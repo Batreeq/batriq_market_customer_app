@@ -24,6 +24,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   gradient_app_bar: ^0.0.1
+  getflutter: ^1.0.4
+  flappy_search_bar: ^1.7.2
 
 
 dev_dependencies:
@@ -45,6 +47,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/icons/home.png
+    - assets/images/icons/card.png
+    - assets/images/icons/chat.png
+    - assets/images/icons/team.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

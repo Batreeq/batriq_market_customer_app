@@ -1,4 +1,5 @@
 import 'package:customerapp/UI/screens/home_screen.dart';
+import 'package:customerapp/UI/screens/ping/HomePage.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       /// Routes
       routes: <String, WidgetBuilder>{
         '/home': (context) => HomeScreen(),
-        bottomNavigationBar.routeName: (context) => bottomNavigationBar(),
+        bottomNavigationBar.routeName: (context) => HomePagee(),
       },
     );
   }
