@@ -16,7 +16,7 @@ class _HomeState extends State<Home> {
 
   String token;
 
-  // this method to get the sequers in the home page (include image and text filled form the api )
+  // this method to get the sequers in the home page (include image and text filled form the api)
   Widget getList() {
     return GridView.count(
         shrinkWrap: true,
@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 900),
-        autoPlayCurve: Curves.fastOutSlowIn,
+        autoPlayCurve: Curves.easeInQuad,
         pauseAutoPlayOnTouch: Duration(seconds: 10),
         enlargeCenterPage: true,
         scrollDirection: Axis.horizontal,
