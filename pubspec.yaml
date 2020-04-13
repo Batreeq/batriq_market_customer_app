@@ -26,6 +26,7 @@ dependencies:
   gradient_app_bar: ^0.0.1
   getflutter: ^1.0.4
   flappy_search_bar: ^1.7.2
+  carousel_slider: ^1.4.1
 
 
 dev_dependencies:

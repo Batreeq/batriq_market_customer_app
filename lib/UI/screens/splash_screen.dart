@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:customerapp/UI/bottom_navigation.dart';
+import 'package:customerapp/UI/screens/ping/HomePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// To navigate layout change
   void NavigatorPage() {
-    Navigator.of(context).pushReplacementNamed(bottomNavigationBar.routeName);
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context )=> HomePagee()));
   }
 
   /// Declare startTime to InitState

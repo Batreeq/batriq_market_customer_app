@@ -15,7 +15,7 @@ class HomePagee extends StatefulWidget {
 
 class _HomePageState extends State<HomePagee> {
   String token;
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   _HomePageState();
