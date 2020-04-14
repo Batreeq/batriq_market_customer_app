@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 
-class AccountScreen extends StatelessWidget {
+class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       resizeToAvoidBottomPadding: true ,
       resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.only(top :30.0),
         child: SingleChildScrollView(
-
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

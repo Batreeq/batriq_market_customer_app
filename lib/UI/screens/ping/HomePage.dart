@@ -1,4 +1,4 @@
-import 'package:customerapp/UI/screens/account_screen.dart';
+import 'package:customerapp/UI/screens/profile_screen.dart';
 import 'package:customerapp/UI/screens/ping/Home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePagee> {
     pageController = new PageController();
     List<Widget> _widgetOptions = <Widget>[
       //ChatScreen(),
-      AccountScreen(),
+      ProfileScreen(),
       CartScreen(),
       WorkWithUsScreen(),
       Home() //ProfilePage(),
