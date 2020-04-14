@@ -27,6 +27,7 @@ dependencies:
   getflutter: ^1.0.4
   flappy_search_bar: ^1.7.2
   carousel_slider: ^1.4.1
+  google_fonts_arabic: ^1.1.7
 
 
 dev_dependencies:
@@ -48,6 +49,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - fonts/
     - assets/images/icons/home.png
     - assets/images/icons/card.png
     - assets/images/icons/chat.png

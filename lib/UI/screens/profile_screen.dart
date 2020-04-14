@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 
-class AccountScreen extends StatelessWidget {
+class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      resizeToAvoidBottomPadding: true ,
+      resizeToAvoidBottomPadding: true,
       resizeToAvoidBottomInset: true,
       body: Padding(
-        padding: const EdgeInsets.only(top :30.0),
+        padding: const EdgeInsets.only(top: 30.0),
         child: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -59,7 +58,8 @@ class AccountScreen extends StatelessWidget {
                                             textAlign: TextAlign.right,
                                             textDirection: TextDirection.rtl,
                                             keyboardType: TextInputType.text,
-                                            textInputAction: TextInputAction.next,
+                                            textInputAction: TextInputAction
+                                                .next,
 //                                    controller: _firstnameController,
 //                                    focusNode: _firstnameFocus,
                                             validator: (value) {
@@ -82,7 +82,8 @@ class AccountScreen extends StatelessWidget {
                                             decoration: InputDecoration(
                                               alignLabelWithHint: true,
                                               border: InputBorder.none,
-                                              hintText: sharedData.phoneHintTextField,
+                                              hintText: sharedData
+                                                  .phoneHintTextField,
                                               hintStyle: TextStyle(
                                                   color: Colors.grey),
                                             ),
@@ -123,7 +124,8 @@ class AccountScreen extends StatelessWidget {
                                             textAlign: TextAlign.right,
                                             textDirection: TextDirection.rtl,
                                             keyboardType: TextInputType.text,
-                                            textInputAction: TextInputAction.next,
+                                            textInputAction: TextInputAction
+                                                .next,
 //                                    controller: _firstnameController,
 //                                    focusNode: _firstnameFocus,
                                             validator: (value) {
@@ -188,7 +190,8 @@ class AccountScreen extends StatelessWidget {
                                             textAlign: TextAlign.right,
                                             textDirection: TextDirection.rtl,
                                             keyboardType: TextInputType.text,
-                                            textInputAction: TextInputAction.next,
+                                            textInputAction: TextInputAction
+                                                .next,
 //                                    controller: _firstnameController,
 //                                    focusNode: _firstnameFocus,
                                             validator: (value) {
@@ -211,7 +214,8 @@ class AccountScreen extends StatelessWidget {
                                             decoration: InputDecoration(
                                               alignLabelWithHint: true,
                                               border: InputBorder.none,
-                                              hintText: sharedData.emailHintTextField,
+                                              hintText: sharedData
+                                                  .emailHintTextField,
                                               hintStyle: TextStyle(
                                                   color: Colors.grey),
                                             ),
@@ -240,7 +244,10 @@ class AccountScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          width: MediaQuery.of(context).size.width-50,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width - 50,
                           height: 50,
                           child: RaisedButton(
                             color: sharedData.yellow,
@@ -249,14 +256,15 @@ class AccountScreen extends StatelessWidget {
                               // side: BorderSide(color: Colors.red)
                             ),
                             onPressed: () {},
-                            child: Text(sharedData.updateProfileTextField , style: sharedData.textInProfileTextStyle,),
+                            child: Text(sharedData.updateProfileTextField,
+                              style: sharedData.textInProfileTextStyle,),
                           ),
                         ),
                       )
                     ],
                   ),
-                ),// name, location, location fields and  button update
-               SizedBox(height: 20,),
+                ), // name, location, location fields and  button update
+                SizedBox(height: 20,),
                 Text(
                   sharedData.textInProfileTextField,
                   style: TextStyle(fontSize: 18),

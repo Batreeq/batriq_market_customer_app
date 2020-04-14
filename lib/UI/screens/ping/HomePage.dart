@@ -1,4 +1,6 @@
-import 'package:customerapp/UI/screens/account_screen.dart';
+import 'package:customerapp/UI/screens/my_orders_screen.dart';
+import 'package:customerapp/UI/screens/profile_screen.dart';
+import 'package:customerapp/UI/screens/balance_screen.dart';
 import 'package:customerapp/UI/screens/ping/Home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +46,9 @@ class _HomePageState extends State<HomePagee> {
     const String chatText = 'المراسلة';
     pageController = new PageController();
     List<Widget> _widgetOptions = <Widget>[
-      //ChatScreen(),
-      AccountScreen(),
-      CartScreen(),
-      WorkWithUsScreen(),
+      ProfileScreen(), //ChatScreen(),
+      MyOrdersScreen(),//CartScreen(),
+      BalanceScreen(), // WorkWithUsScreen(),
       Home() //ProfilePage(),
     ];
     return Scaffold(

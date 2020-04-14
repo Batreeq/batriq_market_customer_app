@@ -1,5 +1,8 @@
  import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+ import 'package:google_fonts_arabic/fonts.dart';
+
+import 'models/orderInfo.dart';
 
 ///this file for shared data between pages
 
@@ -31,8 +34,12 @@ class sharedData {
   static const Icon emailIcon = Icon(Icons.email , color: sharedData.yellow,);
 
   static const TextStyle navBarTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black);
-  static const TextStyle textInProfileTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black , fontSize: 25);
+  static const TextStyle tableFieldsTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black , fontSize: 18);
+  static const TextStyle textInProfileTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black , fontSize: 25 , fontFamily: 'Cairo-Black');
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
+
+  // this list of orders which the user will order , filled from the api in myOrders Screen
+  static List<OrderInfo> listOfColumns = new List<OrderInfo>();
 
   static  Color grayColor12 =  new Color (0x1F000000);
   static const Color yellow =  const Color (0xFFFFEB3B);
@@ -43,6 +50,15 @@ class sharedData {
   static const String  emailHintTextField ='البريد الالكتروني';
   static const String  updateProfileTextField ='تعديل الملف الشخصي';
   static const String  textInProfileTextField ='اكمل الملف الشخصي للحصول على جوائز';
+  static const String  activeBalanceTextField ='رصيد فعال';
+  static const String  notActiveBalanceTextField ='رصيد غير فعال';
+  static const String  totalBalanceTextField ='مجموع الرصيد';
+  static const String  rechargeBalanceTextField ='اعادة شحن رصيد';
+  static const String  accountStatementTextField ='كشف حساب';
+
+  static const String  totalBalanceData ='0.220';
+  static const String  activeBalanceData ='0.200';
+  static const String  notActiveBalanceData ='0.20';
 
   static const List<String> boxesImages = [
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
