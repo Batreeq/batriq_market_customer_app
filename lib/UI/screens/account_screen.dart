@@ -14,6 +14,7 @@ class AccountScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(top :30.0),
         child: SingleChildScrollView(
+
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
