@@ -28,6 +28,14 @@ dependencies:
   flappy_search_bar: ^1.7.2
   carousel_slider: ^1.4.1
   google_fonts_arabic: ^1.1.7
+  requests: ^3.1.0
+  image_picker: ^0.6.5
+  fluttertoast: ^4.0.1
+  shared_preferences: ^0.5.6+3
+  email_validator: ^1.0.4
+
+
+
 
 
 dev_dependencies:

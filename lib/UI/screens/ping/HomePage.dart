@@ -1,5 +1,5 @@
 import 'package:customerapp/UI/screens/my_orders_screen.dart';
-import 'package:customerapp/UI/screens/profile_screen.dart';
+import 'package:customerapp/UI/screens/ping/profile_screen.dart';
 import 'package:customerapp/UI/screens/balance_screen.dart';
 import 'package:customerapp/UI/screens/ping/Home.dart';
 import 'package:flutter/cupertino.dart';
