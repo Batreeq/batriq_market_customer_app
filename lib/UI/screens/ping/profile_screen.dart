@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:customerapp/UI/screens/ping/HomePage.dart';
+import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:requests/requests.dart';
+
+import 'AddMemberScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -23,122 +27,383 @@ class _ProfileScreen extends State {
   final formKey = GlobalKey<FormState>();
 
   Widget defaultImageWidget;
-  String name, phone, location, email;
+  String name, phone, location, email, image;
   TextEditingController nameCon, phoneCon, locationCon, emailCon;
+
   FocusNode nameFocus, phoneFocus, locationFocus, emailFocus;
+  bool phoneChanged;
+  UserInfo info = new UserInfo();
+  Size size;
+  TextEditingController salaryCon = new TextEditingController();
+
+  Widget getTable(List<FamilyMembers> familyMembers) {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.only(right :15.0),
+            child: DataTable(
+              columnSpacing: 25,
+              columns: [
+                DataColumn(
+                  label: Row(
+                    children: <Widget>[
+                      Icon(Icons.keyboard_arrow_down),
+                      Text(
+                        'العمر',
+                        style: sharedData.tableFieldsTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                DataColumn(
+                  label: Row(
+                    children: <Widget>[
+                      Icon(Icons.keyboard_arrow_down),
+                      Text(
+                        'الجنس',
+                        style: sharedData.tableFieldsTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                DataColumn(
+                  label: Row(
+                    children: <Widget>[
+                      Icon(Icons.keyboard_arrow_down),
+                      Text(
+                        'الاسم',
+                        style: sharedData.tableFieldsTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              rows: familyMembers
+              // Loops through dataColumnText, each iteration assigning the value to element
+                  .map(
+                ((element) =>
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          element.age.toString() + 'JD',
+                          style: sharedData.tableFieldsTextStyle,
+                        )),
+                        //Extracting from Map element the value
+                        DataCell(Text(
+                          element.gender,
+                          style: sharedData.tableFieldsTextStyle,
+                        )),
+                        DataCell(Text(
+                          element.name,
+                          style: sharedData.tableFieldsTextStyle,
+                        )),
+                      ],
+                    )),
+              )
+                  .toList(),
+            )
+        )
+    );
+  }
+
+  Future<void> familyDialogUI() {
+    //  List <FamilyMembers> familyMembers = new List<FamilyMembers>();
+
+    FamilyMembers member = new FamilyMembers();
+//    member.name = 'Rami';
+//    member.gender = 'Male';
+//    member.age = '20 ';
+//    userProfile.familyMembers.add(member);
+
+    String title = ' : عرف أفراد اسرتك ';
+    TextEditingController familyNumberCon = new TextEditingController();
+
+    if (userProfile.familyMembers != null )
+       familyNumberCon.text = userProfile.familyMembers.length.toString();
+
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext c) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: SingleChildScrollView(
+                child: Container(
+                  // height: size.height -20 ,
+                    width: size.width,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            textDirection: TextDirection.rtl,
+                            children: <Widget>[
+                              Text(
+                                title,
+                                textAlign: TextAlign.right,
+                                style: sharedData.textInProfileTextStyle,
+                              ),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              Row(
+                                textDirection: TextDirection.rtl,
+                                children: <Widget>[
+                                  Text(
+                                    'عدد أفراد الاسرة',
+                                    style: sharedData.tableFieldsTextStyle,
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                          20.0),
+                                    ),
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        controller: familyNumberCon,
+                                        textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.next,
+                                        decoration: InputDecoration(
+                                          alignLabelWithHint: true,
+                                          border: InputBorder.none,
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                textDirection: TextDirection.ltr,
+                                children: <Widget>[
+                                  InkWell(
+                                    onTap: addMember,
+                                    child: Text(' اضافة ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: sharedData.yellow,
+                                            fontSize: 18)),),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: getTable(userProfile.familyMembers),
+                              ),
+                              Row(
+                                textDirection: TextDirection.rtl,
+                                children: <Widget>[
+                                  Text(
+                                    'الدخل الشهري',
+                                    style: sharedData.tableFieldsTextStyle,
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                          20.0),
+                                    ),
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextField(
+                                        controller: salaryCon,
+                                        textAlign: TextAlign.center,
+                                        textDirection: TextDirection.rtl,
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.next,
+                                        decoration: InputDecoration(
+                                          alignLabelWithHint: true,
+                                          hintText: 'J.D',
+                                          border: InputBorder.none,
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: RaisedButton(
+                                  child: Text('حفظ'),
+                                  onPressed: () {},
+                                  color: sharedData.yellow,
+                                ),)
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                )
+            ),
+          );
+        });
+  }
+
+  UserProfile userProfile;
+  String token;
+
+  Future<String> getToken() async {
+    //token = await sharedData.getToken();
+       token = await sharedData.readFromStorage(key: 'token');
+    if (token == null) {
+      token = '';
+      print('after get token from write, its empty ');
+    }
+    else
+      print('token from profile get token method $token');
+
+       return token ;
+  }
 
   @override
   void initState() {
     super.initState();
-  }
+     // token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807'; // with family members
+    userProfile = new UserProfile();
+    userProfile.familyMembers = new List<FamilyMembers>();
+    image = sharedData.profileImage;
 
-  @override
-  Widget build(BuildContext context) {
-    nameCon = new TextEditingController();
-    phoneCon = new TextEditingController();
-    locationCon = new TextEditingController();
-    emailCon = new TextEditingController();
+    nameCon = new TextEditingController(text: name);
+    phoneCon = new TextEditingController(text: phone);
+    locationCon = new TextEditingController(text: location);
+    emailCon = new TextEditingController(text: email);
     nameFocus = new FocusNode();
     phoneFocus = new FocusNode();
     locationFocus = new FocusNode();
     emailFocus = new FocusNode();
+    getToken().then((tokn){
+      getUserDataFromAPI(tokn);
+    });
 
-    // check if the user registered before if token is null so default image will put , else , will put the user image
-    if (sharedData.token == null || sharedData.token == '') {
-      // user not registered
-      defaultImageWidget = GFAvatar(
-        size: 70,
-        backgroundImage: NetworkImage(
-          sharedData.profileImage,
-        ),
-      );
-    } else {
-      // token not null so user registered before so his info will get from api and put them in the fields
-      defaultImageWidget = GFAvatar(
-        size: 70,
-        backgroundImage: NetworkImage(
-          sharedData.profileImage,
-        ),
-      );
-    }
-
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
-      resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 30.0),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.add),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: InkWell(
-                          onTap: () {
-                            chooseImageFromGallery();
-                          },
-                          child: defaultImageWidget),
-                    ),
-                  ],
-                ), // profile picture
-                Text(
-                  sharedData.name,
-                  style: sharedData.textInProfileTextStyle,
-                ), // name
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      formFields(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width - 50,
-                          height: 50,
-                          child: RaisedButton(
-                            color: sharedData.yellow,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(4.0),
-                              // side: BorderSide(color: Colors.red)
-                            ),
-                            onPressed: () {
-                              _validateAndSubmit();
-                            },
-                            child: Text(
-                              sharedData.updateProfileTextField,
-                              style: sharedData.textInProfileTextStyle,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ), // name, location, location fields and  button update
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  sharedData.textInProfileTextField,
-                  style: TextStyle(fontSize: 18),
-                ), // name
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
+  @override
+  Widget build(BuildContext context) {
+
+    Future.delayed(Duration(seconds: 2));
+  //  print('token from init ' + token);
+
+
+    size = MediaQuery
+        .of(context)
+        .size;
+    // token not null so user registered before so his info will get from api and put them in the fields
+    defaultImageWidget = GFAvatar(
+      size: 70,
+      backgroundImage: NetworkImage(image),
+    );
+
+    return
+      Scaffold(
+          resizeToAvoidBottomPadding: true,
+          resizeToAvoidBottomInset: true,
+          body: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: <Widget>[
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              child: Icon(Icons.add),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: InkWell(
+                              onTap: () {
+                                chooseImageFromGallery();
+                              },
+                              child: defaultImageWidget),
+                        ),
+                      ],
+                    ), // profile picture
+                    Text(
+                      sharedData.name,
+                      style: sharedData.textInProfileTextStyle,
+                    ), // name
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          formFields(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width - 50,
+                              height: 50,
+                              child: RaisedButton(
+                                color: sharedData.yellow,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(4.0),
+                                  // side: BorderSide(color: Colors.red)
+                                ),
+                                onPressed: () {
+                                  _validateAndSubmit();
+                                },
+                                child: Text(
+                                  sharedData.updateProfileTextField,
+                                  style: sharedData.textInProfileTextStyle,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ), // name, location, location fields and  button update
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(child: Text(
+                      sharedData.textInProfileTextField,
+                      style: TextStyle(fontSize: 18),
+                    ), onTap: () {
+                      familyDialogUI();
+                    },)
+                    // name
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          appBar: sharedData.appBar(
+              context, 'الملف الشخصي', Icon(Icons.arrow_forward), () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext c) => HomePagee()));
+          })
+      );
+  }
+
+  // Form will fields (phone number, name, location and email ) to fill them by user
   Widget formFields() {
     return Form(
       key: formKey,
@@ -178,6 +443,7 @@ class _ProfileScreen extends State {
                             if (value.isNotEmpty) if (!isValidPhone()) {
                               return 'Invalid Phone Format';
                             }
+                            phoneChanged = true;
                             return null;
                           },
                           onFieldSubmitted: (term) {
@@ -378,25 +644,135 @@ class _ProfileScreen extends State {
     );
   }
 
-  _fieldFocusChange(BuildContext context, FocusNode currentFocus,
-      FocusNode nextFocus) {
-    currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);
+  //this method to get the user info when he open profile screen will call this method to fill the fields
+  //if the user want to open profile without registration, the token will be null so sent the token as null to api to create anew account
+  void getUserDataFromAPI(String token) async {
+     //  token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807';
+    if (token != '' && token != null) {
+      final response = await Requests.get(
+        sharedData.getUserInfoUrl + token,
+        //  bodyEncoding: RequestBodyEncoding.FormURLEncoded
+      );
+      print(token);
+      if (response != null) {
+        print(response.json().toString());
+        print(response.statusCode);
+      } else
+        print('response = null ');
+
+      sharedData.showLoadingDialog(context); //invoking login
+      await Future.delayed(Duration(seconds: 4));
+
+      if (response.statusCode == 200) {
+        response.raiseForStatus();
+        dynamic json = response.json();
+        info = UserInfo.fromJson(json['user_info']);
+        setState(() {
+          userProfile = UserProfile.fromJson(json);
+        });
+
+        if (null != info && null != userProfile) {
+          print(' user phone number = ' + info.phone.toString());
+          print(' family member list = ' +
+              userProfile.familyMembers.length.toString());
+          print ("token in get user info " + info.apiToken);
+          sharedData.writeToStorage (key:  'token' , value: info.apiToken) ;
+          sharedData.setToken(info.apiToken);
+        } else
+          print('info object which get from json = null');
+        fillFields(info);
+      }
+      Navigator.of(context).pop(); //close the dialog
+    }
+    else {
+      print('token is null $token');
+//      emailCon.text = '';
+//      nameCon.text = '';
+      image = sharedData.profileImage;
+//      phoneCon.text = '';
+//      locationCon.text = '';
+    }
   }
 
-  uploadImage() {}
+  submitUserData(String token) async {
+    //  token = '2d0ff96767efed695b53b04e36941b5f8df3ce30d2bdcc4b98db0a29388e299a';
+    UserInfo info = new UserInfo();
 
+     if (token != null && token != '')
+        info.apiToken = token;
+
+    if (token == null || token == '' && phoneCon.text == null || phoneCon.text == '')
+      sharedData.flutterToast('Fill Your Phone Number to Update Your Profile 😍 ');
+    else
+    {
+      // if (token != '') {
+      info.name = nameCon.text == null || nameCon.text == ''? '' : nameCon.text;
+      info.location = locationCon.text == null || location == ''? '' : locationCon.text;
+      info.email = emailCon.text == null || email == ''? '' : emailCon.text;
+      info.image = image == null || image == ''? '' : image;
+      info.phone = phoneCon.text == null || phone == ''? '' : phoneCon.text;
+
+      print ('will add name =' +  nameCon.text );
+      print ('will add phone =' +  phoneCon.text );
+      print ('will add email =' +  emailCon.text );
+      print ('will add loc =' +  locationCon.text );
+
+      var  response;
+      if (token == null || token == '')
+        response = await Requests.post(
+        sharedData.registerUrl,
+        body: info.toJson(false),
+      );
+      else
+          response = await Requests.post(
+          sharedData.registerUrl,
+          body: info.toJson(true),
+        );
+      if (response != null) {
+        print(response.json());
+        print(response.statusCode);
+      } else
+        print('response is null');
+      print(token);
+
+      sharedData.showLoadingDialog(context); //invoking login
+      await Future.delayed(Duration(seconds: 3));
+
+      if (response.statusCode == 200) {
+        response.raiseForStatus();
+        dynamic json = response.json();
+        info = UserInfo.fromJson(json['user']);
+        if (null != info){
+          print(' user phone number = ' + info.phone.toString());
+          print(' token in submit method = ' + info.apiToken.toString());
+          sharedData.writeToStorage(key: 'token' , value: info.apiToken);
+        }
+        else
+          print('user object which get from json = null');
+        sharedData.flutterToast('You registered Sucsessfully 😍 ');
+      }
+      Navigator.of(context).pop(); //close the dialog
+    }
+  }
+
+  addMember() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => AddMemberScreen(salaryCon.text.toString())));
+  }
+
+  // to open the gallery to select an image
   chooseImageFromGallery() {
     setState(() {
       // open gallery to pick image
       file = ImagePicker.pickImage(source: ImageSource.gallery);
     });
+
     defaultImageWidget = FutureBuilder<File>(
       future: file,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
-          tempFile = snapshot.data;
+          // to transfer the image to base64 to upload it it the database
           base64Image = base64Encode(snapshot.data.readAsBytesSync());
 
           return GFAvatar(
@@ -423,39 +799,34 @@ class _ProfileScreen extends State {
     );
   }
 
-  void getUserDataFromAPI(String id, String token) async {
-//    UserData userData = new UserData();
-//    if (token != ''  ) {
-//      final response = await Requests.get(Utility.GET_USER_BY_ID_API + id,
-//          headers: {'Authorization': 'bearer ' + token},
-//          bodyEncoding: RequestBodyEncoding.FormURLEncoded);
-//      print(response.json());
-//      print(response.statusCode);
-//      print(id);
-//      print(token);
-//
-//      Utility.showLoadingDialog(context); //invoking login
-//      await Future.delayed(Duration(seconds: 3));
-//
-//      if (response.statusCode == 200) {
-//        response.raiseForStatus();
-//        dynamic json = response.json();
-//        UserInfo info = new UserInfo();
-//        info = info.fromJson(json['Data']);
-//        print('pasge index = ' + info.phone.toString());
-//        fillFeilds(info);
-//      }
-//      Navigator.of(context).pop(); //close the dialog
-//    } else
-//      print('token is null ');
+  //this method will fill the fields with data came from the api after do GET request to get user data to fill them once the user open profile screen
+  void fillFields(UserInfo info) {
+    setState(() {
+      name = info.name;
+      email = info.email;
+      location = info.location;
+      phone = info.phone;
+      if (info.image != null && info.image != '' )
+      image = info.image;
+      else image = sharedData.profileImage;
+
+      if (info.name != null ) sharedData.name = info.name;
+
+      nameCon.text = info.name;
+      emailCon.text = info.email;
+      locationCon.text = info.location;
+      phoneCon.text = info.phone;
+    });
   }
 
+  // to check if the email valid like email pattern (name@domain.com)
   bool isValidEmail() {
     if (emailCon.text.trim().toString() == null ||
         emailCon.text.trim().toString() == '') return true;
     return EmailValidator.validate(emailCon.text.trim());
   }
 
+  // to check if the phone valid like Jordan phone pattern (10 characters start with 079, 078 or 077)
   bool isValidPhone() {
     phoneCon.text.trim();
     RegExp regExp = new RegExp('((079)|(078)|(077)){1}[0-9]{7}');
@@ -475,12 +846,24 @@ class _ProfileScreen extends State {
     }
   }
 
+  // change the pointer focus to the next filed after
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus,
+      FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  //this method to check in the inputs are valid, to save and submit to do the update  user info request
   void _validateAndSubmit() {
     final form = formKey.currentState;
     if (form.validate()) {
       //form.save();
+      print(phoneChanged.toString());
       isInputValidate();
+      submitUserData('');
     } else
       sharedData.flutterToast('Invalid Input');
+
+
   }
 }
