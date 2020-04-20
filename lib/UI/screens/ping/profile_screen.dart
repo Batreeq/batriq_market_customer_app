@@ -34,235 +34,226 @@ class _ProfileScreen extends State {
   bool phoneChanged;
   UserInfo info = new UserInfo();
   Size size;
+
+  UserProfile userProfile;
+  String token;
+
   TextEditingController salaryCon = new TextEditingController();
 
   Widget getTable(List<FamilyMembers> familyMembers) {
-    return Center(
-        child: Padding(
-            padding: const EdgeInsets.only(right :15.0),
-            child: DataTable(
-              columnSpacing: 25,
-              columns: [
-                DataColumn(
-                  label: Row(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_down),
-                      Text(
-                        'العمر',
-                        style: sharedData.tableFieldsTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
-                DataColumn(
-                  label: Row(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_down),
-                      Text(
-                        'الجنس',
-                        style: sharedData.tableFieldsTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
-                DataColumn(
-                  label: Row(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_down),
-                      Text(
-                        'الاسم',
-                        style: sharedData.tableFieldsTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
+    return  DataTable(
+      columnSpacing: 20,
+      columns: [
+        DataColumn(
+          label: Row(
+            children: <Widget>[
+              Icon(Icons.keyboard_arrow_down),
+              Text(
+                'العمر',
+                style: sharedData.tableFieldsTextStyle,
+              ),
+            ],
+          ),
+        ),
+        DataColumn(
+          label: Row(
+            children: <Widget>[
+              Icon(Icons.keyboard_arrow_down),
+              Text(
+                'الجنس',
+                style: sharedData.tableFieldsTextStyle,
+              ),
+            ],
+          ),
+        ),
+        DataColumn(
+          label: Row(
+            children: <Widget>[
+              Icon(Icons.keyboard_arrow_down),
+              Text(
+                'الاسم',
+                style: sharedData.tableFieldsTextStyle,
+              ),
+            ],
+          ),
+        ),
+      ],
+      rows: familyMembers
+      // Loops through dataColumnText, each iteration assigning the value to element
+          .map(
+        ((element) =>
+            DataRow(
+              cells: <DataCell>[
+                DataCell(Text(
+                  element.age.toString() + 'JD',
+                  style: sharedData.tableFieldsTextStyle,
+                )),
+                //Extracting from Map element the value
+                DataCell(Text(
+                  element.gender,
+                  style: sharedData.tableFieldsTextStyle,
+                )),
+                DataCell(Text(
+                  element.name,
+                  style: sharedData.tableFieldsTextStyle,
+                )),
               ],
-              rows: familyMembers
-              // Loops through dataColumnText, each iteration assigning the value to element
-                  .map(
-                ((element) =>
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text(
-                          element.age.toString() + 'JD',
-                          style: sharedData.tableFieldsTextStyle,
-                        )),
-                        //Extracting from Map element the value
-                        DataCell(Text(
-                          element.gender,
-                          style: sharedData.tableFieldsTextStyle,
-                        )),
-                        DataCell(Text(
-                          element.name,
-                          style: sharedData.tableFieldsTextStyle,
-                        )),
-                      ],
-                    )),
-              )
-                  .toList(),
-            )
-        )
+            )),
+      )
+          .toList(),
     );
   }
 
   Future<void> familyDialogUI() {
-    //  List <FamilyMembers> familyMembers = new List<FamilyMembers>();
-
-    FamilyMembers member = new FamilyMembers();
-//    member.name = 'Rami';
-//    member.gender = 'Male';
-//    member.age = '20 ';
-//    userProfile.familyMembers.add(member);
-
     String title = ' : عرف أفراد اسرتك ';
     TextEditingController familyNumberCon = new TextEditingController();
 
-    if (userProfile.familyMembers != null )
-       familyNumberCon.text = userProfile.familyMembers.length.toString();
+    if (userProfile.familyMembers != null)
+      familyNumberCon.text = userProfile.familyMembers.length.toString();
 
     return showDialog<void>(
         context: context,
         builder: (BuildContext c) {
-          return Dialog(
+          return Dialog( //elevation: 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
+          //   backgroundColor: Colors.red,
             child: SingleChildScrollView(
                 child: Container(
                   // height: size.height -20 ,
-                    width: size.width,
+                  //   width: size.width,
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            textDirection: TextDirection.rtl,
-                            children: <Widget>[
-                              Text(
-                                title,
-                                textAlign: TextAlign.right,
-                                style: sharedData.textInProfileTextStyle,
-                              ),
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Row(
-                                textDirection: TextDirection.rtl,
-                                children: <Widget>[
-                                  Text(
-                                    'عدد أفراد الاسرة',
-                                    style: sharedData.tableFieldsTextStyle,
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                          20.0),
+                        child:
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              textDirection: TextDirection.rtl,
+                              children: <Widget>[
+                                Text(
+                                  title,
+                                  textAlign: TextAlign.right,
+                                  style: sharedData.textInProfileTextStyle,
+                                ),
+                                SizedBox(
+                                  height: 25,
+                                ),
+                                Row(
+                                  textDirection: TextDirection.rtl,
+                                  children: <Widget>[
+                                    Text(
+                                      'عدد أفراد الاسرة',
+                                      style: sharedData.tableFieldsTextStyle,
                                     ),
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 20.0),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        controller: familyNumberCon,
-                                        textAlign: TextAlign.center,
-                                        textDirection: TextDirection.rtl,
-                                        keyboardType: TextInputType.number,
-                                        textInputAction: TextInputAction.next,
-                                        decoration: InputDecoration(
-                                          alignLabelWithHint: true,
-                                          border: InputBorder.none,
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey),
+                                    Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                            20.0),
+                                      ),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 20.0),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          controller: familyNumberCon,
+                                          textAlign: TextAlign.center,
+                                          textDirection: TextDirection.rtl,
+                                          keyboardType: TextInputType.number,
+                                          textInputAction: TextInputAction.next,
+                                          decoration: InputDecoration(
+                                            alignLabelWithHint: true,
+                                            border: InputBorder.none,
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                textDirection: TextDirection.ltr,
-                                children: <Widget>[
-                                  InkWell(
-                                    onTap: addMember,
-                                    child: Text(' اضافة ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: sharedData.yellow,
-                                            fontSize: 18)),),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: getTable(userProfile.familyMembers),
-                              ),
-                              Row(
-                                textDirection: TextDirection.rtl,
-                                children: <Widget>[
-                                  Text(
-                                    'الدخل الشهري',
-                                    style: sharedData.tableFieldsTextStyle,
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                          20.0),
+                                  ],
+                                ),
+                                Row(
+                                  textDirection: TextDirection.ltr,
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: addMember,
+                                      child: Text(' اضافة ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: sharedData.yellow,
+                                              fontSize: 18)),),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(1.0),
+                                  child: getTable(userProfile.familyMembers),
+                                ),
+                                Row(
+                                  textDirection: TextDirection.rtl,
+                                  children: <Widget>[
+                                    Text(
+                                      'الدخل الشهري',
+                                      style: sharedData.tableFieldsTextStyle,
                                     ),
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 20.0),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextField(
-                                        controller: salaryCon,
-                                        textAlign: TextAlign.center,
-                                        textDirection: TextDirection.rtl,
-                                        keyboardType: TextInputType.number,
-                                        textInputAction: TextInputAction.next,
-                                        decoration: InputDecoration(
-                                          alignLabelWithHint: true,
-                                          hintText: 'J.D',
-                                          border: InputBorder.none,
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey),
+                                    Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                            20.0),
+                                      ),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 20.0),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextField(
+                                          controller: salaryCon,
+                                          textAlign: TextAlign.center,
+                                          textDirection: TextDirection.rtl,
+                                          keyboardType: TextInputType.number,
+                                          textInputAction: TextInputAction.next,
+                                          decoration: InputDecoration(
+                                            alignLabelWithHint: true,
+                                            hintText: 'J.D',
+                                            border: InputBorder.none,
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: RaisedButton(
-                                  child: Text('حفظ'),
-                                  onPressed: () {},
-                                  color: sharedData.yellow,
-                                ),)
-
-                            ],
-                          ),
-                        ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: RaisedButton(
+                                    child: Text('حفظ'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    color: sharedData.yellow,
+                                  ),)
+                              ],
+                            )
                       ),
                     )
                 )
             ),
           );
-        });
+        }
+    );
   }
 
-  UserProfile userProfile;
-  String token;
 
   Future<String> getToken() async {
     //token = await sharedData.getToken();

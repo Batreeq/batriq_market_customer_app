@@ -95,7 +95,7 @@ class sharedData {
   // this list of the images which will be used in the boxes in home screen, and filled in splash screen from api
   static const List<String> boxesImages = [
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
+    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
@@ -107,7 +107,7 @@ class sharedData {
 
   // this list of the texts which will be used in the boxes  in home screen,and filled in splash screen from api
   static const List<String> boxesTexts = [
-    'رز ',
+    'سميد',
     'رز ',
     'رز ',
     'رز ',
@@ -242,5 +242,6 @@ class sharedData {
   static const String getUserInfoUrl = 'https://jaraapp.com/index.php/api/userInfo?api_token=';
   static const String registerUrl = 'https://jaraapp.com/index.php/api/register?';
   static const String addMemberUrl = 'https://jaraapp.com/index.php/api/addFamilyMembers';
+  static const String myOrdersUrl = 'https://jaraapp.com/index.php/api/myOrders';
 
 }

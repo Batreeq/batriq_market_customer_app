@@ -1,8 +1,11 @@
+import 'dart:math';
+
+import 'package:customerapp/UI/screens/ping/OrderDetails.dart';
+import 'package:customerapp/models/ListOfMyOrders.dart';
 import 'package:customerapp/models/orderInfo.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
-import 'package:getflutter/components/avatar/gf_avatar.dart';
-import 'package:getflutter/getflutter.dart';
+import 'package:requests/requests.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   @override
@@ -12,30 +15,146 @@ class MyOrdersScreen extends StatefulWidget {
 }
 
 class _MyOrdersScreen extends State {
+  String token = '';
+
   DateTime selectedDate = DateTime.now();
 
-  Widget getTable() {
+
+  DateTime oldTime ;
+
+  ListOfMyOrders listOfMyOrders ;
+  Orders orders = new Orders();
+
+  @override
+  void initState() {
+    super.initState();
+    oldTime = new DateTime.utc(2020, 1, 1, 12);
+    listOfMyOrders = new ListOfMyOrders();
+    listOfMyOrders.orders = new List <Orders>();
+    sharedData.readFromStorage(key: 'token').then((tokn) {
+      getUserOrders(tokn);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // static object of order to add to the list
     OrderInfo order = new OrderInfo();
-    order.date = "30-07-2019";
+    order.date = "30-7-2019";
     order.price = 2.90;
     order.type = "متفرقة";
 
-    //this is a static data, will change later , will filled from the api
+    //this is a static data, will change later , will fill from the api
     sharedData.listOfColumns.add(order);
     sharedData.listOfColumns.add(order);
     sharedData.listOfColumns.add(order);
     sharedData.listOfColumns.add(order);
+    return Scaffold(
+      appBar: sharedData.appBar(context, 'طلبياتي ', null, () {}),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 22,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text('من تاريخ', style: sharedData.tableFieldsTextStyle,),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 130,
+                      child: FlatButton(
+                        shape: Border.all(color: sharedData.grayColor12,),
+                        onPressed: () {
+                          _selectDate(context, 'from');
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.keyboard_arrow_down,
+                                color: sharedData.yellow),
+                            Text(oldTime.day.toString() +
+                                '-' +
+                                oldTime.month.toString() +
+                                '-' +
+                                oldTime.year.toString())
+                          ],
+                        ),),),
+                  ),
+                ],),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text('الى تاريخ', style: sharedData.tableFieldsTextStyle,),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 130,
+                      child: FlatButton(
+                        shape: Border.all(color: sharedData.grayColor12,),
+                        onPressed: () {
+                          _selectDate(context, 'to');
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.keyboard_arrow_down, color: sharedData
+                                .yellow,),
+                            Text(selectedDate.day.toString() +
+                                '-' +
+                                selectedDate.month.toString() +
+                                '-' +
+                                selectedDate.year.toString())
+                          ],
+                        ),),),
+                  ),
+                ],),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text('السعر', style: sharedData.tableFieldsTextStyle,),
+                  SizedBox(width: 25,),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 130,
+                      child: FlatButton(
+                        shape: Border.all(color: sharedData.grayColor12,),
+                        onPressed: () {},
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.keyboard_arrow_down, color: sharedData
+                                .yellow,),
+                            Text('')
+                          ],
+                        ),),),
+                  ),
+                ],),
+            ),
+            getTable()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getTable() {
     return Center(
-        child: Padding(
+        child: listOfMyOrders.orders != null ?
+        Padding(
             padding: const EdgeInsets.all(8.0),
             child: DataTable(
               columnSpacing: 30,
               columns: [
                 DataColumn(
-                  label: Container(
-                    decoration: BoxDecoration(color: sharedData.grayColor12),
-                    child: Row(
+                  label:   Row(
                       children: <Widget>[
                         Icon(Icons.keyboard_arrow_down),
                         Text(
@@ -44,7 +163,6 @@ class _MyOrdersScreen extends State {
                         ),
                       ],
                     ),
-                  ),
                 ),
                 DataColumn(
                   label: Row(
@@ -69,129 +187,111 @@ class _MyOrdersScreen extends State {
                   ),
                 ),
               ],
-              rows: sharedData
-                  .listOfColumns // Loops through dataColumnText, each iteration assigning the value to element
-                  .map(
-                ((element) =>
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text(
-                          element.price.toString() + 'JD',
-                          style: sharedData.tableFieldsTextStyle,
-                        )),
-                        //Extracting from Map element the value
-                        DataCell(Text(
-                          element.type,
-                          style: sharedData.tableFieldsTextStyle,
-                        )),
-                        DataCell(Text(
-                          element.date,
-                          style: sharedData.tableFieldsTextStyle,
-                        )),
-                      ],
-                    )),
+              rows: // Loops through dataColumnText, each iteration assigning the value to element
+
+              listOfMyOrders.orders
+                  .map((element) {
+                //Extracting from Map element the value
+                List<String> dateSplit = element.createdAt.split('-');
+                return
+                  DataRow(
+                    cells: <DataCell>[
+                      DataCell(
+                          Text(
+                            element.totalPrice.toString() + 'JD',
+                            style: sharedData.tableFieldsTextStyle,
+                          ),
+                          onTap: () {
+                            goToOrderDetails(element.orderDetails ,element.createdDate);
+                          }),
+                      DataCell(
+                          Text(
+                            'متفرقة',
+                            style: sharedData.tableFieldsTextStyle,
+                          ),
+                          onTap: () {
+                               goToOrderDetails(element.orderDetails ,element.createdDate);
+                          }),
+                      DataCell(
+                          Text(
+                            element.createdDate,
+                            style: sharedData.tableFieldsTextStyle,
+                          ),
+                          onTap: () {
+                               goToOrderDetails(element.orderDetails ,element.createdDate,);
+                          }),
+                    ],
+                  );
+              }
               )
                   .toList(),
-            )));
+            )
+        )
+        : Container()
+    );
   }
 
-  Future<Null> _selectDate(BuildContext context) async {
+  goToOrderDetails(List <OrderDetails> listOfOrdersDetails ,String date ) {
+    Navigator.push(context, MaterialPageRoute(
+        builder: (BuildContext c) => OrderDetailsScreen(listOfOrdersDetails ,date)));
+  }
+
+  Future <Null> _selectDate(BuildContext context, String type) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: type == 'from ' ? selectedDate : oldTime,
         firstDate: DateTime(2000, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
+        lastDate: DateTime(2101, 12));
+    if (type == 'from')
+      if (picked != null && picked != oldTime)
+        setState(() {
+          oldTime = picked;
+        });
+      else if (type == 'to')
+        if (picked != null && picked != selectedDate)
+          setState(() {
+            selectedDate = picked;
+          });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(height: 22,),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: <Widget>[
-                Text('من تاريخ', style: sharedData.tableFieldsTextStyle,),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 130,
-                    child: FlatButton(
-                      shape: Border.all(color: sharedData.grayColor12,),
-                      onPressed: () {_selectDate(context);},
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.keyboard_arrow_down , color: Colors.yellow),
-                          Text(selectedDate.day.toString() +
-                              '-' +
-                              selectedDate.month.toString() +
-                              '-' +
-                              selectedDate.year.toString())
-                        ],
-                      ),),),
-                ),
-              ],),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: <Widget>[
-                Text('الى تاريخ', style: sharedData.tableFieldsTextStyle,),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 130,
-                    child: FlatButton(
-                      shape: Border.all(color: sharedData.grayColor12,),
-                      onPressed: () {_selectDate(context);},
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.keyboard_arrow_down, color: Colors.yellow,),
-                          Text(selectedDate.day.toString() +
-                              '-' +
-                              selectedDate.month.toString() +
-                              '-' +
-                              selectedDate.year.toString())
-                        ],
-                      ),),),
-                ),
-              ],),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: <Widget>[
-                Text('السعر', style: sharedData.tableFieldsTextStyle,),
-                SizedBox(width: 25,),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 130,
-                    child: FlatButton(
-                      shape: Border.all(color: sharedData.grayColor12,),
-                      onPressed: () {},
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.keyboard_arrow_down, color: Colors.yellow,),
-                          Text('')
-                        ],
-                      ),),),
-                ),
-              ],),
-          ),
-          getTable()
-        ],
-      ),
-    );
+  void getUserOrders(String token) async {
+    token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807';
+    print('token in before do get orders request $token');
+
+    sharedData.showLoadingDialog(context);
+    if (token != '') {
+      final response = await Requests.post(
+          sharedData.myOrdersUrl,
+          body: {'api_token': token},
+          bodyEncoding: RequestBodyEncoding.FormURLEncoded
+      );
+
+    //  await Future.delayed(Duration(seconds: 3));
+
+      print(response.json());
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        response.raiseForStatus();
+        dynamic json = response.json();
+        setState(() {
+          listOfMyOrders = ListOfMyOrders.fromJson(json);
+        });
+
+        if (listOfMyOrders.orders.length != 0)
+          print('delivary time index 0 = ' + listOfMyOrders.orders
+              .elementAt(0)
+              .deliveryTime);
+        else
+          print('list of products is null ');
+
+        Navigator.of(context).pop(); //close the dialog
+      }
+      else
+        sharedData.flutterToast(
+            'Some thing went wrong in getting your orders, please try again ' +
+                response.statusCode);
+    } else
+      print('token is null in my orders method is null ');
   }
 }
