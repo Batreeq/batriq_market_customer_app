@@ -43,11 +43,7 @@ class sharedData {
       color: Colors.black,
       fontSize: 25,
       fontFamily: 'Cairo-Black');
-  static const TextStyle optionStyle = TextStyle(
-      fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
-
-  // this list of orders which the user will order , filled from the api in myOrders Screen
-  static List<OrderInfo> listOfColumns = new List<OrderInfo>();
+  static const TextStyle optionStyle = TextStyle(fontSize: 18, color: Colors.black);
 
   static Color grayColor12 = new Color (0x1F000000);
   static const Color yellow = const Color(0xFFFBBF00);
@@ -104,6 +100,8 @@ class sharedData {
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
   ];
+
+
 
   // this list of the texts which will be used in the boxes  in home screen,and filled in splash screen from api
   static const List<String> boxesTexts = [

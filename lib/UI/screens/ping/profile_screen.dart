@@ -242,7 +242,8 @@ class _ProfileScreen extends State {
                                       Navigator.of(context).pop();
                                     },
                                     color: sharedData.yellow,
-                                  ),)
+                                  ),
+                                )
                               ],
                             )
                       ),

@@ -1,4 +1,4 @@
-import 'package:customerapp/UI/screens/ping/OrderInfoDetails.dart';
+
 import 'package:customerapp/models/ListOfMyOrders.dart';
 import 'package:customerapp/models/orderInfo.dart';
 import 'package:flutter/cupertino.dart';

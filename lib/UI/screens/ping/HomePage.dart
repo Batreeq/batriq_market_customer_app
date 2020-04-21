@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePagee> {
     List<Widget> _widgetOptions = <Widget>[
       ProfileScreen(), //ChatScreen(),
       MyOrdersScreen(),//CartScreen(),
-      BalanceScreen(), // WorkWithUsScreen(),
+      WorkWithUsScreen(),
       Home() //ProfilePage(),
     ];
     return Scaffold(

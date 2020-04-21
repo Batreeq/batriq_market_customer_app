@@ -38,17 +38,7 @@ class _MyOrdersScreen extends State {
 
   @override
   Widget build(BuildContext context) {
-    // static object of order to add to the list
-    OrderInfo order = new OrderInfo();
-    order.date = "30-7-2019";
-    order.price = 2.90;
-    order.type = "متفرقة";
 
-    //this is a static data, will change later , will fill from the api
-    sharedData.listOfColumns.add(order);
-    sharedData.listOfColumns.add(order);
-    sharedData.listOfColumns.add(order);
-    sharedData.listOfColumns.add(order);
     return Scaffold(
       appBar: sharedData.appBar(context, 'طلبياتي ', null, () {}),
       body: SingleChildScrollView(
