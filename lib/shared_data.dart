@@ -1,10 +1,94 @@
- import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 ///this file for shared data between pages
 
 String appBarTitle = "الصفحة الرئيسية";
+List<String> icons = [
+  "assets/images/user.png",
+  "assets/images/order.png",
+  "assets/images/payment.png",
+  "assets/images/win.png",
+  "assets/images/question.png",
+  "assets/images/privacy.png",
+  "assets/images/privacy.png",
+  "",
+  "assets/images/logout.png",
+];
+final String homeTextPage = 'الصفحة الرئيسية';
+final String workWithusText = 'اعمل معنا';
+final String cardText = 'سلة المشتريات';
+final String chatText = 'المراسلة';
 
+List categoriesList = [
+  {"id": "business", "name": "خدمات", "icon": Icons.work, "color": Colors.teal},
+  {
+    "id": "technology",
+    "name": "التكنولوجيا",
+    "icon": Icons.smartphone,
+    "color": Colors.grey[600]
+  },
+  {
+    "id": "science-and-nature",
+    "name": "العقارات",
+    "icon": Icons.nature_people,
+    "color": Colors.green[600]
+  },
+  {
+    "id": "sport",
+    "name": "السيارات",
+    "icon": Icons.directions_car,
+    "color": Colors.deepOrange
+  },
+  {
+    "id": "gaming",
+    "name": "الموبايل",
+    "icon": Icons.phone_android,
+    "color": Colors.orange
+  },
+  {
+    "id": "general",
+    "name": "اللابتوب",
+    "icon": Icons.laptop,
+    "color": Colors.cyan
+  },
+  {
+    "id": "entertainment",
+    "name": "كاميرات",
+    "icon": Icons.photo_camera,
+    "color": Colors.purple
+  },
+  {
+    "id": "health-and-medical",
+    "name": "حيوانات",
+    "icon": Icons.control_point_duplicate,
+    "color": Colors.red
+  },
+  {
+    "id": "music",
+    "name": "وظائف",
+    "icon": Icons.airplanemode_active,
+    "color": Colors.amber
+  },
+  {
+    "id": "politics",
+    "name": "اكسسوارات",
+    "icon": Icons.assistant_photo,
+    "color": Colors.blueGrey
+  },
+];
+
+List<String> titles = [
+  "الملف الشخصي",
+  "طلبياتي السابفة",
+  "الرصيد",
+  "اكسب معنا",
+  "المساعدة",
+  "سياسة الخصوصية",
+  "شروط الإستخدام",
+  "تغيير اللغة",
+  "تسجيل الخروج",
+];
 const primary_color = Color(0xFFFBBF00);
 const socondary_color = Color(0xFFFBBF00);
 
@@ -26,23 +110,36 @@ class sharedData {
   );
   static const Icon searchIcon = Icon(Icons.search);
   static const Icon menuIcon = Icon(Icons.menu);
-  static const Icon phoneIcon = Icon(Icons.phone , color: sharedData.yellow,);
-  static const Icon locationIcon = Icon(Icons.location_on , color: sharedData.yellow,);
-  static const Icon emailIcon = Icon(Icons.email , color: sharedData.yellow,);
+  static const Icon phoneIcon = Icon(
+    Icons.phone,
+    color: sharedData.yellow,
+  );
+  static const Icon locationIcon = Icon(
+    Icons.location_on,
+    color: sharedData.yellow,
+  );
+  static const Icon emailIcon = Icon(
+    Icons.email,
+    color: sharedData.yellow,
+  );
 
-  static const TextStyle navBarTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black);
-  static const TextStyle textInProfileTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black , fontSize: 25);
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
+  static const TextStyle navBarTextStyle =
+      TextStyle(fontWeight: FontWeight.bold, color: Colors.black);
+  static const TextStyle textInProfileTextStyle =
+      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
 
-  static  Color grayColor12 =  new Color (0x1F000000);
-  static const Color yellow =  const Color (0xFFFFEB3B);
+  static Color grayColor12 = new Color(0x1F000000);
+  static const Color yellow = const Color(0xFFFFEB3B);
 
   static const String searchHintText = 'البحث';
-  static const String phoneHintTextField  ='رقم الهاتف';
-  static const String  locationHintTextField ='الموقع';
-  static const String  emailHintTextField ='البريد الالكتروني';
-  static const String  updateProfileTextField ='تعديل الملف الشخصي';
-  static const String  textInProfileTextField ='اكمل الملف الشخصي للحصول على جوائز';
+  static const String phoneHintTextField = 'رقم الهاتف';
+  static const String locationHintTextField = 'الموقع';
+  static const String emailHintTextField = 'البريد الالكتروني';
+  static const String updateProfileTextField = 'تعديل الملف الشخصي';
+  static const String textInProfileTextField =
+      'اكمل الملف الشخصي للحصول على جوائز';
 
   static const List<String> boxesImages = [
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
@@ -67,7 +164,7 @@ class sharedData {
     'رز ',
   ];
 
-  static const  List<String> sliderHomeImages = [
+  static const List<String> sliderHomeImages = [
     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
     'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
     'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
@@ -80,6 +177,7 @@ class sharedData {
     primarySwatch: Colors.yellow,
   );
 
-  static const String profileImage = 'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
+  static const String profileImage =
+      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
   static const String name = 'محمد محمد';
 }

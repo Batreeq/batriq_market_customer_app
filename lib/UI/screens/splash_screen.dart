@@ -19,7 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// To navigate layout change
   void NavigatorPage() {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context )=> HomePagee()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (BuildContext context) => HomePagee()));
   }
 
   /// Declare startTime to InitState
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Center(
           child: Image.asset(
-        "assets/images/splash.png",
+        "assets/images/logo.png",
         width: 150,
         height: 150,
         fit: BoxFit.fill,
