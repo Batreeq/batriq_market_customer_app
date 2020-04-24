@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'models/UserBalance.dart';
 import 'models/orderInfo.dart';
 
 ///this file for shared data between pages
@@ -36,8 +37,7 @@ class sharedData {
 
   static const TextStyle navBarTextStyle = TextStyle(
       fontWeight: FontWeight.bold, color: Colors.black);
-  static const TextStyle tableFieldsTextStyle = TextStyle(
-      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18);
+  static const TextStyle tableFieldsTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 17);
   static const TextStyle textInProfileTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
       color: Colors.black,
@@ -62,9 +62,9 @@ class sharedData {
   static const String rechargeBalanceTextField = 'اعادة شحن رصيد';
   static const String accountStatementTextField = 'كشف حساب';
 
-  static const String totalBalanceData = '0.220';
-  static const String activeBalanceData = '0.200';
-  static const String notActiveBalanceData = '0.20';
+  static String totalBalanceData = '100';
+  static String activeBalanceData = '100';
+  static String notActiveBalanceData = '100';
 
 
   static Widget appBar(BuildContext context , String title , Icon icon , void fun()){
@@ -197,11 +197,12 @@ class sharedData {
   }
 
   static Future<String> readFromStorage({String key}) async{
-
      //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
     String s = await storage.read(key: key ,);
      print (s + 'in read storage in shared');
-    return storage.read(key: key ,);
+     token = await storage.read(key: key ,);
+    token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807';
+    return token ;
   }
 
   static setToken(String token) async {
@@ -241,5 +242,11 @@ class sharedData {
   static const String registerUrl = 'https://jaraapp.com/index.php/api/register?';
   static const String addMemberUrl = 'https://jaraapp.com/index.php/api/addFamilyMembers';
   static const String myOrdersUrl = 'https://jaraapp.com/index.php/api/myOrders';
+  static const String userBalanceUrl = 'https://jaraapp.com/index.php/api/userBalance?api_token=';
+
+  static String userPoints = '0';
+  static List <UserPayments>  listOfUserPayment ;
+
+static  String name, phone, location, email, image;
 
 }

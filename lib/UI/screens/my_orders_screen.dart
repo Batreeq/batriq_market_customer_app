@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:customerapp/UI/screens/ping/OrderDetails.dart';
 import 'package:customerapp/models/ListOfMyOrders.dart';
-import 'package:customerapp/models/orderInfo.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
@@ -18,7 +15,6 @@ class _MyOrdersScreen extends State {
   String token = '';
 
   DateTime selectedDate = DateTime.now();
-
 
   DateTime oldTime ;
 
@@ -245,7 +241,6 @@ class _MyOrdersScreen extends State {
   }
 
   void getUserOrders(String token) async {
-    token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807';
     print('token in before do get orders request $token');
 
     sharedData.showLoadingDialog(context);

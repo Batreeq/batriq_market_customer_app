@@ -1,14 +1,240 @@
+import 'package:customerapp/UI/screens/ping/BalanceDetails.dart';
+import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:requests/requests.dart';
 
-class BalanceScreen extends StatelessWidget {
+class BalanceScreen extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _BalanceScreen();
+  }
+
+}
+
+class _BalanceScreen extends State {
+
+  bool checkBoxValue1 = false,
+      checkBoxValue2 = false;
+  bool checkBoxValue3 = false,
+      checkBoxValue4 = false;
+  BuildContext context;
+
+  UserBalance userBalance = new UserBalance();
+  UserBalanceModel userBalanceModel = new UserBalanceModel();
+  List<UserPayments> listUserPayment = new List<UserPayments>();
+  Size size;
+
+  @override
+  void initState() {
+    super.initState();
+    sharedData.readFromStorage(key: 'token').then((val) {
+      getUserBalance(val);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    size = MediaQuery
+        .of(context)
+        .size;
+    this.context = context;
+    return Scaffold(
+      appBar: sharedData.appBar(context, 'الرصيد', null, () {}),
+      body: getBody(),
+    );
+  }
 
+  Future<void> replacementDialogUI() {
+    String title = 'اشحن رصيد من خلال';
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext c) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Dialog(
+              //elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              //   backgroundColor: Colors.red,
+              child: SingleChildScrollView(
+                  child: Container(
+                    // height: size.height -20 ,
+                    //   width: size.width,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              textDirection: TextDirection.rtl,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      title,
+                                      textAlign: TextAlign.right,
+                                      style: sharedData.textInProfileTextStyle,
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  textDirection: TextDirection.rtl,
+                                  children: <Widget>[
+                                    Checkbox(
+                                        autofocus: true,
+                                        value: checkBoxValue1,
+                                        //   activeColor: Colors.green,
+                                        onChanged: (bool newValue) {
+                                          print(checkBoxValue1.toString());
+                                          if (newValue)
+                                            setState(() {
+                                              checkBoxValue1 = true;
+                                            });
+                                          else
+                                            checkBoxValue1 = false;
+                                          print(checkBoxValue1.toString() +
+                                              " " +
+                                              checkBoxValue2.toString() +
+                                              ' ' +
+                                              newValue.toString());
+                                        }),
+                                    Text(
+                                      'شحن من خلال فواتير في المستقبل',
+                                      textAlign: TextAlign.right,
+                                      style: sharedData.optionStyle,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  textDirection: TextDirection.rtl,
+                                  children: <Widget>[
+                                    Checkbox(
+                                        value: checkBoxValue2,
+                                        onChanged: (bool newValue) {
+                                          setState(() {
+                                            checkBoxValue2 = newValue;
+                                          });
+                                        }),
+                                    Text(
+                                      'شحن من خلال الفيزا',
+                                      textAlign: TextAlign.right,
+                                      style: sharedData.optionStyle,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  textDirection: TextDirection.rtl,
+                                  children: <Widget>[
+                                    Checkbox(
+                                        autofocus: true,
+                                        value: checkBoxValue3,
+                                        //   activeColor: Colors.green,
+                                        onChanged: (bool newValue) {
+                                          print(checkBoxValue3.toString());
+                                          if (newValue)
+                                            setState(() {
+                                              checkBoxValue3 = true;
+                                            });
+                                          else
+                                            checkBoxValue3 = false;
+                                          print(checkBoxValue3.toString() +
+                                              " " +
+                                              checkBoxValue4.toString() +
+                                              ' ' +
+                                              newValue.toString());
+                                        }),
+                                    Text(
+                                      'اشحن من ماستر كارد',
+                                      textAlign: TextAlign.right,
+                                      style: sharedData.optionStyle,
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 9.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: RaisedButton(
+                                      child: Text(
+                                        'تأكيد',
+                                        style: sharedData
+                                            .textInProfileTextStyle,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      color: sharedData.yellow,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
+                      ))),
+            );
+          });
+        });
+  }
+
+  void getUserBalance(String token) async {
+    print('token in before do get orders request $token');
+
+
+    if (token != '') {
+      final response = await Requests.get(
+          sharedData.userBalanceUrl + token,
+          bodyEncoding: RequestBodyEncoding.FormURLEncoded
+      );
+
+      sharedData.showLoadingDialog(context);
+      await Future.delayed(Duration(seconds: 3));
+
+      print(response.json());
+      print(response.statusCode);
+
+      Navigator.of(context).pop();
+      if (response.statusCode == 200) {
+        response.raiseForStatus();
+        dynamic json = response.json();
+        setState(() {
+          userBalanceModel = UserBalanceModel.fromJson(json);
+        });
+
+        if (userBalanceModel.userBalance != null) {
+          setState(() {
+            sharedData.activeBalanceData = userBalanceModel.userBalance.activeBalance;
+            sharedData.notActiveBalanceData =
+                userBalanceModel.userBalance.inactiveBalance;
+            sharedData.totalBalanceData =
+                userBalanceModel.userBalance.totalBalance;
+          });
+        }
+        else
+          print('user balance is null ');
+        if (userBalanceModel.userPayments != null)
+          if (userBalanceModel.userPayments.length != 0)
+            listUserPayment = userBalanceModel.userPayments;
+          else
+            print('list of payment length is 0 ');
+        else
+          print('list of payment is null ');
+
+        //  Navigator.of(context).pop(); //close the dialog
+      }
+      else
+        sharedData.flutterToast(
+            'Some thing went wrong in getting your orders, please try again ' +
+                response.statusCode);
+    } else
+      print('token is null in my orders method is null ');
+  }
+
+  getBody() {
     return Center(
       child: Container(
         //  to add border to the container  ,
@@ -108,17 +334,11 @@ class BalanceScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
-
-
-
-
-
-
-
                   ],
                 ),
-                SizedBox(height: 40,),
+                SizedBox(
+                  height: 40,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -133,38 +353,44 @@ class BalanceScreen extends StatelessWidget {
                         borderRadius: new BorderRadius.circular(4.0),
                         // side: BorderSide(color: Colors.red)
                       ),
-                      onPressed: () {},
-                      child: Text(sharedData.rechargeBalanceTextField,
-                        style: sharedData.textInProfileTextStyle,),
+                      onPressed: () {
+                        replacementDialogUI();
+                      },
+                      child: Text(
+                        sharedData.rechargeBalanceTextField,
+                        style: sharedData.textInProfileTextStyle,
+                      ),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width - 50,
-                    height: 50,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: sharedData.grayColor12
-                        )
-                      ),
-                      child: RaisedButton(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(4.0),
-                          // side: BorderSide(color: Colors.red)
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width - 50,
+                      height: 50,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: sharedData.grayColor12)),
+                        child: RaisedButton(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(4.0),
+                            // side: BorderSide(color: Colors.red)
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext c) =>
+                                    BalanceDetails(listUserPayment)));
+                          },
+                          child: Text(
+                            sharedData.accountStatementTextField,
+                            style: sharedData.textInProfileTextStyle,
+                          ),
                         ),
-                        onPressed: () {},
-                        child: Text(sharedData.accountStatementTextField,
-                          style: sharedData.textInProfileTextStyle,),
-                      ),
-                    )
-                  ),
+                      )),
                 ),
               ],
             ),

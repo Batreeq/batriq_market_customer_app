@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:customerapp/UI/screens/balance_screen.dart';
 import 'package:customerapp/UI/screens/ping/BalanceDetails.dart';
 import 'package:customerapp/UI/screens/ping/SearchBar.dart';
 import 'package:flutter/cupertino.dart';
@@ -105,7 +106,7 @@ class _HomeState extends State<Home> {
                   //menu icon
                   IconButton(
                     icon: sharedData.menuIcon,
-                    onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=>BalanceDetails())) ;  },
+                    onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=>BalanceScreen())) ;  },
                   ),
                 ],
               ),

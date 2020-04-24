@@ -1,6 +1,7 @@
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:requests/requests.dart';
 
 class EarnWithUsScreen extends StatefulWidget{
   @override
@@ -14,6 +15,10 @@ class _EarnWithUsScreen extends State {
       checkBoxValue2 = false;
   BuildContext context;
 
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     this.context = context;
@@ -85,7 +90,7 @@ class _EarnWithUsScreen extends State {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text('نقطة 200 ',
+                                  child: Text(sharedData.userPoints + 'نقطة ',
                                     style: sharedData.navBarTextStyle,),
                                 ),
                               ],
@@ -106,7 +111,7 @@ class _EarnWithUsScreen extends State {
                   child: Text('أستبدل نقاطك',
                     style: sharedData.textInProfileTextStyle,),
                   onPressed: () {
-                    replacementDialogUI();
+                    DialogUI();
                     // Navigator.of(context).pop();
                   },
                   shape: RoundedRectangleBorder(
@@ -123,7 +128,7 @@ class _EarnWithUsScreen extends State {
     );
   }
 
-  Future<void> replacementDialogUI() {
+  Future<void> DialogUI() {
     String title = 'استبدل نقاطك ب';
     return showDialog<void>(
         context: context,

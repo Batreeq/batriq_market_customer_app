@@ -1,22 +1,31 @@
- import 'package:customerapp/models/orderInfo.dart';
+ import 'package:customerapp/models/UserBalance.dart';
+import 'package:customerapp/models/orderInfo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 
 class BalanceDetails extends StatefulWidget {
+  List <UserPayments>  listOfUserPayment ;
+
+
+  BalanceDetails(this.listOfUserPayment);
+
   @override
   State<StatefulWidget> createState() {
-    return _BalanceDetails();
+    return _BalanceDetails(this.listOfUserPayment);
   }
 }
 
 class _BalanceDetails extends State {
-  List<String> list;
+  List<UserPayments> listOfUserPayment;
+
+  _BalanceDetails(this.listOfUserPayment);
 
   @override
   Widget build(BuildContext context) {
-    list = new List<String>();
-    //  list.add('Rawan ');
+
+
+    //  listOfUserPayment.add('Rawan ');
     return Scaffold(
       appBar: sharedData.appBar(context, 'كشف الحساب', null, () {}),
       resizeToAvoidBottomInset: false,
@@ -25,10 +34,15 @@ class _BalanceDetails extends State {
   }
 
   Widget getTable() {
+    if (sharedData.listOfUserPayment == null )
+    if (sharedData.listOfUserPayment.length == 0)
+      return Container();
+     // sharedData.listOfUserPayment = new List<UserPayments>();
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: DataTable(
-          columnSpacing: 18,
+          columnSpacing: 10,
+          dataRowHeight: 55,
           columns: [
             DataColumn(
               label: Row(
@@ -73,22 +87,26 @@ class _BalanceDetails extends State {
             ),
           ],
           rows:
-          list // Loops through dataColumnText, each iteration assigning the value to element
+          sharedData.listOfUserPayment // Loops through dataColumnText, each iteration assigning the value to element
               .map(
             ((element) =>
                 DataRow(
                   cells: <DataCell>[
                     DataCell(Text(
-                      '',
+                      element.totalBalance,
                       style: sharedData.tableFieldsTextStyle,
                     )),
                     //Extracting from Map element the value
                     DataCell(Text(
-                      '',
+                      element.creditDebt,
                       style: sharedData.tableFieldsTextStyle,
                     )),
                     DataCell(Text(
-                      '',
+                      element.details,
+                      style: sharedData.tableFieldsTextStyle,
+                    )),
+                    DataCell(Text(
+                      element.createdDate,
                       style: sharedData.tableFieldsTextStyle,
                     )),
                   ],
