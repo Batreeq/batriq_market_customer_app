@@ -39,14 +39,14 @@ class sharedData {
   static const TextStyle navBarTextStyle = TextStyle(
       fontWeight: FontWeight.bold, color: Colors.black);
   static const TextStyle tableFieldsTextStyle = TextStyle(
-      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 17);
+      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 13);
   static const TextStyle textInProfileTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
       color: Colors.black,
       fontSize: 25,
       fontFamily: 'Cairo-Black');
   static const TextStyle optionStyle = TextStyle(
-      fontSize: 18, color: Colors.black);
+      fontSize: 17, color: Colors.black);
 
   static Color grayColor12 = new Color (0x1F000000);
   static const Color yellow = const Color(0xFFFBBF00);

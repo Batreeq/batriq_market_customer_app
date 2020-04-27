@@ -41,8 +41,8 @@ class _BalanceDetails extends State {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: DataTable(
-          columnSpacing: 10,
-          dataRowHeight: 55,
+          columnSpacing: 7,
+          dataRowHeight: 50,
           columns: [
             DataColumn(
               label: Row(

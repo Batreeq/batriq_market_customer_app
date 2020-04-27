@@ -32,7 +32,7 @@ class _BalanceScreen extends State {
   void initState() {
     super.initState();
     sharedData.readFromStorage(key: 'token').then((val) {
-      getUserBalance(val);
+    //  getUserBalance(val);
     });
   }
 
@@ -244,8 +244,8 @@ class _BalanceScreen extends State {
           ),
           borderRadius: BorderRadius.circular(10.0),
         ),
-        width: size.width - 30,
-        height: size.height - 250,
+        width: size.width - 12,
+        height: size.height - 150,
 
         child: GFAvatar(
           backgroundColor: Colors.white30,
@@ -270,7 +270,7 @@ class _BalanceScreen extends State {
                         ),
                         // the size box to make each row far from the above
                         SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -311,7 +311,7 @@ class _BalanceScreen extends State {
                           ),
                           // the size box to make each row far from the above
                           SizedBox(
-                            height: 30,
+                            height: 25,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -337,7 +337,7 @@ class _BalanceScreen extends State {
                   ],
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 35,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

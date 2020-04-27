@@ -137,7 +137,7 @@ class _MyOrdersScreen extends State {
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: DataTable(
-              columnSpacing: 30,
+              columnSpacing: 20,
               columns: [
                 DataColumn(
                   label:   Row(
