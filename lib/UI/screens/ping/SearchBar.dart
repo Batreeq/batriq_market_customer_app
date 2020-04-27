@@ -17,6 +17,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPage extends State<SearchPage> {
   SearchData searchData = new SearchData();
+  List<Products> productsList;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _SearchPage extends State<SearchPage> {
           hintText: sharedData.searchHintText,
           onSearch: search,
           onError: (error) {
-            print(error.toString());
+            print('search error ' + error.toString());
             return Center(child: Text('No Items Found',
               style: sharedData.textInProfileTextStyle,));
           },
@@ -50,65 +51,69 @@ class _SearchPage extends State<SearchPage> {
       ),
     );
   }
-  List<Products> productsList;
+
+
   // this function called   the user type string and will take the searched String and return a list of Post items generated from the String.
   Future<List<Products>> search(String searchString) async {
     getSearchDataFromAPI(searchString); //.then((val) async {
-    if (sharedData != null) {
-      productsList  = searchData.products;
-      // here should be the search api to get te result
-      await Future.delayed(Duration(seconds: 5));
-      return searchData.products ;
-//      return List.generate(searchData.products.length, (int index) {
-//        return Products(
-//          name: productsList
-//              .elementAt(index)
-//              .name,
-//          id: productsList
-//              .elementAt(index)
-//              .id,
-//          categoryId: productsList
-//              .elementAt(index)
-//              .categoryId,
-//          size: productsList
-//              .elementAt(index)
-//              .size,
-//          createdAt: productsList
-//              .elementAt(index)
-//              .createdAt,
-//          detailsImage: productsList
-//              .elementAt(index)
-//              .detailsImage,
-//          detailsText: productsList
-//              .elementAt(index)
-//              .detailsText,
-//          detailsTitle: productsList
-//              .elementAt(index)
-//              .detailsTitle,
-//          image: productsList
-//              .elementAt(index)
-//              .image,
-//          notice: productsList
-//              .elementAt(index)
-//              .notice,
-//          price: productsList
-//              .elementAt(index)
-//              .price,
-//          quantity: productsList
-//              .elementAt(index)
-//              .quantity,
-//          updatedAt: productsList
-//              .elementAt(index)
-//              .updatedAt,
-//        );
-//      });
-    } else {
-      sharedData.flutterToast('List is Empty');
-    }
+
+    if (searchData != null)
+      if (searchData.products != null)
+        if (searchData.products.length != 0) {
+          productsList = searchData.products;
+          // here should be the search api to get te result
+          await Future.delayed(Duration(seconds: 5));
+          return List.generate(searchData.products.length, (int index) {
+            return Products(
+              name: productsList
+                  .elementAt(index)
+                  .name,
+              id: productsList
+                  .elementAt(index)
+                  .id,
+              categoryId: productsList
+                  .elementAt(index)
+                  .categoryId,
+              size: productsList
+                  .elementAt(index)
+                  .size,
+              createdAt: productsList
+                  .elementAt(index)
+                  .createdAt,
+              detailsImage: productsList
+                  .elementAt(index)
+                  .detailsImage,
+              detailsText: productsList
+                  .elementAt(index)
+                  .detailsText,
+              detailsTitle: productsList
+                  .elementAt(index)
+                  .detailsTitle,
+              image: productsList
+                  .elementAt(index)
+                  .image,
+              notice: productsList
+                  .elementAt(index)
+                  .notice,
+              price: productsList
+                  .elementAt(index)
+                  .price,
+              quantity: productsList
+                  .elementAt(index)
+                  .quantity,
+              updatedAt: productsList
+                  .elementAt(index)
+                  .updatedAt,
+
+            );
+          });
+        } else {
+          sharedData.flutterToast('List is Empty');
+        }
   }
 
   Future<SearchData> getSearchDataFromAPI(String searchString) async {
-    // searchString = 'بيض'
+    searchString = 'بيض';
     print(searchString);
     if (searchString != '') {
       final response = await Requests.get(
@@ -138,4 +143,3 @@ class _SearchPage extends State<SearchPage> {
       print('Search String is null ');
   }
 }
-

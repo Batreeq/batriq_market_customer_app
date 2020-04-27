@@ -8,7 +8,10 @@ import 'package:flutter/material.dart';
 import '../../../shared_data.dart';
 import '../cart_screen.dart';
 import '../chat_screen.dart';
+import '../privacy_policy_screen.dart';
+import '../terms_screen.dart';
 import '../work_with_us_screen.dart';
+import 'HelpScreen.dart';
 
 class HomePagee extends StatefulWidget {
   HomePagee({Key key}) : super(key: key);
@@ -20,7 +23,8 @@ class _HomePageState extends State<HomePagee> {
   String token;
   int _selectedIndex = 3;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   _HomePageState();
 
   void _onItemTapped(int index) {
@@ -31,6 +35,7 @@ class _HomePageState extends State<HomePagee> {
 
   PageController pageController;
   int currentTab = 0;
+
   _changeCurrentTab(int tab) {
     setState(() {
       currentTab = tab;
@@ -47,11 +52,17 @@ class _HomePageState extends State<HomePagee> {
     pageController = new PageController();
     List<Widget> _widgetOptions = <Widget>[
       ProfileScreen(), //ChatScreen(),
-      MyOrdersScreen(),//CartScreen(),
-      BalanceScreen(),// WorkWithUsScreen(),
+      MyOrdersScreen(), //CartScreen(),
+      BalanceScreen(), // WorkWithUsScreen(),
       Home() //ProfilePage(),
     ];
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => HelpScreen()));
+        },
+      ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         //  backgroundColor: Colors.grey,

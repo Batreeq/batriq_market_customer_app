@@ -33,8 +33,8 @@ class Products {
   String detailsTitle;
   String detailsImage;
   String notice;
-  Null createdAt;
-  Null updatedAt;
+  String createdAt;
+  String updatedAt;
 
   Products(
       {this.id,

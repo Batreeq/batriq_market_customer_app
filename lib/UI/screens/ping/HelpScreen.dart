@@ -2,19 +2,19 @@ import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 
-class TermsScreen extends StatefulWidget {
+class HelpScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _TermsScreen();
+    return _HelpScreen();
   }
 }
 
-class _TermsScreen extends State {
+class _HelpScreen extends State {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Scaffold(
-        appBar: sharedData.appBar(context, 'Terms ', null, () {}),
+        appBar: sharedData.appBar(context, 'Help ', null, () {}),
         body: SingleChildScrollView(child: Column(
           textDirection: TextDirection.rtl,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -25,7 +25,7 @@ class _TermsScreen extends State {
                 child: GFAvatar(
                   size: 70,
                   backgroundImage: NetworkImage(
-                    sharedData.termsImage,
+                    sharedData.helpImage,
                   ),
                 ),
               ),
