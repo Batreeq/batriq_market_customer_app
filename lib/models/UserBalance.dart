@@ -1,33 +1,3 @@
-class UserBalanceModel {
-  List<UserPayments> userPayments;
-  UserBalance userBalance;
-
-  UserBalanceModel({this.userPayments, this.userBalance});
-
-  UserBalanceModel.fromJson(Map<String, dynamic> json) {
-    if (json['user_payments'] != null) {
-      userPayments = new List<UserPayments>();
-      json['user_payments'].forEach((v) {
-        userPayments.add(new UserPayments.fromJson(v));
-      });
-    }
-    userBalance = json['user_balance'] != null
-        ? new UserBalance.fromJson(json['user_balance'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.userPayments != null) {
-      data['user_payments'] = this.userPayments.map((v) => v.toJson()).toList();
-    }
-    if (this.userBalance != null) {
-      data['user_balance'] = this.userBalance.toJson();
-    }
-    return data;
-  }
-}
-
 class UserPayments {
   int id;
   String userId;

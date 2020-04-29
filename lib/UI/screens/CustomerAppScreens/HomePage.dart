@@ -1,3 +1,4 @@
+import 'package:customerapp/UI/screens/balance_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePagee> {
     List<Widget> _widgetOptions = <Widget>[
       ProfileScreen(), //ChatScreen(),
       MyOrdersScreen(),//CartScreen(),
-      WorkWithUsScreen(), //,DriverPrivileges(),
+     BalanceScreen(),//,DriverPrivileges(),  WorkWithUsScreen(),
       Home() //ProfilePage(),
     ];
     return Scaffold(

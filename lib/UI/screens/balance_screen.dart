@@ -32,14 +32,19 @@ class _BalanceScreen extends State {
     super.initState();
     sharedData.readFromStorage(key: 'token').then((val) {
       //  getUserBalance(val);
-      userBalance = sharedData.userBalance;
-      if (userBalance == null) {
-        userBalance = new UserBalance();
-        userBalance.totalBalance = ' 0';
-        userBalance.totalBalance = ' 0';
-        userBalance.totalBalance = ' 0';
-      }
+
+
     });
+
+    userBalance = sharedData.userBalance;
+    if (userBalance == null ||  userBalance.totalBalance == null || userBalance.activeBalance == null) {
+      userBalance = new UserBalance();
+      setState(() {
+        userBalance.totalBalance = ' 0';
+        userBalance.totalBalance = ' 0';
+        userBalance.totalBalance = ' 0';
+      });
+    }
   }
 
   @override

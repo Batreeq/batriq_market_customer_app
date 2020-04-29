@@ -292,5 +292,6 @@ class sharedData {
   static List<FamilyMembers> familyMembers = new List<FamilyMembers>();
   static UserInfo userInfo = new UserInfo();
   static UserBalance userBalance = new UserBalance();
+
   static List <UserPayments> listOfUserPayment = new List<UserPayments>();
 }
