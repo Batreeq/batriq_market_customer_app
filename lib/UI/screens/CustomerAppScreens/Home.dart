@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import '../../../shared_data.dart';
-import '../BalanceDetails.dart';
+import 'BalanceDetails.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);

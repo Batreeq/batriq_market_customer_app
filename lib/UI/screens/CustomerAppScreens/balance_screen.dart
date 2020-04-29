@@ -1,6 +1,5 @@
 import 'package:customerapp/models/UserBalance.dart';
-import 'package:customerapp/UI/screens/ping/BalanceDetails.dart';
-import 'package:customerapp/models/UserBalance.dart';
+ import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

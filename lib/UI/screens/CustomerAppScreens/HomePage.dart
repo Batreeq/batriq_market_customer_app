@@ -1,4 +1,4 @@
-import 'package:customerapp/UI/screens/balance_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/balance_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
