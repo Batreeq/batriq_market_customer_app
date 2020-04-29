@@ -1,12 +1,9 @@
 import 'package:customerapp/models/UserBalance.dart';
-import 'package:customerapp/UI/screens/ping/BalanceDetails.dart';
-import 'package:customerapp/models/UserBalance.dart';
-import 'package:customerapp/shared_data.dart';
+ import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:requests/requests.dart';
 
 import 'BalanceDetails.dart';
 
@@ -39,7 +36,8 @@ class _BalanceScreen extends State {
     });
 
     userBalance = sharedData.userBalance;
-    if (userBalance == null ||  userBalance.totalBalance == null || userBalance.activeBalance == null) {
+    if (userBalance == null || userBalance.totalBalance == null ||
+        userBalance.activeBalance == null) {
       userBalance = new UserBalance();
       setState(() {
         userBalance.totalBalance = ' 0';
@@ -341,9 +339,8 @@ class _BalanceScreen extends State {
                             // side: BorderSide(color: Colors.red)
                           ),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext c) =>
-                                    BalanceDetails()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c) {return BalanceDetails();})
+                            );
                           },
                           child: Text(
                             sharedData.accountStatementTextField,
