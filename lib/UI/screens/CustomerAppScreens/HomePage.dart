@@ -20,7 +20,8 @@ class _HomePageState extends State<HomePagee> {
   String token;
   int _selectedIndex = 3;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   _HomePageState();
 
   void _onItemTapped(int index) {
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePagee> {
 
   PageController pageController;
   int currentTab = 0;
+
   _changeCurrentTab(int tab) {
     setState(() {
       currentTab = tab;
@@ -47,8 +49,8 @@ class _HomePageState extends State<HomePagee> {
     pageController = new PageController();
     List<Widget> _widgetOptions = <Widget>[
       ProfileScreen(), //ChatScreen(),
-      MyOrdersScreen(),//CartScreen(),
-     BalanceScreen(),//,DriverPrivileges(),  WorkWithUsScreen(),
+      MyOrdersScreen(), //CartScreen(),
+      WorkWithUsScreen(), //,DriverPrivileges(),
       Home() //ProfilePage(),
     ];
     return Scaffold(

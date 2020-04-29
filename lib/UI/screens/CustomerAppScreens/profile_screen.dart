@@ -148,27 +148,30 @@ class _ProfileScreen extends State {
                           ),
                           Container(
                             width: 100,
+                            height: 55,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.grey.withOpacity(0.5),
                                 width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(18.0),
                             ),
                             margin: const EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                controller: familyNumberCon,
-                                textAlign: TextAlign.center,
-                                textDirection: TextDirection.rtl,
-                                keyboardType: TextInputType.number,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  alignLabelWithHint: true,
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(color: Colors.grey),
+                              child: Center(
+                                child: TextFormField(
+                                  controller: familyNumberCon,
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.rtl,
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    alignLabelWithHint: true,
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                  ),
                                 ),
                               ),
                             ),
@@ -201,28 +204,31 @@ class _ProfileScreen extends State {
                           ),
                           Container(
                             width: 100,
+                            height: 50,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.grey.withOpacity(0.5),
                                 width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(18.0),
                             ),
                             margin: const EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: TextField(
-                                controller: salaryCon,
-                                textAlign: TextAlign.center,
-                                textDirection: TextDirection.rtl,
-                                keyboardType: TextInputType.number,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  alignLabelWithHint: true,
-                                  hintText: 'J.D',
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(color: Colors.grey),
+                              child: Center(
+                                child: TextField(
+                                  controller: salaryCon,
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.rtl,
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    alignLabelWithHint: true,
+                                    hintText: 'J.D',
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                  ),
                                 ),
                               ),
                             ),
@@ -371,10 +377,7 @@ class _ProfileScreen extends State {
           ),
         ),
         appBar: sharedData
-            .appBar(context, 'الملف الشخصي', Icon(Icons.arrow_forward), () {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (BuildContext c) => HomePagee()));
-        }));
+            .appBar(context, 'الملف الشخصي', null, (){}));
   }
 
   // Form will fields (phone number, name, location and email ) to fill them by user

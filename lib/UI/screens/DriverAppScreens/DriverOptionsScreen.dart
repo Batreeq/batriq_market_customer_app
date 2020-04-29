@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'PlacesAndTimes.dart';
+import 'TripsNotConfirmedYet.dart';
 
 class DriverOptionsScreen extends StatefulWidget{
   @override
@@ -227,6 +228,7 @@ class _DriverOptionsScreen extends State {
         }
       case 1 :
         {
+          Navigator.of(context).push(MaterialPageRoute( builder: (BuildContext c) => TripsNotConfirmedYet()));
           break;
         }
       case 2 :

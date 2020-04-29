@@ -62,6 +62,8 @@ flutter:
     - assets/images/icons/card.png
     - assets/images/icons/chat.png
     - assets/images/icons/team.png
+    - assets/images/icons/forward.png
+    - assets/images/icons/reword.png
     - assets/images/facebook.png
     - assets/images/reward.png
     - assets/images/googleplus.png
