@@ -106,7 +106,6 @@ class _HomeState extends State<Home> {
                   //menu icon
                   IconButton(
                     icon: sharedData.menuIcon,
-                    onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=>BalanceDetails())) ;  },
                   ),
                 ],
               ),
