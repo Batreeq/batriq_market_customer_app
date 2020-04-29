@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:customerapp/UI/screens/ping/BalanceDetails.dart';
-import 'package:customerapp/UI/screens/ping/SearchBar.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/SearchBar.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/privacy_policy_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import '../../../shared_data.dart';
+import 'BalanceDetails.dart';
+import 'helpScareen.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -86,6 +88,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=>HelpScreen())) ;
+        },
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),

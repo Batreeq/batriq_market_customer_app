@@ -1,11 +1,11 @@
 import 'dart:math';
-
-import 'package:customerapp/UI/screens/ping/OrderDetails.dart';
 import 'package:customerapp/models/ListOfMyOrders.dart';
 import 'package:customerapp/models/orderInfo.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
+
+import 'OrderDetails.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   @override

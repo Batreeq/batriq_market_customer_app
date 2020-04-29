@@ -1,10 +1,8 @@
-import 'package:customerapp/UI/screens/home_screen.dart';
-import 'package:customerapp/UI/screens/ping/HomePage.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'UI/screens/splash_screen.dart';
+import 'UI/screens/CustomerAppScreens/HomePage.dart';
+import 'UI/screens/CustomerAppScreens/splash_screen.dart';
 
 void main() => runApp(MyApp());
 

@@ -85,7 +85,7 @@ class _EarnWithUsScreen extends State {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text('نقطة 200 ',
+                                  child: Text(sharedData.userInfo.points + 'نقطة ',
                                     style: sharedData.navBarTextStyle,),
                                 ),
                               ],

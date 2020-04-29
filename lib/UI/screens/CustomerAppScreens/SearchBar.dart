@@ -1,4 +1,3 @@
-import 'package:customerapp/UI/screens/ping/HomePage.dart';
 import 'package:customerapp/models/searchResult.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +7,7 @@ import 'package:requests/requests.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../shared_data.dart';
+import 'HomePage.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);

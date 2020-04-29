@@ -1,10 +1,28 @@
+import 'package:customerapp/models/UserBalanceModel.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 
-class BalanceScreen extends StatelessWidget {
+class BalanceScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _BalanceScreen();
+  }
+}
+
+
+class _BalanceScreen extends State {
+
+  UserBalance userBalance ;
+  @override
+  void initState() {
+    super.initState();
+    userBalance = sharedData.userBalance ;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -79,7 +97,7 @@ class BalanceScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              sharedData.activeBalanceData + 'JD',
+                              sharedData.userBalance.activeBalance + 'JD',
                               style: sharedData.textInProfileTextStyle,
                             ),
                           ),
@@ -90,7 +108,7 @@ class BalanceScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              sharedData.notActiveBalanceData + 'JD',
+                              sharedData.userBalance.inactiveBalance + 'JD',
                               style: sharedData.textInProfileTextStyle,
                             ),
                           ),
@@ -101,21 +119,13 @@ class BalanceScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              sharedData.totalBalanceData + 'JD',
+                              sharedData.userBalance.totalBalance + 'JD',
                               style: sharedData.textInProfileTextStyle,
                             ),
                           )
                         ],
                       ),
                     ),
-
-
-
-
-
-
-
-
                   ],
                 ),
                 SizedBox(height: 40,),

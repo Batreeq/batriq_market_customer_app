@@ -62,7 +62,10 @@ flutter:
     - assets/images/icons/card.png
     - assets/images/icons/chat.png
     - assets/images/icons/team.png
+    - assets/images/facebook.png
     - assets/images/reward.png
+    - assets/images/googleplus.png
+    - assets/images/batreeq.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,14 +1,14 @@
-import 'package:customerapp/UI/screens/my_orders_screen.dart';
-import 'package:customerapp/UI/screens/ping/profile_screen.dart';
-import 'package:customerapp/UI/screens/balance_screen.dart';
-import 'package:customerapp/UI/screens/ping/Home.dart';
+import 'package:customerapp/UI/screens/DriverAppScreens/DriverPrivileges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../shared_data.dart';
-import '../cart_screen.dart';
-import '../chat_screen.dart';
-import '../work_with_us_screen.dart';
+import 'Home.dart';
+import 'cart_screen.dart';
+import 'chat_screen.dart';
+import 'my_orders_screen.dart';
+import 'profile_screen.dart';
+import 'work_with_us_screen.dart';
 
 class HomePagee extends StatefulWidget {
   HomePagee({Key key}) : super(key: key);
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePagee> {
     List<Widget> _widgetOptions = <Widget>[
       ProfileScreen(), //ChatScreen(),
       MyOrdersScreen(),//CartScreen(),
-      WorkWithUsScreen(),
+      WorkWithUsScreen(), //,DriverPrivileges(),
       Home() //ProfilePage(),
     ];
     return Scaffold(
