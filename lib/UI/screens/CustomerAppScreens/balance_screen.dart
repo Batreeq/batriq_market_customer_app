@@ -25,27 +25,17 @@ class _BalanceScreen extends State {
       checkBoxValue4 = false;
   BuildContext context;
 
-  UserBalance userBalance = new UserBalance();
   Size size;
+  UserBalance userBalance;
 
   @override
   void initState() {
     super.initState();
+    userBalance = new UserBalance();
+
     sharedData.readFromStorage(key: 'token').then((val) {
       //  getUserBalance(val);
-
-
     });
-
-    userBalance = sharedData.userBalance;
-    if (userBalance == null ||  userBalance.totalBalance == null || userBalance.activeBalance == null) {
-      userBalance = new UserBalance();
-      setState(() {
-        userBalance.totalBalance = ' 0';
-        userBalance.totalBalance = ' 0';
-        userBalance.totalBalance = ' 0';
-      });
-    }
   }
 
   @override
@@ -53,6 +43,18 @@ class _BalanceScreen extends State {
     size = MediaQuery
         .of(context)
         .size;
+
+
+    userBalance = sharedData.userBalance;
+    if (userBalance == null || userBalance.totalBalance == null ||
+        userBalance.activeBalance == null) {
+      userBalance = new UserBalance();
+      setState(() {
+        userBalance.activeBalance = ' 0';
+        userBalance.inactiveBalance = ' 0';
+        userBalance.totalBalance = ' 0';
+      });
+    }
     this.context = context;
     return Scaffold(
       appBar: sharedData.appBar(context, 'الرصيد', null, () {}),
@@ -275,7 +277,7 @@ class _BalanceScreen extends State {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              sharedData.userBalance.inactiveBalance + 'JD',
+                              userBalance.inactiveBalance + 'JD',
                               style: sharedData.textInProfileTextStyle,
                             ),
                           ),
@@ -286,7 +288,7 @@ class _BalanceScreen extends State {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              sharedData.userBalance.totalBalance + 'JD',
+                              userBalance.totalBalance + 'JD',
                               style: sharedData.textInProfileTextStyle,
                             ),
                           )
