@@ -12,22 +12,43 @@ class BalanceDetails extends StatefulWidget {
 }
 
 class _BalanceDetails extends State {
-  List<UserPayments> list;
-  UserPayments userPayments ;
+
+  bool isSelect = false;
+
+  bool isAscending = true;
+
+  List<UserPayments> list = new List<UserPayments> ();
+  UserPayments userPayments = new UserPayments();
 
   @override
   void initState() {
     super.initState();
-    list = new List<UserPayments> ();
-    userPayments = new UserPayments();
-    list = sharedData.listOfUserPayment ;
-    if (list == null || list.length == 0 )
-      list.add(userPayments);
+  }
+
+  bool isSelected() {
+    if (isSelect)
+      isSelect = false;
+    else
+      isSelect = true;
+    print(isSelect.toString());
+    return isSelect;
+  }
+
+  sortAscending() {
+    if (isAscending)
+      isAscending = false;
+    else
+      isAscending = true;
+    print(isAscending.toString());
+    return isAscending;
   }
 
   @override
   Widget build(BuildContext context) {
-    list = new List<UserPayments>();
+    list = sharedData.listOfUserPayment;
+
+    if (list == null || list.length == 0)
+      list.add(userPayments);
     //  list.add('Rawan ');
     return Scaffold(
       appBar: sharedData.appBar(context, 'كشف الحساب', null, () {}),
@@ -39,9 +60,10 @@ class _BalanceDetails extends State {
   Widget getTable() {
     return Padding(
         padding: const EdgeInsets.all(8.0),
-        child:Align(
+        child: Align(
           alignment: Alignment.topCenter,
-          child:  DataTable(
+          child: DataTable(
+            sortAscending: sortAscending(),
             columnSpacing: 18,
             columns: [
               DataColumn(
@@ -91,6 +113,7 @@ class _BalanceDetails extends State {
                 .map(
               ((element) =>
                   DataRow(
+                    selected: isSelected(),
                     cells: <DataCell>[
                       DataCell(Text(
                         element.totalBalance,
@@ -102,11 +125,11 @@ class _BalanceDetails extends State {
                         style: sharedData.tableFieldsTextStyle,
                       )),
                       DataCell(Text(
-                      element.details,
+                        element.details,
                         style: sharedData.tableFieldsTextStyle,
                       )),
                       DataCell(Text(
-                      element.createdDate,
+                        element.createdDate,
                         style: sharedData.tableFieldsTextStyle,
                       )),
                     ],

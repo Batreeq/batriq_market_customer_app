@@ -23,6 +23,16 @@ class _MyOrdersScreen extends State {
 
   ListOfMyOrders listOfMyOrders ;
   Orders orders = new Orders();
+  bool isSelect = false;
+
+  bool isSelected() {
+    if (isSelect)
+      isSelect = false;
+    else
+      isSelect = true;
+    print(isSelect.toString());
+    return isSelect;
+  }
 
   @override
   void initState() {
@@ -184,6 +194,7 @@ class _MyOrdersScreen extends State {
                 List<String> dateSplit = element.createdAt.split('-');
                 return
                   DataRow(
+                    selected: isSelected(),
                     cells: <DataCell>[
                       DataCell(
                           Text(

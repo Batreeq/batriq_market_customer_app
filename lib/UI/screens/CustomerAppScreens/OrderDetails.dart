@@ -23,6 +23,8 @@ class OrderDetailsScreen extends StatefulWidget{
 
    List <OrderDetails> listOfOrdersDetails ;
 
+   bool isSelect = false;
+
   _OrderDetails(this.listOfOrdersDetails , this.orderDate);
 
   @override
@@ -132,6 +134,7 @@ class OrderDetailsScreen extends StatefulWidget{
                   .map(
                 ((element) =>
                     DataRow(
+                      selected: isSelected(),
                       cells: <DataCell>[
                         DataCell(Text(
                           element.totalPrice.toString() + 'JD',
@@ -152,4 +155,14 @@ class OrderDetailsScreen extends StatefulWidget{
                   .toList(),
             )));
   }
+
+
+   bool isSelected() {
+     if (isSelect)
+       isSelect = false;
+     else
+       isSelect = true;
+     print(isSelect.toString());
+     return isSelect;
+   }
  }

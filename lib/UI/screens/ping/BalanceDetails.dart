@@ -20,7 +20,7 @@ class _BalanceDetails extends State {
     super.initState();
     list = new List<UserPayments> ();
     userPayments = new UserPayments();
-    list = sharedData.listOfUserPayment ;
+
     if (list == null || list.length == 0 )
       list.add(userPayments);
   }
