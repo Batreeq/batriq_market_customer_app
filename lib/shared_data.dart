@@ -1,10 +1,10 @@
- import 'package:customerapp/models/UserBalanceModel.dart';
-import 'package:flutter/cupertino.dart';
+ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/UserInfo.dart';
+import 'models/UserBalance.dart';
 import 'models/orderInfo.dart';
 
 ///this file for shared data between pages
@@ -86,7 +86,7 @@ class sharedData {
   static Widget appBar(BuildContext context, String title, Icon icon,
       void fun()) {
     return AppBar(
-      title: Text(title, style: appBarTextStyle,),
+      title: Text(title, style: tableFieldsTextStyle,),
       centerTitle: true,
       // automaticallyImplyLeading: true,
       actions: <Widget>[
@@ -293,5 +293,4 @@ class sharedData {
   static UserInfo userInfo = new UserInfo();
   static UserBalance userBalance = new UserBalance();
   static List <UserPayments> listOfUserPayment = new List<UserPayments>();
-
 }

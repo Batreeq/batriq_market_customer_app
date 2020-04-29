@@ -1,4 +1,3 @@
-import 'package:customerapp/UI/screens/DriverAppScreens/DriverPrivileges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

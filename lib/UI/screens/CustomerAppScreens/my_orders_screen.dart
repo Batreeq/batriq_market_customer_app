@@ -19,7 +19,6 @@ class _MyOrdersScreen extends State {
 
   DateTime selectedDate = DateTime.now();
 
-
   DateTime oldTime ;
 
   ListOfMyOrders listOfMyOrders ;
@@ -245,7 +244,6 @@ class _MyOrdersScreen extends State {
   }
 
   void getUserOrders(String token) async {
-    token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807';
     print('token in before do get orders request $token');
 
     sharedData.showLoadingDialog(context);

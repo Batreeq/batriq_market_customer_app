@@ -1,6 +1,7 @@
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:requests/requests.dart';
 
 class EarnWithUsScreen extends StatefulWidget{
   @override
@@ -14,6 +15,10 @@ class _EarnWithUsScreen extends State {
       checkBoxValue2 = false;
   BuildContext context;
 
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     this.context = context;
