@@ -284,6 +284,10 @@ class _ProfileScreen extends State {
      // getUserDataFromAPI(tokn);
       token = tokn ;
     });
+    defaultImageWidget = GFAvatar(
+      size: 70,
+      backgroundImage: NetworkImage(image),
+    );
   }
 
   @override
@@ -293,10 +297,7 @@ class _ProfileScreen extends State {
 
     size = MediaQuery.of(context).size;
     // token not null so user registered before so his info will get from api and put them in the fields
-    defaultImageWidget = GFAvatar(
-      size: 70,
-      backgroundImage: NetworkImage(image),
-    );
+
 
     return Scaffold(
         resizeToAvoidBottomPadding: true,
@@ -751,12 +752,31 @@ class _ProfileScreen extends State {
           // to transfer the image to base64 to upload it it the database
           base64Image = base64Encode(snapshot.data.readAsBytesSync());
 
-          return GFAvatar(
-            child: Image.file(snapshot.data),
+          return  Container(
+            width: 100.0,
+            height: 100.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(49.0)),
+               color: sharedData.grayColor12,
+            ),
+            child: Image.file(
+              snapshot.data ,fit: BoxFit.cover,
+              height: 100.0,
+              width: 100.0,
+            ),
           );
+
+
+          /*GFAvatar(
+            shape: GFAvatarShape.standard,
+            size: 70,
+             child : Image.file(snapshot.data ,fit: BoxFit.fitHeight,)
+          );*/
+
         } else if (snapshot.hasError) {
           sharedData.flutterToast('Error In Uploading Image ');
           return GFAvatar(
+            shape: GFAvatarShape.circle,
             size: 70,
             backgroundImage: NetworkImage(
               sharedData.profileImage,
