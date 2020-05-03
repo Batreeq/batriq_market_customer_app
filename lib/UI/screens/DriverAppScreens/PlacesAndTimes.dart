@@ -1,6 +1,7 @@
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'DriverPlaces.dart';
 import 'DriverTimes.dart';
 
 class PlacesAndTimes  extends StatefulWidget{
@@ -54,7 +55,10 @@ class _PlacesAndTimes  extends State {
             width: double.infinity,
             height: 40,
             child: RaisedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext c) => DriverPlaces()));
+              },
               color: sharedData.yellow,
               child: Text('أدخل مكان منطقة العمل المفضلة لديك',
                 style: sharedData.appBarTextStyle,),

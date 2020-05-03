@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'AgreedTrips.dart';
+import 'BalanceDetails.dart';
 import 'PlacesAndTimes.dart';
 import 'TripsCounter.dart';
 import 'TripsNotConfirmedYet.dart';
@@ -236,6 +237,7 @@ class _DriverOptionsScreen extends State {
         }
       case 2 :
         {
+          Navigator.of(context).push(MaterialPageRoute( builder: (BuildContext c) => BalanceDetailsDriver()));
           break;
         }
       case 3 :
