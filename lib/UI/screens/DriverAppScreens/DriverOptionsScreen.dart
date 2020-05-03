@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'PlacesAndTimes.dart';
+import 'TripsCounter.dart';
 import 'TripsNotConfirmedYet.dart';
 
 class DriverOptionsScreen extends StatefulWidget{
@@ -224,6 +225,7 @@ class _DriverOptionsScreen extends State {
     switch (element) {
       case 0 :
         {
+          Navigator.of(context).push(MaterialPageRoute( builder: (BuildContext c) => TripsCounter()));
           break;
         }
       case 1 :

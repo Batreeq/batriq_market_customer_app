@@ -55,8 +55,8 @@ class sharedData {
       fontFamily: 'Cairo-Black');
   static const TextStyle optionStyle = TextStyle(
       fontSize: 17, color: Colors.black);
-  static const TextStyle yellowStyle = TextStyle(
-      fontSize: 19, color: yellow, fontWeight: FontWeight.bold);
+  static const TextStyle yellowStyle = TextStyle(fontSize: 19, color: yellow, fontWeight: FontWeight.bold);
+  static const TextStyle size19Style = TextStyle(fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold);
 
   static Color grayColor12 = new Color (0x1F000000);
   static const Color yellow = const Color(0xFFFBBF00);
@@ -86,7 +86,7 @@ class sharedData {
   static Widget appBar(BuildContext context, String title, Icon icon,
       void fun()) {
     return AppBar(
-      title: Text(title, style: tableFieldsTextStyle,),
+      title: Text(title, style: appBarTextStyle,),
       centerTitle: true,
       // automaticallyImplyLeading: true,
       actions: <Widget>[
