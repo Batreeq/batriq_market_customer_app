@@ -2,37 +2,174 @@ import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'AgreedTrips.dart';
-import 'PlacesAndTimes.dart';
-import 'TripsCounter.dart';
-import 'TripsNotConfirmedYet.dart';
-
-class DriverOptionsScreen extends StatefulWidget{
+class AgreedTrips extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return _DriverOptionsScreen();
+    return _AgreedTrips();
   }
 }
 
-class _DriverOptionsScreen extends State {
+class _AgreedTrips extends State {
+  String orderNoText = ' : رقم الطلبية',
+      expectedTimeText = ' :  الوقت المتوقع',
+      startTimeText = ' : وقت البداية',
+      startingPointText = ' : نقطة الانطلاق',
+      cancelText = ' : الغاء اضطراري ';
+
+  String orderNoData = ' ',
+      expectedTimeData = '',
+      startTimeData = '',
+      startingPointData = '',
+      cancelData = '  ';
+
+  bool isChecked = false ;
+  Size size;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: sharedData.appBar(context, 'السائق', null, () {}),
-      body: getBody(),
-    );
+    size = MediaQuery
+        .of(context)
+        .size;
+    return
+      Scaffold(
+        appBar: sharedData.appBar(context, 'عداد الجولات', null, () {}),
+        body: getBody(),
+      );
   }
 
   Widget getBody() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          textDirection: TextDirection.rtl,
+          children: <Widget>[
+            SizedBox(height: 30,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text(orderNoText, style: sharedData.size19Style,),
+                  SizedBox(width: 30,),
+                  Text(orderNoData, style: sharedData.optionStyle,),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text(expectedTimeText, style: sharedData.size19Style,),
+                  SizedBox(width: 30,),
+                  Text(expectedTimeData, style: sharedData.optionStyle,),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text(startTimeText, style: sharedData.size19Style,),
+                  SizedBox(width: 30,),
+                  Text(startTimeData, style: sharedData.optionStyle,),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text(startingPointText, style: sharedData.size19Style,),
+                  SizedBox(width: 30,),
+                  Text(startingPointData, style: sharedData.optionStyle,),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textDirection: TextDirection.rtl,
+                children: <Widget>[
+                  Text(cancelText, style: sharedData.size19Style,),
+                  SizedBox(width: 15,),
+                  Checkbox(
+                    onChanged: (val) {
+                      setState(() {
+                        isChecked = val ;
+                      });
+                    },
+                    value: isChecked,
+                  )
+                ],
+              ),
+            ),
+            getOptions(),
+            SizedBox(height: 30,),
+
+            getButtons()
+          ],
+        ),
+      ),
+    );
+  }
+  Widget getButtons() {
+    return Column(
+      children: <Widget>[
+        Center(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            textDirection: TextDirection.rtl,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  child: Column(
+                    textDirection: TextDirection.rtl,
+                    children: <Widget>[
+                      Image.asset('assets/images/icons/forward.png'),
+                      Text('السابق')
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(width: size.width - 200,),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: <Widget>[
+                    InkWell(
+                      child: Column(
+                        textDirection: TextDirection.rtl,
+                        children: <Widget>[
+                          Image.asset('assets/images/icons/reword.png'),
+                          Text('التالي')
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget getOptions(){
     // this list for the home buttons
     List<String> users = new List<String>();
-    users.add('عداد الجولات');
-    users.add('جولات قيد التأكيد');
-    users.add('كشف حساب اجمالي');
-    users.add('الجولات المتفق عليها');
     users.add('جهز للموظف');
-    users.add('أوقات و أماكن مفضلة');
+    users.add('تم الوصول');
+    users.add('انجزت الجولة');
+    users.add('بدء الجولة');
 
     // this method to get the buttons in the home page after the driver login
     return Column(
@@ -68,7 +205,7 @@ class _DriverOptionsScreen extends State {
                   ),
                   onTap: () {
                     print('hi ' + users.elementAt(0));
-                     onTap(0);
+                    onTap(0);
                   },
                 ),
               ),
@@ -93,14 +230,13 @@ class _DriverOptionsScreen extends State {
                   ),
                   onTap: () {
                     print('hi ' + users.elementAt(1));
-                     onTap(1);
+                    onTap(1);
                   },
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 40,),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -152,86 +288,27 @@ class _DriverOptionsScreen extends State {
                   ),
                   onTap: () {
                     print('hi ' + users.elementAt(3));
-                   onTap(3);
+                    onTap(3);
                   },
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 40,),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  child: Container(
-                    width: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: sharedData.yellow)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          users.elementAt(4),
-                          style: sharedData.optionStyle,
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    print('hi ' + users.elementAt(4));
-                    onTap(4);
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  child: Container(
-                    width: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: sharedData.yellow)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          users.elementAt(5),
-                          style: sharedData.optionStyle,
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    print('hi ' + users.elementAt(5));
-                    onTap(5);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+
       ],
     );
   }
+
 
   onTap(int element) {
     switch (element) {
       case 0 :
         {
-          Navigator.of(context).push(MaterialPageRoute( builder: (BuildContext c) => TripsCounter()));
           break;
         }
       case 1 :
         {
-          Navigator.of(context).push(MaterialPageRoute( builder: (BuildContext c) => TripsNotConfirmedYet()));
           break;
         }
       case 2 :
@@ -240,7 +317,6 @@ class _DriverOptionsScreen extends State {
         }
       case 3 :
         {
-          Navigator.of(context).push(MaterialPageRoute( builder: (BuildContext c) => AgreedTrips()));
           break;
         }
       case 4 :
@@ -249,7 +325,6 @@ class _DriverOptionsScreen extends State {
         }
       case 5 :
         {
-          Navigator.of(context).push(MaterialPageRoute( builder: (BuildContext c) => PlacesAndTimes()));
           break;
         }
     }
