@@ -20,7 +20,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State {
-  Future<File> file;
+  Future <File> file;
   String base64Image = '';
   File tempFile;
   final formKey = GlobalKey<FormState>();
@@ -83,7 +83,7 @@ class _ProfileScreen extends State {
             ((element) => DataRow(
                   cells: <DataCell>[
                     DataCell(Text(
-                      element.age.toString() + 'JD',
+                      element.age.toString(),
                       style: sharedData.tableFieldsTextStyle,
                     )),
                     //Extracting from Map element the value
@@ -302,6 +302,10 @@ class _ProfileScreen extends State {
     return Scaffold(
         resizeToAvoidBottomPadding: true,
         resizeToAvoidBottomInset: true,
+        appBar: sharedData.appBar(context, 'الملف الشخصي', Icon(Icons.arrow_forward), (){
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder:
+              (BuildContext context) => HomePagee()));
+        }),
         body: Padding(
           padding: const EdgeInsets.only(top: 10.0),
           child: SingleChildScrollView(
@@ -377,8 +381,8 @@ class _ProfileScreen extends State {
             ),
           ),
         ),
-        appBar: sharedData
-            .appBar(context, 'الملف الشخصي', null, (){}));
+
+    );
   }
 
   // Form will fields (phone number, name, location and email ) to fill them by user
@@ -681,18 +685,18 @@ class _ProfileScreen extends State {
           .flutterToast('Fill Your Phone Number to Update Your Profile 😍 ');
     else {
       // if (token != '') {
-      info.name =
-          nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
-      info.location =
-          locationCon.text == null || location == '' ? '' : locationCon.text;
+      info.name = nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
+      info.location = locationCon.text == null || location == '' ? '' : locationCon.text;
       info.email = emailCon.text == null || email == '' ? '' : emailCon.text;
       info.image = image == null || image == '' ? '' : image;
       info.phone = phoneCon.text == null || phone == '' ? '' : phoneCon.text;
+      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
 
       print('will add name =' + nameCon.text);
       print('will add phone =' + phoneCon.text);
       print('will add email =' + emailCon.text);
       print('will add loc =' + locationCon.text);
+      print('will add salary =' + salaryCon.text);
 
       var response;
       if (token == null || token == '')
@@ -738,61 +742,63 @@ class _ProfileScreen extends State {
   }
 
   // to open the gallery to select an image
-  chooseImageFromGallery() {
-    setState(() {
+  chooseImageFromGallery() async  {
+
       // open gallery to pick image
-      file = ImagePicker.pickImage(source: ImageSource.gallery);
-    });
+      file =  ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      defaultImageWidget = FutureBuilder<File>(
+        future: file,
+        builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            // to transfer the image to base64 to upload it it the database
+            print (' file data from snapshot' + snapshot.data.toString());
+           base64Image =  base64Encode( snapshot.data.readAsBytesSync() ) ;
 
-    defaultImageWidget = FutureBuilder<File>(
-      future: file,
-      builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
-          // to transfer the image to base64 to upload it it the database
-          base64Image = base64Encode(snapshot.data.readAsBytesSync());
-
-          return  Container(
-            width: 100.0,
-            height: 100.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(49.0)),
-               color: sharedData.grayColor12,
-            ),
-            child: Image.file(
-              snapshot.data ,fit: BoxFit.cover,
-              height: 100.0,
+            print (' image 64 = ' + base64Image);
+            return  Container(
               width: 100.0,
-            ),
-          );
+              height: 100.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(49.0)),
+                color: sharedData.grayColor12,
+              ),
+              child: Image.file(
+                snapshot.data ,fit: BoxFit.cover,
+                height: 100.0,
+                width: 100.0,
+              ),
+            );
 
 
-          /*GFAvatar(
+            /*GFAvatar(
             shape: GFAvatarShape.standard,
             size: 70,
              child : Image.file(snapshot.data ,fit: BoxFit.fitHeight,)
           );*/
 
-        } else if (snapshot.hasError) {
-          sharedData.flutterToast('Error In Uploading Image ');
-          return GFAvatar(
-            shape: GFAvatarShape.circle,
-            size: 70,
-            backgroundImage: NetworkImage(
-              sharedData.profileImage,
-            ),
-          );
-        } else {
-          sharedData.flutterToast('No Image Selected');
-          return GFAvatar(
-            size: 70,
-            backgroundImage: NetworkImage(
-              sharedData.profileImage,
-            ),
-          );
-        }
-      },
-    );
+          } else if (snapshot.hasError) {
+            sharedData.flutterToast('Error In Uploading Image ');
+            return GFAvatar(
+              shape: GFAvatarShape.circle,
+              size: 70,
+              backgroundImage: NetworkImage(
+                sharedData.profileImage,
+              ),
+            );
+          } else {
+            sharedData.flutterToast('No Image Selected');
+            return GFAvatar(
+              size: 70,
+              backgroundImage: NetworkImage(
+                sharedData.profileImage,
+              ),
+            );
+          }
+        },
+      );
+    });
   }
 
   //this method will fill the fields with data came from the api after do GET request to get user data to fill them once the user open profile screen

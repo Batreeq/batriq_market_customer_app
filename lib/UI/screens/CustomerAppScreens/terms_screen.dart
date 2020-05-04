@@ -12,8 +12,13 @@ class TermsScreen extends StatefulWidget {
 }
 
 class _TermsScreen extends State {
+  Size size;
+
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery
+        .of(context)
+        .size;
     return Center(
       child: Scaffold(
         appBar: sharedData.appBar(
@@ -23,21 +28,27 @@ class _TermsScreen extends State {
               textDirection: TextDirection.rtl,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(sharedData.termsTitle,
-                  textAlign: TextAlign.center,style: sharedData.appBarTextStyle,),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: GFAvatar(
-                      size: 70,
-                      backgroundImage: NetworkImage(
-                        sharedData.termsImage,
-                      ),
-                    ),
+                  child: Text(sharedData.termsTitle,
+                    textAlign: TextAlign.center,
+                    style: sharedData.appBarTextStyle,),
+                ),
+                Container(
+                  width: size.width,
+                  height: 170,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(sharedData.termsImage)
+                      )
                   ),
                 ),
-                Text(sharedData.termsText,
-                  textAlign: TextAlign.center,style: sharedData.optionStyle,),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    sharedData.termsText,
+                    textAlign: TextAlign.center, style: sharedData.optionStyle,),
+                ),
               ],
             )),
       ),

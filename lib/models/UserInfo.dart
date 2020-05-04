@@ -96,7 +96,6 @@ class UserInfo {
     data['name'] = this.name;
     data['email'] = this.email;
     data['email_verified_at'] = this.emailVerifiedAt;
-
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['phone'] = this.phone;

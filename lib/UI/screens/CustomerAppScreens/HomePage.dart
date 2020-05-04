@@ -1,4 +1,5 @@
 import 'package:customerapp/UI/screens/CustomerAppScreens/balance_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/terms_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -46,19 +47,18 @@ class _HomePageState extends State<HomePagee> {
     const String workWithusText = 'اعمل معنا';
     const String cardText = 'سلة المشتريات';
     const String chatText = 'المراسلة';
+
     pageController = new PageController();
     List<Widget> _widgetOptions = <Widget>[
       ProfileScreen(), //ChatScreen(),
       MyOrdersScreen(), //CartScreen(),
-      WorkWithUsScreen(), //,DriverPrivileges(),
+      TermsScreen(), // WorkWithUsScreen(), //,DriverPrivileges(),
       Home() //ProfilePage(),
     ];
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-        //  backgroundColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
-//        // unselectedItemColor: Colors.black,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: sharedData.chatIcon,

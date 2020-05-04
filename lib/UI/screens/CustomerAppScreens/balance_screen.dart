@@ -1,11 +1,9 @@
 import 'package:customerapp/models/UserBalance.dart';
- import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:requests/requests.dart';
 
 import 'BalanceDetails.dart';
 
@@ -14,7 +12,6 @@ class BalanceScreen extends StatefulWidget{
   State<StatefulWidget> createState() {
     return _BalanceScreen();
   }
-
 }
 
 class _BalanceScreen extends State {
@@ -43,7 +40,6 @@ class _BalanceScreen extends State {
     size = MediaQuery
         .of(context)
         .size;
-
 
     userBalance = sharedData.userBalance;
     if (userBalance == null || userBalance.totalBalance == null ||

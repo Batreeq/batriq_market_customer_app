@@ -85,6 +85,10 @@ class _AddMemberScreen extends State {
         print('response = null ');
 
       if (response.statusCode == 200) {
+        setState(() {
+          // sharedData.familyMembers.add(addf)
+        });
+
         sharedData.flutterToast('Added Successfully');
       }
       Navigator.of(context).pop(); //close the dialog

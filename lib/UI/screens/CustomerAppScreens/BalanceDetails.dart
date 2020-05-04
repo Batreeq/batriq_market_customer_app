@@ -47,6 +47,11 @@ class _BalanceDetails extends State {
   Widget build(BuildContext context) {
     list = sharedData.listOfUserPayment;
 
+    userPayments.createdDate = '';
+    userPayments.totalBalance = '';
+    userPayments.details = '';
+    userPayments.creditDebt = '';
+
     if (list == null || list.length == 0)
       list.add(userPayments);
     //  list.add('Rawan ');

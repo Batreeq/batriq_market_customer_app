@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:customerapp/shared_data.dart';
 
+import 'HomePage.dart';
+
 class HelpScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -12,12 +14,17 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreen extends State {
+  Size size ;
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size ;
     return Center(
       child: Scaffold(
         appBar: sharedData.appBar(
-            context, 'Help', null, () {}),
+            context, 'Help', null, () {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder:
+              (BuildContext context) => HomePagee()));
+        }),
         body: SingleChildScrollView(
             child: Column(
               textDirection: TextDirection.rtl,
@@ -28,15 +35,13 @@ class _HelpScreen extends State {
                   child: Text(sharedData.helpTitle,
                     textAlign: TextAlign.center,style:  sharedData.appBarTextStyle,),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: GFAvatar(
-                      size: 70,
-                      backgroundImage: NetworkImage(
-                        sharedData.helpImage,
-                      ),
-                    ),
+                Container(
+                  width: size.width,
+                  height: 170,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(sharedData.helpImage)
+                      )
                   ),
                 ),
                 Text(sharedData.helpText,
