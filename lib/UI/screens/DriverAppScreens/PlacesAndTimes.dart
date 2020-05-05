@@ -1,7 +1,6 @@
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'DriverPlaces.dart';
 import 'DriverTimes.dart';
 
 class PlacesAndTimes  extends StatefulWidget{
