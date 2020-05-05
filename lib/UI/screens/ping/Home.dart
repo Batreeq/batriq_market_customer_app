@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/Library/carousel_pro/src/carousel_pro.dart';
 import 'package:customerapp/UI/wigets/CategoryItemValue.dart';
+import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,94 +19,79 @@ class Home extends StatelessWidget {
         overlayShadow: true,
         overlayShadowColors: Colors.white.withOpacity(0.9),
         overlayShadowSize: 0.9,
-        images: [
-          AssetImage("assets/images/baner1.png"),
-          AssetImage("assets/images/baner12.png"),
-          AssetImage("assets/images/baner2.png"),
-          AssetImage("assets/images/baner3.png"),
-          AssetImage("assets/images/baner4.png"),
-        ],
+        images: buildSlideImages(),
       ),
     );
   }
 
-  var categoryImageBottom = Container(
-    color: Colors.white,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  CategoryItemValue(
-                    image: "assets/images/category2.png",
-                    title: "عروض بطريق",
-                    tap: () {},
-                  ),
-                  CategoryItemValue(
-                    image: "assets/images/category1.png",
-                    title: "عروض خاصة لاسم المستخدم",
-                    tap: () {},
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Padding(padding: EdgeInsets.only(top: 15.0)),
-                  CategoryItemValue(
-                    image: "assets/images/category3.png",
-                    title: "عروض لمرة واحدة",
-                    tap: () {},
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                  ),
-                  CategoryItemValue(
-                    image: "assets/images/category4.png",
-                    title: "عروض أصنافي",
-                    tap: () {},
-                  ),
-                ],
-              ),
-              Padding(padding: EdgeInsets.only(left: 10.0)),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Padding(padding: EdgeInsets.only(top: 15.0)),
-                  CategoryItemValue(
-                    image: "assets/images/category5.png",
-                    title: "مجمدات",
-                    tap: () {},
-                  ),
-                ],
-              ),
-              Padding(padding: EdgeInsets.only(left: 10.0)),
-            ],
-          ),
-        )
-      ],
-    ),
-  );
-  Widget getList() {
-    return Container(height: 620, child: categoryImageBottom);
+  List<Widget> buildSlideImages() {
+    List<Widget> images = [];
+    sharedData.sliderHomeImages.forEach((image) {
+      images.add(CachedNetworkImage(
+        imageUrl: image,
+        fit: BoxFit.cover,
+      ));
+    });
+    return images;
+  }
+
+  Widget Categories(context) => Container(
+        height: (sharedData.catigoriesData.length *
+                MediaQuery.of(context).size.width /
+                4) +
+            50,
+        color: Colors.white,
+        child: buildGrideList(context),
+      );
+  Widget getList(context) {
+    return Container(
+        height: (sharedData.catigoriesData.length *
+                MediaQuery.of(context).size.width /
+                4) +
+            50,
+        width: MediaQuery.of(context).size.width,
+        child: Categories(context));
   }
 
   @override
   Widget build(BuildContext context) {
+    appbarBloc.setTitle("الرئيسية");
+
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          getSlider(),
-          getList(),
-        ],
+      child: Container(
+        height: (sharedData.catigoriesData.length *
+                MediaQuery.of(context).size.width /
+                4) +
+            258,
+        child: Column(
+          children: <Widget>[
+            getSlider(),
+            getList(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildGrideList(context) {
+    return GridView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(10.0),
+      itemCount: sharedData.catigoriesData.length,
+      itemBuilder: (ctx, i) {
+        final catigory = sharedData.catigoriesData[i];
+        return Container(
+          child: CategoryItemValue(
+            catigory: catigory,
+          ),
+        );
+      },
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        childAspectRatio: MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 2),
+        mainAxisSpacing: 10,
       ),
     );
   }

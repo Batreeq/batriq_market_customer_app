@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -19,6 +19,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -27,13 +30,23 @@ dependencies:
   getflutter: ^1.0.4
   flappy_search_bar: ^1.7.2
   carousel_slider: ^1.4.1
+  google_fonts_arabic: ^1.1.7
+  requests: ^3.1.0
+  image_picker: ^0.6.5
+  fluttertoast: ^4.0.1
+  shared_preferences: ^0.5.6+3
+  email_validator: ^1.0.4
+  flutter_secure_storage: ^3.3.1+1
+  cached_network_image: ^2.1.0+1
+  google_maps_flutter: ^0.5.26
+  location: ^3.0.0
+  flutter_spinkit: "^4.1.2"
+  speech_to_text: ^2.1.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -44,10 +57,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - fonts/
     - assets/images/icons/home.png
     - assets/images/icons/card.png
     - assets/images/icons/chat.png

@@ -1,41 +1,48 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:customerapp/DataLayer/Catigory.dart';
+import 'package:customerapp/UI/screens/products_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CategoryItemValue extends StatelessWidget {
-  String image, title;
-  GestureTapCallback tap;
-
-  CategoryItemValue({
-    this.image,
-    this.title,
-    this.tap,
-  });
-
+  Catigory catigory;
+  CategoryItemValue({this.catigory});
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: InkWell(
-        onTap: tap,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductsScreen(
+                offerId: catigory.id,
+              ),
+            ),
+          );
+        },
         child: Container(
-          height: 115.0,
+          height: 105.0,
           width: 160.0,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+            borderRadius: BorderRadius.all(Radius.circular(3.0)),
+            image: DecorationImage(
+                image: CachedNetworkImageProvider(catigory.image),
+                fit: BoxFit.cover),
           ),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderRadius: BorderRadius.all(Radius.circular(3.0)),
               color: Colors.black.withOpacity(0.25),
             ),
             child: Center(
                 child: Text(
-              title,
+              catigory.name,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: "Berlin",
-                fontSize: 15,
+                fontSize: 18.5,
                 letterSpacing: 0.7,
                 fontWeight: FontWeight.w800,
               ),

@@ -1,0 +1,34 @@
+https://elements.envato.com/
+Mahmoudath
+Re7nal*27*27
+get request
+https://jaraapp.com/index.php/api/splash 
+------------------------------
+get
+https://jaraapp.com/index.php/api/search?name={value{
+----------------------------
+get
+https://jaraapp.com/index.php/api/productCategory?category_id=2
+---------------------------------
+GET
+https://jaraapp.com/index.php/api/products
+https://docs.google.com/spreadsheets/d/1PeM-GafozHsgrJmk1BXHPsUUl6wQsj0LqpZR_Z354Ro/edit?usp=sharing
+//confirm with cart
+https://jaraapp.com/index.php/api/confirmOrder
+https://jaraapp.com/index.php/api/myOrders
+1. splash 
+GET https://jaraapp.com/index.php/api/splash
+2. get products based on offer 
+GET https://jaraapp.com/index.php/api/products?offer_id=1
+3. get products based on offer and category 
+GET https://jaraapp.com/index.php/api/productCategory?category_id=2&offer_id=1
+GET 
+https://jaraapp.com/api/userPoints?api_token=03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807
+GET
+https://jaraapp.com/api/userBalance?api_token=03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807
+//server
+https://vmi370554.contaboserver.net:8443/
+username: Administrator
+Pass: o2vA3DN7ab3U4HX
+// cart
+POST https://jaraapp.com/api/addMultiToCart
