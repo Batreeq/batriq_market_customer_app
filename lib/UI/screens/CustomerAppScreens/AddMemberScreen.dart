@@ -1,3 +1,4 @@
+import 'package:customerapp/models/UserInfo.dart';
 import 'package:customerapp/models/addFamilyMember.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,9 @@ class AddMemberScreen extends StatefulWidget {
 }
 
 class _AddMemberScreen extends State {
+
+  FamilyMembers familyMembers ;
+
   TextEditingController memberNameCon, memberAgeCon;
 
   String salary;
@@ -24,7 +28,7 @@ class _AddMemberScreen extends State {
 
   String name, age, gender;
 
-  AddFamilyMember addFamilyMember;
+  FamilyMembers addFamilyMember;
 
   final formKey = GlobalKey<FormState>();
 
@@ -35,7 +39,7 @@ class _AddMemberScreen extends State {
   @override
   void initState() {
     super.initState();
-    addFamilyMember = new AddFamilyMember();
+    addFamilyMember = new FamilyMembers();
     readToken();
 
     memberNameCon = new TextEditingController(text: '');
@@ -86,10 +90,11 @@ class _AddMemberScreen extends State {
 
       if (response.statusCode == 200) {
         setState(() {
-          // sharedData.familyMembers.add(addf)
+            sharedData.familyMembers.add(addFamilyMember);
         });
 
         sharedData.flutterToast('Added Successfully');
+        Navigator.of(context).pop();
       }
       Navigator.of(context).pop(); //close the dialog
 

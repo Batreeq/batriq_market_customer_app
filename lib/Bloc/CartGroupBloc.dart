@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:customerapp/DataLayer/Cart.dart';
 import 'package:customerapp/DataLayer/CartGroup.dart';
-import 'package:customerapp/UI/screens/cart_screen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'bloc.dart';
 import 'package:http/http.dart' as http;

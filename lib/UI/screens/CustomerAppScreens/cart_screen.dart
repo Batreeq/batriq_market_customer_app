@@ -3,12 +3,13 @@ import 'package:customerapp/Bloc/CartGroupBloc.dart';
 import 'package:customerapp/Bloc/bloc_provider.dart';
 import 'package:customerapp/DataLayer/Cart.dart';
 import 'package:customerapp/DataLayer/CartGroup.dart';
-import 'package:customerapp/UI/screens/order_confirm_screen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+
+import 'order_confirm_screen.dart';
 
 class CartScreen extends StatefulWidget {
   String title;

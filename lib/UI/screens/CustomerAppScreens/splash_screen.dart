@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/tab.dart';
-import 'package:customerapp/UI/screens/ping/HomePage.dart';
-import 'package:customerapp/models/UserBalance.dart';
+ import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:customerapp/models/UserPayments.dart';
 import 'package:customerapp/shared_data.dart';
@@ -20,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   void NavigatorPage() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => HomePagee(),
@@ -54,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> getSplashData(api_token) async {
-    print("tokken$api_token");
+    print("tokken $api_token");
     final url = 'https://jaraapp.com/index.php/api/splash?api_token=$api_token';
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -140,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> {
     sharedData.privacyTitle = extractedData['PrivacyPolicy'][0]['title'];
     sharedData.termsText = extractedData['termsAndConditions'][0]['text'];
     sharedData.termsTitle = extractedData['termsAndConditions'][0]['title'];
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       new MaterialPageRoute(builder: (context) => new HomePagee()),
     );

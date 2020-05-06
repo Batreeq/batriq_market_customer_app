@@ -7,16 +7,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Bloc/appBarTitleBloc.dart';
-import 'Bloc/appBarTitleBloc.dart';
 import 'DataLayer/Catigory.dart';
 import 'DataLayer/tab.dart';
 import 'models/UserInfo.dart';
 import 'models/orderInfo.dart';
 import 'package:customerapp/models/UserBalance.dart';
-import 'package:customerapp/models/UserPayments.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'models/UserInfo.dart';
 import 'models/UserBalance.dart';
 import 'models/orderInfo.dart';
@@ -26,7 +21,7 @@ import 'models/orderInfo.dart';
 ///
 List<ProductTab> tabs = [];
 LocationData locationData;
-String token;
+String token = '';
 appBarBloc appbarBloc;
 bool isRegistered() {
   if (token != null && token.length > 10) {
@@ -83,7 +78,7 @@ List categoriesList = [];
 
 List<String> titles = [
   "الملف الشخصي",
-  "طلبياتي السابفة",
+  "طلبياتي السابقة",
   "الرصيد",
   "اكسب معنا",
   "المساعدة",
@@ -104,8 +99,6 @@ class sharedData {
       color: Colors.black,
       fontSize: 21,
       fontFamily: 'Cairo-Black');
-  static const String userBalanceUrl =
-      'https://jaraapp.com/index.php/api/userBalance?api_token=';
   static const mainColor = Color(0xFFFBBF00);
   static List<Catigory> catigoriesData = [];
   static const ImageIcon homeIcon = ImageIcon(
@@ -134,43 +127,18 @@ class sharedData {
     Icons.email,
     color: sharedData.yellow,
   );
-  static const Icon phoneIcon = Icon(Icons.phone, color: sharedData.yellow,);
-  static const Icon locationIcon = Icon(
-    Icons.location_on, color: sharedData.yellow,);
-  static const Icon emailIcon = Icon(Icons.email, color: sharedData.yellow,);
   static const Icon nameIcon = Icon(Icons.person, color: sharedData.yellow,);
   static const Icon passwordIcon = Icon(
     Icons.lock_outline, color: sharedData.yellow,);
 
-  static const TextStyle navBarTextStyle =
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
-  static const TextStyle textInProfileTextStyle =
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
+  static const TextStyle navBarTextStyle = TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Cairo-Black' ,  color: Colors.black, fontSize: 12);
+  static const TextStyle optionStyle = TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black,fontFamily: 'Cairo-Black');
   static Color grayColor12 = new Color(0x1F000000);
   static const Color yellow = const Color(0xFFFFEB3B);
-  static const TextStyle navBarTextStyle = TextStyle(
-      fontWeight: FontWeight.bold, color: Colors.black);
-  static const TextStyle tableFieldsTextStyle = TextStyle(
-      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 13);
-  static const TextStyle textInProfileTextStyle = TextStyle(
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-      fontSize: 25,
-      fontFamily: 'Cairo-Black');
-  static const TextStyle appBarTextStyle = TextStyle(
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-      fontSize: 21,
-      fontFamily: 'Cairo-Black');
-  static const TextStyle optionStyle = TextStyle(
-      fontSize: 17, color: Colors.black);
-  static const TextStyle yellowStyle = TextStyle(fontSize: 19, color: yellow, fontWeight: FontWeight.bold);
-  static const TextStyle size19Style = TextStyle(fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold);
+   static const TextStyle textInProfileTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25, fontFamily: 'Cairo-Black');
+  static const TextStyle yellowStyle = TextStyle(fontSize: 19, color: yellow, fontWeight: FontWeight.bold,fontFamily: 'Cairo-Black');
+  static const TextStyle size19Style = TextStyle(fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold,fontFamily: 'Cairo-Black');
 
-  static Color grayColor12 = new Color (0x1F000000);
-  static const Color yellow = const Color(0xFFFBBF00);
 
   static const String searchHintText = 'البحث';
   static const String phoneHintTextField = 'رقم الهاتف';
@@ -193,43 +161,15 @@ class sharedData {
   static const String typeHintTextField = ' نوع المركبة';
   static const String lastNameTextField = 'اسم العائلة';
 
-
-  static const Icon nameIcon = Icon(
-    Icons.person,
-    color: sharedData.yellow,
-  );
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
       color: Colors.black,
       fontSize: 11,
       fontFamily: 'default');
 
-  static Widget appBar(BuildContext context, String title, Icon icon,
-      void fun()) {
-    return AppBar(
-      title: Text(title, style: appBarTextStyle,),
-      centerTitle: true,
-      // automaticallyImplyLeading: true,
-      actions: <Widget>[
-        icon != null ? Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            child: icon,
-            onTap: fun,
-          ),
-        )
-            :
-        Container(
 
   // this list of orders which the user will order , filled from the api in myOrders Screen
   static List<OrderInfo> listOfColumns = new List<OrderInfo>();
-  static const String ageHintTextField = 'العمر';
-  static const String nameHintTextField = 'الاسم';
-  static const String activeBalanceTextField = 'رصيد فعال';
-  static const String notActiveBalanceTextField = 'رصيد غير فعال';
-  static const String totalBalanceTextField = 'مجموع الرصيد';
-  static const String rechargeBalanceTextField = 'اعادة شحن رصيد';
-  static const String accountStatementTextField = 'كشف حساب';
   static const String totalBalanceData = '0.220';
   static const String activeBalanceData = '0.200';
   static const String notActiveBalanceData = '0.20';
@@ -287,14 +227,6 @@ class sharedData {
   ];
 
   // this list of the images which will be used in the slider in home screen,and filled in splash screen from api
-  static const List<String> sliderHomeImages = [
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-  ];
   static List<String> sliderHomeImages = [];
 
   // this method takes a message as parameter to show a toast
@@ -308,23 +240,6 @@ class sharedData {
         textColor: Colors.white,
         fontSize: 14.0);
   }
-
-  // this method takes a message as parameter to show a toast
-  static flutterToast(String msg) {
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 14.0
-    );
-  }
-
-  static ThemeData appTheme = ThemeData(
-    primarySwatch: Colors.yellow,
-  );
 
   static String token;
 
@@ -459,176 +374,7 @@ class sharedData {
   static List<FamilyMembers> familyMembers = new List<FamilyMembers>();
   static UserInfo userInfo = new UserInfo();
   static UserBalance userBalance = new UserBalance();
-  static const String profileImage =
-      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
-  static String name = 'محمد محمد';
-  static String token = "hfdgfjkgd";
-
-  static Future<void> ackAlert(
-      BuildContext context, String title, String content) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          //backgroundColor: dialogBackgroundColor,
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              content,
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                'OK',
-                style: TextStyle(fontSize: 18),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  //to get token locally from sharedPreferences and save the value to the static "token"  variable
-  static Future<String> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    token = await prefs.get(
-      'token',
-    );
-    token =
-        '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807'; // with family members
-    token =
-        '71b57bad20073f55373c27cb681c6a84d6ec2d1ddd7f4d2b8d5164e98728f88c'; // without
-
-    if (token != null)
-      print('token when init ' + token);
-    else
-      print('no old token ');
-
-    return token;
-  }
-
-  static FlutterSecureStorage storage = FlutterSecureStorage();
-
-  static Future<bool> writeToStorage({String key, String value}) async {
-    await storage
-        .write(
-          key: key,
-          value: value,
-        )
-        .then((val) {});
-    token = value;
-  }
-
-  static Future<String> readFromStorage({String key}) async {
-    //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
-    String s = await storage.read(
-      key: key,
-    );
-    return storage.read(
-      key: key,
-    );
-  }
-
-  static setToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-      token,
-      'token',
-    );
-  }
-
-  // to show the loader
-  static Future<void> showLoadingDialog(BuildContext context) async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return new WillPopScope(
-              onWillPop: () async => false,
-              child: SimpleDialog(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  shape: null,
-                  children: <Widget>[
-                    Center(
-                      child: Column(children: [
-                        CircularProgressIndicator(
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ]),
-                    )
-                  ]));
-        });
-  }
-
-  static const String searchUrl = 'https://jaraapp.com/index.php/api/search?';
-  static const String getUserInfoUrl =
-      'https://jaraapp.com/index.php/api/userInfo?api_token=';
-  static const String registerUrl =
-      'https://jaraapp.com/index.php/api/register?';
-  static const String addMemberUrl =
-      'https://jaraapp.com/index.php/api/addFamilyMembers';
-  static const String myOrdersUrl =
-      'https://jaraapp.com/index.php/api/myOrders';
-
-  static const TextStyle yellowStyle =
-      TextStyle(fontSize: 19, color: yellow, fontWeight: FontWeight.bold);
-
-  static const String passwordTextField = 'كلمة المرور';
-
-  static const String altPhoneHintTextField = 'رقم الهاتف البديل ';
-  static const String addressHintTextField = 'العنوان ';
-  static const String modelHintTextField = 'موديل المركبة';
-  static const String typeHintTextField = ' نوع المركبة';
-  static const String lastNameTextField = 'اسم العائلة';
-
-  static const Icon passwordIcon = Icon(
-    Icons.lock_outline,
-    color: sharedData.yellow,
-  );
-
-  static String userPoints = '0';
-
-  //static List <UserPayments>  listOfUserPayment ;
-
-//static  String name, phone, location, email, image;
-
-  static String welcomeTextInLoginDriver = 'اهلا بك مرة اخرى في بطريق ماركت ';
-  static String dontHaveAccount = ' ليس لدي حساب ؟ ';
-  static String createAccount = ' انشاء حساب ';
-  static String loginUsingText = 'سجل دخولك بواسطة';
-
-  static const String termsImage =
-      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
-  static const String privacyImage =
-      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
-  static const String helpImage =
-      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
-
-  static String termsText =
-      'Title Title Title TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle';
-  static String privacyText =
-      'https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=v';
-  static String helpText =
-      'https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=https://jaraapp.com/index.php/api/userBalance?api_token=v';
-
-  static String termsTitle = 'Title';
-  static String privacyTitle = 'Title';
-  static String helpTitle = 'Title';
-
-  static List<FamilyMembers> familyMembers = new List<FamilyMembers>();
-  static UserInfo userInfo = new UserInfo();
-  static UserBalance userBalance = new UserBalance();
 
   static List<UserPayments> listOfUserPayment = new List<UserPayments>();
-}
 
-  static List <UserPayments> listOfUserPayment = new List<UserPayments>();
 }

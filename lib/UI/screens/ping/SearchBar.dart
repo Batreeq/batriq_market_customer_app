@@ -1,6 +1,7 @@
 import 'package:customerapp/Bloc/bloc_provider.dart';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/Product.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ import 'package:http/http.dart' as http;
 import 'package:customerapp/Bloc/appBarTitleBloc.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import '../../../shared_data.dart';
-import '../product_detail_screen.dart';
 import 'package:customerapp/shared_data.dart';
 
 class CustomAppBar extends StatelessWidget {

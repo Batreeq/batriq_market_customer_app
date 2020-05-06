@@ -93,7 +93,7 @@ class _EarnWithUsScreen extends State {
                                   child: Text(
                                     sharedData.userInfo.points != null ?
                                     sharedData.userInfo.points :
-                                        '0'
+                                        ' 0 '
                                       + 'نقطة ',
                                     style: sharedData.navBarTextStyle,),
                                 ),

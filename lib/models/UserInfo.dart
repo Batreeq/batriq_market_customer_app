@@ -96,7 +96,6 @@ class UserInfo {
     data['name'] = this.name;
     data['email'] = this.email;
     data['email_verified_at'] = this.emailVerifiedAt;
-
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['phone'] = this.phone;
@@ -122,13 +121,17 @@ class FamilyMembers {
   String name;
   String gender;
   String age;
+  String token ;
   String createdAt;
   String updatedAt;
+  String salary ;
 
   FamilyMembers(
       {this.id,
+        this.salary ,
         this.userId,
         this.name,
+        this.token ,
         this.gender,
         this.age,
         this.createdAt,
@@ -142,6 +145,8 @@ class FamilyMembers {
     age = json['age'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    token = json['api_token'];
+    salary = json['salary'];
   }
 
   Map<String, dynamic> toJson() {
@@ -151,8 +156,10 @@ class FamilyMembers {
     data['name'] = this.name;
     data['gender'] = this.gender;
     data['age'] = this.age;
+    data['api_token'] = this.token;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['salary'] = this.salary;
     return data;
   }
 }

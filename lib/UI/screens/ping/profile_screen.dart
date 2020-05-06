@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:customerapp/UI/screens/ping/HomePage.dart';
-import 'package:customerapp/models/UserInfo.dart';
+ import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -319,7 +318,7 @@ class _ProfileScreen extends State {
                   ],
                 ), // profile picture
                 Text(
-                  sharedData.name,
+                  sharedData.userInfo.name != null ?  sharedData.userInfo.name : ' ',
                   style: sharedData.textInProfileTextStyle,
                 ), // name
                 Container(

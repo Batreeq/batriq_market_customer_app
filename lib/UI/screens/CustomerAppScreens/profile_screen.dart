@@ -35,9 +35,10 @@ class _ProfileScreen extends State {
   List<FamilyMembers> familyMembers;
   Size size;
 
+  String salary ;
   String token;
 
-  TextEditingController salaryCon = new TextEditingController();
+  TextEditingController salaryCon ;
 
   Widget getTable(List<FamilyMembers> familyMembers) {
     return DataTable(
@@ -258,9 +259,9 @@ class _ProfileScreen extends State {
     if (token == null) {
       token = '';
       print('after get token from write, its empty ');
-    } else
+    } else {
       print('token from profile get token method $token');
-
+    }
     return token;
   }
 
@@ -272,6 +273,15 @@ class _ProfileScreen extends State {
     info = sharedData.userInfo ;
     image = sharedData.profileImage;
 
+
+     name = info.name != null ? info.name :'' ;
+     phone = info.phone  != null ? info.phone :'' ;
+     location =info.location != null ? info.location :'' ;
+     email = info.email  != null ? info.email :'' ;
+     salary = info.salary  != null ? info.salary : '' ;
+     image = info.image  != null ? info.image : sharedData.profileImage ;
+
+    salaryCon = new TextEditingController(text: salary);
     nameCon = new TextEditingController(text: name);
     phoneCon = new TextEditingController(text: phone);
     locationCon = new TextEditingController(text: location);
@@ -282,8 +292,9 @@ class _ProfileScreen extends State {
     emailFocus = new FocusNode();
     getToken().then((tokn) {
      // getUserDataFromAPI(tokn);
-      token = tokn ;
+     // token = tokn ;
     });
+
     defaultImageWidget = GFAvatar(
       size: 70,
       backgroundImage: NetworkImage(image),
@@ -302,7 +313,7 @@ class _ProfileScreen extends State {
     return Scaffold(
         resizeToAvoidBottomPadding: true,
         resizeToAvoidBottomInset: true,
-        appBar: sharedData.appBar(context, 'الملف الشخصي', Icon(Icons.arrow_forward), (){
+        appBar: sharedData.appBar(context, 'الملف الشخصي', null, (){
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder:
               (BuildContext context) => HomePagee()));
         }),
@@ -624,54 +635,6 @@ class _ProfileScreen extends State {
     );
   }
 
-  //this method to get the user info when he open profile screen will call this method to fill the fields
-  //if the user want to open profile without registration, the token will be null so sent the token as null to api to create anew account
-  void getUserDataFromAPI(String token) async {
-    //  token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807';
-    if (token != '' && token != null) {
-      final response = await Requests.get(
-        sharedData.getUserInfoUrl + token,
-        //  bodyEncoding: RequestBodyEncoding.FormURLEncoded
-      );
-      print(token);
-      if (response != null) {
-        print(response.json().toString());
-        print(response.statusCode);
-      } else
-        print('response = null ');
-
-      sharedData.showLoadingDialog(context); //invoking login
-      await Future.delayed(Duration(seconds: 4));
-
-      if (response.statusCode == 200) {
-        response.raiseForStatus();
-        dynamic json = response.json();
-        info = UserInfo.fromJson(json['user_info']);
-        setState(() {
-        //  userProfile = UserProfile.fromJson(json);
-        });
-
-        if (null != info && null != familyMembers) {
-          print(' user phone number = ' + info.phone.toString());
-          print(' family member list = ' +
-              familyMembers.length.toString());
-          print("token in get user info " + info.apiToken);
-          sharedData.writeToStorage(key: 'token', value: info.apiToken);
-          sharedData.setToken(info.apiToken);
-        } else
-          print('info object which get from json = null');
-        fillFields(info);
-      }
-      Navigator.of(context).pop(); //close the dialog
-    } else {
-      print('token is null $token');
-//      emailCon.text = '';
-//      nameCon.text = '';
-      image = sharedData.profileImage;
-//      phoneCon.text = '';
-//      locationCon.text = '';
-    }
-  }
 
   submitUserData(String token) async {
     //  token = '2d0ff96767efed695b53b04e36941b5f8df3ce30d2bdcc4b98db0a29388e299a';
@@ -699,6 +662,7 @@ class _ProfileScreen extends State {
       print('will add salary =' + salaryCon.text);
 
       var response;
+      print ('i\'m in submit method before post request ' + info.name );
       if (token == null || token == '')
         response = await Requests.post(
           sharedData.registerUrl,
@@ -801,31 +765,11 @@ class _ProfileScreen extends State {
     });
   }
 
-  //this method will fill the fields with data came from the api after do GET request to get user data to fill them once the user open profile screen
-  void fillFields(UserInfo info) {
-    setState(() {
-      name = info.name;
-      email = info.email;
-      location = info.location;
-      phone = info.phone;
-      if (info.image != null && info.image != '')
-        image = info.image;
-      else
-        image = sharedData.profileImage;
-
-      if (info.name != null) sharedData.name = info.name;
-
-      nameCon.text = info.name;
-      emailCon.text = info.email;
-      locationCon.text = info.location;
-      phoneCon.text = info.phone;
-    });
-  }
-
   // to check if the email valid like email pattern (name@domain.com)
   bool isValidEmail() {
     if (emailCon.text.trim().toString() == null ||
-        emailCon.text.trim().toString() == '') return true;
+        emailCon.text.trim().toString() == '')
+      return true;
     return EmailValidator.validate(emailCon.text.trim());
   }
 
@@ -850,8 +794,7 @@ class _ProfileScreen extends State {
   }
 
   // change the pointer focus to the next filed after
-  _fieldFocusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
@@ -863,7 +806,7 @@ class _ProfileScreen extends State {
       //form.save();
       print(phoneChanged.toString());
       isInputValidate();
-      submitUserData('');
+      submitUserData(token);
     } else
       sharedData.flutterToast('Invalid Input');
   }
