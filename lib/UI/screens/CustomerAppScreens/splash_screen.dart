@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/tab.dart';
+import 'package:customerapp/UI/screens/DriverAppScreens/DriverOptionsScreen.dart';
  import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:customerapp/models/UserPayments.dart';
@@ -36,7 +37,12 @@ class _SplashScreenState extends State<SplashScreen> {
   startHome() async {
     token = await sharedData.readFromStorage(key: 'token');
     print("splash : $token");
-    isRegistered() ? getSplashData(token) : getSplashData("");
+    //isRegistered() ? getSplashData(token) : getSplashData("");
+
+    Navigator.pushReplacement(
+      context,
+      new MaterialPageRoute(builder: (context) => new DriverOptionsScreen()),
+    );
   }
 
   Widget build(BuildContext context) {

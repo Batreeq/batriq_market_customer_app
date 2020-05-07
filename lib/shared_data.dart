@@ -1,3 +1,4 @@
+import 'package:customerapp/models/Employee.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -376,5 +377,9 @@ class sharedData {
   static UserBalance userBalance = new UserBalance();
 
   static List<UserPayments> listOfUserPayment = new List<UserPayments>();
+  static List<EmployeeInfo> listEmployeeInfo = new List<EmployeeInfo>();
+
+  static String orderNo = '20';
+  static String stopPointNumber = '1';
 
 }

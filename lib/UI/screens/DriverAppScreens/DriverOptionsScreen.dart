@@ -1,3 +1,4 @@
+import 'package:customerapp/UI/screens/DriverAppScreens/PrepareForEmployee.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -247,6 +248,10 @@ class _DriverOptionsScreen extends State {
         }
       case 4 :
         {
+          Navigator.pushReplacement(
+            context,
+            new MaterialPageRoute(builder: (context) => new PrepareForEmployee()),
+          );
           break;
         }
       case 5 :
