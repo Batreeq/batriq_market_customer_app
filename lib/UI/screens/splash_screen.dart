@@ -29,6 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    readToken();
+  }
+
+  readToken() async {
+    token = await sharedData.readFromStorage(key: 'token');
     startHome();
   }
 
@@ -137,6 +142,9 @@ class _SplashScreenState extends State<SplashScreen> {
     sharedData.privacyText = extractedData['PrivacyPolicy'][0]['text'];
     sharedData.privacyTitle = extractedData['PrivacyPolicy'][0]['title'];
     sharedData.termsText = extractedData['termsAndConditions'][0]['text'];
+    sharedData.termsImage = extractedData['termsAndConditions'][0]['image'];
+    sharedData.helpImage = extractedData['HelpScreen'][0]['image'];
+    sharedData.privacyImage = extractedData['PrivacyPolicy'][0]['image'];
     sharedData.termsTitle = extractedData['termsAndConditions'][0]['title'];
     Navigator.push(
       context,

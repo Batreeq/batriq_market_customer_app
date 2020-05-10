@@ -14,7 +14,7 @@ class _PrivacyPolicyScreen extends State {
   Widget build(BuildContext context) {
     return Center(
       child: Scaffold(
-        appBar: sharedData.appBar(context, 'الخصوصية ', null, () {}),
+        appBar: sharedData.appBar(context, 'الخصوصية', null, () {}),
         body: SingleChildScrollView(
             child: Column(
           textDirection: TextDirection.rtl,

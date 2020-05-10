@@ -12,12 +12,9 @@ class BalanceDetails extends StatefulWidget {
 
 class _BalanceDetails extends State {
   bool isSelect = false;
-
   bool isAscending = true;
-
   List<UserPayments> list = new List<UserPayments>();
   UserPayments userPayments = new UserPayments();
-
   @override
   void initState() {
     super.initState();
@@ -44,7 +41,6 @@ class _BalanceDetails extends State {
   @override
   Widget build(BuildContext context) {
     list = sharedData.listOfUserPayment;
-
     if (list == null || list.length == 0) list.add(userPayments);
     //  list.add('Rawan ');
     return Scaffold(

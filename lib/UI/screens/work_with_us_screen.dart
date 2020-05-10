@@ -1,3 +1,4 @@
+import 'package:customerapp/UI/screens/DriverAppScreens/DriverPrivileges.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,16 +20,10 @@ class _WorkWithUsScreen extends State {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    appbarBloc.setTitle("اعمل معنا");
-  }
-
   Widget getBody() {
     List<String> users = new List<String>();
     users.add('موظف معنا ');
-    users.add(' شريك سوبر ماركت ');
+    users.add(' شريك سوبر ');
     users.add('سائق');
     users.add('تاجر');
     // this method to get the sequers in the home page (include image and text filled form the api)
@@ -48,9 +43,23 @@ class _WorkWithUsScreen extends State {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
-                      child: Text(
-                        users.elementAt(index),
-                        style: sharedData.textInProfileTextStyle,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            users.elementAt(index),
+                            style: sharedData.textInProfileTextStyle,
+                          ),
+                          index == 1
+                              ?
+                              //
+                              Text(
+                                  'ماركت',
+                                  style: sharedData.textInProfileTextStyle,
+                                )
+                              : Container(),
+                        ],
                       ),
                     ),
                   ),
@@ -75,8 +84,8 @@ class _WorkWithUsScreen extends State {
         }
       case 'سائق':
         {
-//          Navigator.of(context).push(MaterialPageRoute(
-//              builder: (BuildContext c) => DriverPrivileges()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext c) => DriverPrivileges()));
           break;
         }
       case 'تاجر':
@@ -84,5 +93,11 @@ class _WorkWithUsScreen extends State {
           break;
         }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    appbarBloc.setTitle("اعمل معنا");
   }
 }

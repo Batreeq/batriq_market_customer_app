@@ -1,5 +1,3 @@
-import 'package:customerapp/Bloc/appBarTitleBloc.dart';
-import 'package:customerapp/DataLayer/Menu.dart';
 import 'package:customerapp/Bloc/side_menu_bloc.dart';
 import 'package:customerapp/UI/screens/balance_screen.dart';
 import 'package:customerapp/UI/screens/language_screen.dart';
@@ -159,7 +157,9 @@ class _HomePageState extends State<HomePagee> {
               rowSide(6, context, bloc, titles[5]),
               rowSide(7, context, bloc, titles[5]),
               rowSide(8, context, bloc, titles[5]),
-              rowSide(9, context, bloc, titles[5]),
+              token != null && token.length > 10
+                  ? rowSide(9, context, bloc, titles[5])
+                  : Container(),
             ],
           ),
         ),
@@ -178,7 +178,6 @@ class _HomePageState extends State<HomePagee> {
     TermsScreen(),
     LanguageScreen()
   ];
-
   void navigateTo(int index) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => sidMenuPages[index - 1]));
@@ -188,7 +187,18 @@ class _HomePageState extends State<HomePagee> {
     return InkWell(
       onTap: () {
         Navigator.of(context).pop();
-        navigateTo(index);
+        if (index <= 7) {
+          navigateTo(index);
+        } else {
+          if (index == 8) {
+            sharedData.flutterToast("language api not integrated yet");
+          } else if (index == 9) {
+            sharedData.logout();
+            setState(() {
+              token = "";
+            });
+          }
+        }
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -235,15 +245,5 @@ class _HomePageState extends State<HomePagee> {
   void initState() {
     super.initState();
     readToken();
-  }
-
-  readToken() async {
-    token = await sharedData.readFromStorage(key: 'token');
-  }
-
-  void refresh() {
-    setState(() {
-      appBarTitle = "ho is him";
-    });
   }
 }

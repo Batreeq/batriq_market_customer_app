@@ -20,7 +20,7 @@ import 'package:customerapp/models/UserPayments.dart';
 ///
 List<ProductTab> tabs = [];
 LocationData locationData;
-String token;
+String token = "";
 appBarBloc appbarBloc;
 bool isRegistered() {
   if (token != null && token.length > 10) {
@@ -77,7 +77,7 @@ List categoriesList = [];
 
 List<String> titles = [
   "الملف الشخصي",
-  "طلبياتي السابفة",
+  "طلبياتي السابقة",
   "الرصيد",
   "اكسب معنا",
   "المساعدة",
@@ -227,9 +227,9 @@ class sharedData {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 14.0);
+        backgroundColor: mainColor,
+        textColor: Colors.black,
+        fontSize: 16.0);
   }
 
   static ThemeData appTheme = ThemeData(
@@ -313,6 +313,13 @@ class sharedData {
     );
   }
 
+  static logout() async {
+    await storage.delete(key: "token");
+    token = "";
+    sharedData.token = "";
+    flutterToast("تم تسجيل الخروج ");
+  }
+
   static setToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(
@@ -382,11 +389,11 @@ class sharedData {
   static String createAccount = ' انشاء حساب ';
   static String loginUsingText = 'سجل دخولك بواسطة';
 
-  static const String termsImage =
+  static String termsImage =
       'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
-  static const String privacyImage =
+  static String privacyImage =
       'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
-  static const String helpImage =
+  static String helpImage =
       'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
 
   static String termsText =

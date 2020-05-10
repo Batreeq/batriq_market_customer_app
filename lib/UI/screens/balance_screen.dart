@@ -1,10 +1,11 @@
+import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
+
 import 'BalanceDetails.dart';
-import 'package:customerapp/models/UserBalance.dart';
 
 class BalanceScreen extends StatefulWidget {
   @override
@@ -65,10 +66,11 @@ class _BalanceScreen extends State {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               //   backgroundColor: Colors.red,
-              child: Container(
-                  // height: size.height -20 ,
-                  //   width: size.width,
-                  child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                  child: Container(
+                      // height: size.height -20 ,
+                      //   width: size.width,
+                      child: SingleChildScrollView(
                 child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Column(
@@ -178,7 +180,7 @@ class _BalanceScreen extends State {
                         )
                       ],
                     )),
-              )),
+              ))),
             );
           });
         });
@@ -209,7 +211,7 @@ class _BalanceScreen extends State {
                   //mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -325,8 +327,13 @@ class _BalanceScreen extends State {
                             // side: BorderSide(color: Colors.red)
                           ),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext c) => BalanceDetails()));
+                            sharedData.listOfUserPayment != null &&
+                                    sharedData.listOfUserPayment.length > 0
+                                ? Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext c) =>
+                                        BalanceDetails()))
+                                : sharedData
+                                    .flutterToast("لاتوجد لديك تحويلات سابقة");
                           },
                           child: Text(
                             sharedData.accountStatementTextField,

@@ -6,6 +6,7 @@ import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/DataLayer/CartName.dart';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/Product.dart';
+import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/UI/screens/product_detail_screen.dart';
 import 'package:customerapp/UI/wigets/custom_tab.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
@@ -120,7 +121,6 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   bool isloading = true;
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -490,10 +490,12 @@ class _ProductsState extends State<Products> {
     if (extractedData == null) {
       return;
     }
+
     extractedData['products'].forEach((p) {
       print("ssd${p}");
-      Catigory category = sharedData.catigoriesData
-          .firstWhere((cat) => cat.id == p['category_id']);
+      ProductTab category = tabs.firstWhere(
+          (cat) => cat.id.toString() == p['category_id'].toString());
+
       Product product = Product(
           catigory: category,
           price: p['price'],
@@ -503,12 +505,13 @@ class _ProductsState extends State<Products> {
           size: p['size']);
       products.add(product);
     });
-    setState(() {
-      if (isloading) {
-        productss = products;
-        isloading = false;
-      }
-    });
+    if (mounted)
+      setState(() {
+        if (isloading) {
+          productss = products;
+          isloading = false;
+        }
+      });
   }
 
   @override

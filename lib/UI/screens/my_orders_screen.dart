@@ -265,16 +265,16 @@ class _MyOrdersScreen extends State {
         initialDate: type == 'from ' ? selectedDate : oldTime,
         firstDate: DateTime(2000, 8),
         lastDate: DateTime(2101, 12));
-    if (type == 'from') if (picked != null && picked != oldTime)
+    if (type == 'from')
       setState(() {
         oldTime = picked;
+        filteredOrders(wholeList, oldTime, selectedDate, price);
       });
-    else if (type == 'to') if (picked != null && picked != selectedDate)
+    else if (type == 'to')
       setState(() {
         selectedDate = picked;
+        filteredOrders(wholeList, oldTime, selectedDate, price);
       });
-
-    filteredOrders(wholeList, oldTime, selectedDate, price);
   }
 
   void getUserOrders(String token) async {
@@ -284,7 +284,6 @@ class _MyOrdersScreen extends State {
       final response = await Requests.post(sharedData.myOrdersUrl,
           body: {'api_token': token},
           bodyEncoding: RequestBodyEncoding.FormURLEncoded);
-
       if (response.statusCode == 200) {
         response.raiseForStatus();
         dynamic json = response.json();
