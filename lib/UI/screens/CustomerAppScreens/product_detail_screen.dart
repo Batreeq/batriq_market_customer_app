@@ -6,132 +6,140 @@ import 'package:customerapp/shared_data.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   Product product;
+
   ProductDetailsScreen({this.product});
+
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Builder(
-          builder: (context) => new SliverContainer(
-                  floatingActionButton: Container(
-                    height: 30,
-                    width: 30,
-                    margin: EdgeInsets.only(right: 20),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.share,
-                        color: sharedData.mainColor,
-                        size: 40,
-                      ),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            widget.product.title,
+            style: TextStyle(fontSize: 15),
+          ),
+        ),
+        body: Container(
+          margin: EdgeInsets.all(15),
+          width: double.infinity,
+          height: 650,
+          child: ListView(
+            children: <Widget>[
+              Container(
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            widget.product.image,
+                            fit: BoxFit.fill,
+                          )),
+                      width: double.infinity,
+                      height: 200,
                     ),
-                  ),
-                  expandedHeight: 256.0,
-                  slivers: <Widget>[
-                    new SliverAppBar(
-                      iconTheme: IconThemeData(color: Colors.white),
-                      expandedHeight: 256.0,
-                      backgroundColor: sharedData.mainColor,
-                      pinned: true,
-                      flexibleSpace: new FlexibleSpaceBar(
-                        title: new Text(
-                          widget.product.title,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        background: CachedNetworkImage(
-                          imageUrl: widget.product.image,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    new SliverList(
-                      delegate: new SliverChildListDelegate(
-                        new List.generate(1, (int index) {
-                          return Container(
-                            margin: EdgeInsets.all(15),
-                            width: double.infinity,
-                            height: 650,
+                    Positioned(
+                      bottom: 0,
+                      left: 10,
+                      right: 10,
+                      child: Card(
+                          elevation: 2,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          shape: RoundedRectangleBorder(
+                              side: new BorderSide(
+                                  color: Colors.blue.withOpacity(0.3),
+                                  width: 0.5),
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10))),
+                          child: Container(
+                            height: 150,
+                            margin: EdgeInsets.all(20),
                             child: Column(
                               children: <Widget>[
-                                Card(
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    shape: RoundedRectangleBorder(
-                                        side: new BorderSide(
-                                            color: Colors.blue.withOpacity(0.3),
-                                            width: 0.5),
-                                        borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20))),
-                                    child: Container(
-                                      height: 150,
-                                      margin: EdgeInsets.all(20),
-                                      child: Center(
-                                        child: Text(
-                                          widget.product.title,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                      ),
-                                    )),
                                 Text(
-                                  "قدم لنا عرض بيع علي هذا الصنف  ",
+                                  widget.product.title,
                                   style: TextStyle(
-                                      color: sharedData.mainColor,
-                                      fontWeight: FontWeight.normal),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 20),
                                 ),
-                                buildPriceItem(),
-                                buildQuantityItem(),
-                                buildValidToItem(),
-                                buildNotesItem(),
-                                Container(
-                                  height: 60,
-                                  width: double.infinity,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Positioned(
-                                        left: 0,
-                                        right: 0,
-                                        top: 0,
-                                        bottom: 0,
-                                        child: InkWell(
-                                          onTap: () {},
-                                          child: Container(
-                                            child: Image.asset(
-                                              'assets/images/btn_orange.png',
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          "أرسل عرضك لنا",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                      )
-                                    ],
+                                Center(
+                                  child: Text(
+                                    widget.product.title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal),
                                   ),
                                 ),
                               ],
                             ),
-                          );
-                        }),
+                          )),
+                    ),
+                  ],
+                ),
+                height: 370,
+                width: double.infinity,
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    "قدم لنا عرض بيع علي هذا الصنف  ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 20),
+                  ),
+                ),
+              ),
+              buildPriceItem(),
+              buildQuantityItem(),
+              buildValidToItem(),
+              buildNotesItem(),
+              Container(
+                height: 60,
+                width: double.infinity,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          child: Image.asset(
+                            'assets/images/btn_orange.png',
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
                     ),
-                  ])),
-    );
+                    Center(
+                      child: Text(
+                        "أرسل عرضك لنا",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget buildPriceItem() {
@@ -142,6 +150,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          Text(
+            "السعر",
+            style:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+          ),
           Container(
             height: 60,
             width: 170,
@@ -167,11 +180,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
           ),
-          Text(
-            "السعر",
-            style:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
-          ),
         ],
       ),
     );
@@ -185,6 +193,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          Text(
+            "الكمبة",
+            style:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+          ),
           Container(
             height: 60,
             width: 170,
@@ -210,15 +223,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
           ),
-          Text(
-            "الكمبة",
-            style:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
-          ),
         ],
       ),
     );
   }
+
   Widget buildValidToItem() {
     return Container(
       width: double.infinity,
@@ -227,6 +236,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          Text(
+            "صلاحية العرض لغاية",
+            textAlign: TextAlign.right,
+            style:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+          ),
           Container(
             height: 60,
             width: 170,
@@ -252,12 +267,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
           ),
-          Text(
-            "صلاحية العرض لغاية",
-            textAlign: TextAlign.right,
-            style:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
-          ),
         ],
       ),
     );
@@ -271,6 +280,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          Text(
+            "ملاحظات",
+            style:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+          ),
           Container(
             height: 60,
             width: 170,
@@ -296,15 +310,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
           ),
-          Text(
-            "ملاحظات",
-            style:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
-          ),
         ],
       ),
     );
   }
-
-
 }
+
+
+

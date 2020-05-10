@@ -1,4 +1,3 @@
-import 'package:customerapp/models/Employee.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ import 'models/orderInfo.dart';
 ///
 List<ProductTab> tabs = [];
 LocationData locationData;
-String token = '';
+String token = "";
 appBarBloc appbarBloc;
 bool isRegistered() {
   if (token != null && token.length > 10) {
@@ -132,8 +131,12 @@ class sharedData {
   static const Icon passwordIcon = Icon(
     Icons.lock_outline, color: sharedData.yellow,);
 
-  static const TextStyle navBarTextStyle = TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Cairo-Black' ,  color: Colors.black, fontSize: 12);
-  static const TextStyle optionStyle = TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black,fontFamily: 'Cairo-Black');
+  static const TextStyle navBarTextStyle =
+      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
+  static const TextStyle textInProfileTextStyle =
+      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
   static Color grayColor12 = new Color(0x1F000000);
   static const Color yellow = const Color(0xFFFFEB3B);
    static const TextStyle textInProfileTextStyle = TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25, fontFamily: 'Cairo-Black');
@@ -211,12 +214,9 @@ class sharedData {
     'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
   ];
 
-
-  // this list of the texts which will be used in the boxes  in home screen,and filled in splash screen from api
-
   // this list of the texts which will be used in the boxes  in home screen,and filled in splash screen from api
   static const List<String> boxesTexts = [
-    'رز ',
+    'سميد',
     'رز ',
     'رز ',
     'رز ',
@@ -237,9 +237,9 @@ class sharedData {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 14.0);
+        backgroundColor: mainColor,
+        textColor: Colors.black,
+        fontSize: 16.0);
   }
 
   static String token;
@@ -296,23 +296,38 @@ class sharedData {
   static FlutterSecureStorage storage = FlutterSecureStorage();
 
   static Future<bool> writeToStorage({String key, String value}) async {
-    await storage.write(key: key, value: value,).then((val) {
-      print('done saving token in storage ');
-    });
+    await storage
+        .write(
+          key: key,
+          value: value,
+        )
+        .then((val) {});
+    token = value;
   }
 
   static Future<String> readFromStorage({String key}) async {
     //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
-    String s = await storage.read(key: key,);
-    print(s + 'in read storage in shared');
-    token = await storage.read(key: key,);
-   // token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807';
-    return token;
+    String s = await storage.read(
+      key: key,
+    );
+    return storage.read(
+      key: key,
+    );
+  }
+
+  static logout() async {
+    await storage.delete(key: "token");
+    token = "";
+    sharedData.token = "";
+    flutterToast("تم تسجيل الخروج ");
   }
 
   static setToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(token, 'token',);
+    prefs.setString(
+      token,
+      'token',
+    );
   }
 
   // to show the loader
@@ -340,11 +355,30 @@ class sharedData {
   }
 
   static const String searchUrl = 'https://jaraapp.com/index.php/api/search?';
-  static const String getUserInfoUrl = 'https://jaraapp.com/index.php/api/userInfo?api_token=';
-  static const String registerUrl = 'https://jaraapp.com/index.php/api/register?';
-  static const String addMemberUrl = 'https://jaraapp.com/index.php/api/addFamilyMembers';
-  static const String myOrdersUrl = 'https://jaraapp.com/index.php/api/myOrders';
-  static const String userBalanceUrl = 'https://jaraapp.com/index.php/api/userBalance?api_token=';
+  static const String getUserInfoUrl =
+      'https://jaraapp.com/index.php/api/userInfo?api_token=';
+  static const String registerUrl =
+      'https://jaraapp.com/index.php/api/register?';
+  static const String addMemberUrl =
+      'https://jaraapp.com/index.php/api/addFamilyMembers';
+  static const String myOrdersUrl =
+      'https://jaraapp.com/index.php/api/myOrders';
+
+  static const TextStyle yellowStyle =
+      TextStyle(fontSize: 19, color: yellow, fontWeight: FontWeight.bold);
+
+  static const String passwordTextField = 'كلمة المرور';
+
+  static const String altPhoneHintTextField = 'رقم الهاتف البديل ';
+  static const String addressHintTextField = 'العنوان ';
+  static const String modelHintTextField = 'موديل المركبة';
+  static const String typeHintTextField = ' نوع المركبة';
+  static const String lastNameTextField = 'اسم العائلة';
+
+  static const Icon passwordIcon = Icon(
+    Icons.lock_outline,
+    color: sharedData.yellow,
+  );
 
   static String userPoints = '0';
 
@@ -357,6 +391,12 @@ class sharedData {
   static String createAccount = ' انشاء حساب ';
   static String loginUsingText = 'سجل دخولك بواسطة';
 
+  static String termsImage =
+      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
+  static String privacyImage =
+      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
+  static String helpImage =
+      'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
 
   static const String profileImage = 'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';
   static const String termsImage = 'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80';

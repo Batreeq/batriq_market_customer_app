@@ -285,32 +285,12 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
         context: context,
         builder: (builder) {
           return new Container(
-            height: 350.0,
-            color: Colors.transparent, //could change this to Color(0xFF737373),
-            //so you don't have to change MaterialApp canvasColor
-            child: Column(
-              children: <Widget>[
-                RadioListTile<SingingCharacter>(
-                  title: const Text('Lafayette'),
-                  value: SingingCharacter.lafayette,
-                  groupValue: _character,
-                  onChanged: (SingingCharacter value) {
-                    setState(() {
-                      _character = value;
-                    });
-                  },
-                ),
-                RadioListTile<SingingCharacter>(
-                  title: const Text('Thomas Jefferson'),
-                  value: SingingCharacter.jefferson,
-                  groupValue: _character,
-                  onChanged: (SingingCharacter value) {
-                    setState(() {
-                      _character = value;
-                    });
-                  },
-                ),
-              ],
+            width: 260.0,
+            height: 230.0,
+            decoration: new BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: const Color(0xFFFFFF),
+              borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
             ),
           );
         });

@@ -1,4 +1,5 @@
 import 'package:customerapp/DataLayer/Catigory.dart';
+import 'package:customerapp/DataLayer/tab.dart';
 
 class Product {
   String title;
@@ -6,6 +7,7 @@ class Product {
   String image;
   String price;
   String size;
-  Catigory catigory;
-  Product({this.title, this.image, this.price, this.size, this.catigory,this.id});
+  ProductTab catigory;
+  Product(
+      {this.title, this.image, this.price, this.size, this.catigory, this.id});
 }

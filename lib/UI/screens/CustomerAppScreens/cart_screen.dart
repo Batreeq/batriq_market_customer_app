@@ -44,7 +44,7 @@ class _CartScreenState extends State<CartScreen> {
               builder: (context, snapshot) {
                 return snapshot.data == null
                     ? Center(child: Text(''))
-                    : buildCartList(snapshot.data, bloc);
+                    : buildCartList(snapshot.data, bloc, context);
               }),
         ),
         isloading
@@ -184,7 +184,107 @@ class _CartScreenState extends State<CartScreen> {
 //    );
 //  }
 
-  Widget buildCartList(List<CartGroup> data, bloc) {
+  Widget shareCartDialog(String cartNum, ctx) {
+    String name = "";
+    return new AlertDialog(
+      content: new Container(
+        width: 260.0,
+        height: 230.0,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            // dialog top
+            new Expanded(
+              child: new Row(
+                children: <Widget>[
+                  new Container(
+                    // padding: new EdgeInsets.all(10.0),
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: new Text(
+                      'مشاركة السلة',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // dialog centre
+            new Expanded(
+              child: new Container(
+                  child: new TextField(
+                keyboardType: TextInputType.phone,
+                onChanged: (v) {
+                  name = v;
+                },
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintStyle: TextStyle(fontSize: 13),
+                    hintText: 'اكتب رقم هاتف المرسل اليه'),
+              )),
+              flex: 2,
+            ),
+
+            // dialog bottom
+            new Expanded(
+              child: new Container(
+                padding: new EdgeInsets.all(16.0),
+                decoration: new BoxDecoration(
+                  color: sharedData.mainColor,
+                ),
+                child: FlatButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    if (name.length > 2) {
+                      shareCart(name, cartNum, ctx);
+//                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: new Text(
+                    'إرسال',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  shareCart(String phone, String cartNum, ctx) async {
+    Map<String, dynamic> params = new Map();
+    params['api_token'] = token;
+    params['to_user'] = phone;
+    params['cart_num'] = cartNum;
+    print(
+        'https://jaraapp.com/index.php/api/shareCart?api_token=$token&to_user=$phone&cart_num=$cartNum');
+    final Uri url = Uri.parse('https://jaraapp.com/index.php/api/shareCart');
+    var response = await http.post(url, body: params);
+    if (response.statusCode == 200) {
+      sharedData.flutterToast(" تم بنجاح مشاركة السلة مع  $phone");
+    } else {
+      sharedData.flutterToast("رقم الهاتف غير صحيح");
+    }
+//    Navigator.of(ctx).pop();
+  }
+
+  Widget buildCartList(List<CartGroup> data, bloc, ctx) {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
@@ -240,7 +340,12 @@ class _CartScreenState extends State<CartScreen> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  child: shareCartDialog(
+                                      data[index].groupId, ctx));
+                            },
                           ),
                         ),
                       ),

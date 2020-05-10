@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
  import 'package:customerapp/models/UserInfo.dart';
+import 'dart:typed_data';
+import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:io' as Io;
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,7 +36,6 @@ class _ProfileScreen extends State {
   bool phoneChanged;
   UserInfo info = new UserInfo();
   Size size;
-
   UserProfile userProfile;
   String token;
   TextEditingController salaryCon = new TextEditingController();
@@ -263,7 +266,6 @@ class _ProfileScreen extends State {
     userProfile = new UserProfile();
     userProfile.familyMembers = new List<FamilyMembers>();
     image = sharedData.profileImage;
-
     nameCon = new TextEditingController(text: name);
     phoneCon = new TextEditingController(text: phone);
     locationCon = new TextEditingController(text: location);
@@ -284,12 +286,30 @@ class _ProfileScreen extends State {
 
     size = MediaQuery.of(context).size;
     // token not null so user registered before so his info will get from api and put them in the fields
-    defaultImageWidget = GFAvatar(
-      size: 70,
-      backgroundImage: NetworkImage(image),
-    );
+
+    defaultImageWidget = base64Image.length > 20
+        ? Container(
+            margin: EdgeInsets.only(top: 40),
+            height: 70,
+            width: 70,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(35),
+              child: Image.memory(
+                base64Decode(base64Image),
+                fit: BoxFit.fill,
+                height: 70,
+                width: 70,
+              ),
+            ),
+          )
+        : Icon(
+            Icons.cloud_upload,
+            size: 70,
+            color: sharedData.mainColor,
+          );
 
     return Scaffold(
+      appBar: sharedData.appBar(context, 'الملف الشخصي', null, () {}),
       resizeToAvoidBottomPadding: true,
       resizeToAvoidBottomInset: true,
       body: Padding(
@@ -303,22 +323,26 @@ class _ProfileScreen extends State {
                   alignment: Alignment.bottomRight,
                   children: <Widget>[
                     Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: InkWell(
+                        onTap: () {
+                          getImage();
+                        },
+                        child: defaultImageWidget,
+                      ),
+                    ),
+                    Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           child: Icon(Icons.add),
                         )),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: InkWell(
-                          onTap: () {
-                            chooseImageFromGallery();
-                          },
-                          child: defaultImageWidget),
-                    ),
                   ],
                 ), // profile picture
                 Text(
                   sharedData.userInfo.name != null ?  sharedData.userInfo.name : ' ',
+                  sharedData.userInfo.name != null
+                      ? sharedData.userInfo.name
+                      : ' ',
                   style: sharedData.textInProfileTextStyle,
                 ), // name
                 Container(
@@ -627,7 +651,6 @@ class _ProfileScreen extends State {
 
       sharedData.showLoadingDialog(context); //invoking login
       await Future.delayed(Duration(seconds: 4));
-
       if (response.statusCode == 200) {
         response.raiseForStatus();
         dynamic json = response.json();
@@ -658,6 +681,28 @@ class _ProfileScreen extends State {
     }
   }
 
+  static void LogPrint(Object object) async {
+    int defaultPrintLength = 1020;
+    if (object == null || object.toString().length <= defaultPrintLength) {
+      print(object);
+    } else {
+      String log = object.toString();
+      int start = 0;
+      int endIndex = defaultPrintLength;
+      int logLength = log.length;
+      int tmpLogLength = log.length;
+      while (endIndex < logLength) {
+        print(log.substring(start, endIndex));
+        endIndex += defaultPrintLength;
+        start += defaultPrintLength;
+        tmpLogLength -= defaultPrintLength;
+      }
+      if (tmpLogLength > 0) {
+        print(log.substring(start, logLength));
+      }
+    }
+  }
+
   submitUserData(String token) async {
     //  token = '2d0ff96767efed695b53b04e36941b5f8df3ce30d2bdcc4b98db0a29388e299a';
     UserInfo info = new UserInfo();
@@ -676,13 +721,9 @@ class _ProfileScreen extends State {
       info.location =
           locationCon.text == null || location == '' ? '' : locationCon.text;
       info.email = emailCon.text == null || email == '' ? '' : emailCon.text;
-      info.image = image == null || image == '' ? '' : image;
+      info.image = base64Image.trim();
       info.phone = phoneCon.text == null || phone == '' ? '' : phoneCon.text;
-
-      print('will add name =' + nameCon.text);
-      print('will add phone =' + phoneCon.text);
-      print('will add email =' + emailCon.text);
-      print('will add loc =' + locationCon.text);
+      print("base:$base64Image");
 
       var response;
       if (token == null || token == '')
@@ -727,21 +768,38 @@ class _ProfileScreen extends State {
             AddMemberScreen(salaryCon.text.toString())));
   }
 
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File imageFile = new File(image.path);
+    List<int> imageBytes = imageFile.readAsBytesSync();
+    String base64Images = base64Encode(imageBytes);
+    LogPrint("base65: ${base64Images.length}   image string : $base64Images");
+    setState(() {
+      base64Image = base64Images;
+    });
+  }
+
+  imageToBytes(image) async {
+    final bytes = Io.File(image).readAsBytesSync();
+    setState(() {
+      base64Image = base64.encode(bytes);
+    });
+  }
+
   // to open the gallery to select an image
   chooseImageFromGallery() {
     setState(() {
       // open gallery to pick image
       file = ImagePicker.pickImage(source: ImageSource.gallery);
     });
-
     defaultImageWidget = FutureBuilder<File>(
       future: file,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
           // to transfer the image to base64 to upload it it the database
-          base64Image = base64Encode(snapshot.data.readAsBytesSync());
 
+          base64Image = base64Encode(snapshot.data.readAsBytesSync());
           return GFAvatar(
             child: Image.file(snapshot.data),
           );

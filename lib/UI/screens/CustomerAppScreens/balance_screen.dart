@@ -72,120 +72,119 @@ class _BalanceScreen extends State {
               //   backgroundColor: Colors.red,
               child: SingleChildScrollView(
                   child: Container(
-                    // height: size.height -20 ,
-                    //   width: size.width,
+                      // height: size.height -20 ,
+                      //   width: size.width,
                       child: SingleChildScrollView(
-                        child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              textDirection: TextDirection.rtl,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      title,
-                                      textAlign: TextAlign.right,
-                                      style: sharedData.textInProfileTextStyle,
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  textDirection: TextDirection.rtl,
-                                  children: <Widget>[
-                                    Checkbox(
-                                        autofocus: true,
-                                        value: checkBoxValue1,
-                                        //   activeColor: Colors.green,
-                                        onChanged: (bool newValue) {
-                                          print(checkBoxValue1.toString());
-                                          if (newValue)
-                                            setState(() {
-                                              checkBoxValue1 = true;
-                                            });
-                                          else
-                                            checkBoxValue1 = false;
-                                          print(checkBoxValue1.toString() +
-                                              " " +
-                                              checkBoxValue2.toString() +
-                                              ' ' +
-                                              newValue.toString());
-                                        }),
-                                    Text(
-                                      'شحن من خلال فواتير في المستقبل',
-                                      textAlign: TextAlign.right,
-                                      style: sharedData.optionStyle,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  textDirection: TextDirection.rtl,
-                                  children: <Widget>[
-                                    Checkbox(
-                                        value: checkBoxValue2,
-                                        onChanged: (bool newValue) {
-                                          setState(() {
-                                            checkBoxValue2 = newValue;
-                                          });
-                                        }),
-                                    Text(
-                                      'شحن من خلال الفيزا',
-                                      textAlign: TextAlign.right,
-                                      style: sharedData.optionStyle,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  textDirection: TextDirection.rtl,
-                                  children: <Widget>[
-                                    Checkbox(
-                                        autofocus: true,
-                                        value: checkBoxValue3,
-                                        //   activeColor: Colors.green,
-                                        onChanged: (bool newValue) {
-                                          print(checkBoxValue3.toString());
-                                          if (newValue)
-                                            setState(() {
-                                              checkBoxValue3 = true;
-                                            });
-                                          else
-                                            checkBoxValue3 = false;
-                                          print(checkBoxValue3.toString() +
-                                              " " +
-                                              checkBoxValue4.toString() +
-                                              ' ' +
-                                              newValue.toString());
-                                        }),
-                                    Text(
-                                      'اشحن من ماستر كارد',
-                                      textAlign: TextAlign.right,
-                                      style: sharedData.optionStyle,
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 9.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: RaisedButton(
-                                      child: Text(
-                                        'تأكيد',
-                                        style: sharedData
-                                            .textInProfileTextStyle,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      color: sharedData.yellow,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )),
-                      ))),
+                child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      textDirection: TextDirection.rtl,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              title,
+                              textAlign: TextAlign.right,
+                              style: sharedData.textInProfileTextStyle,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          textDirection: TextDirection.rtl,
+                          children: <Widget>[
+                            Checkbox(
+                                autofocus: true,
+                                value: checkBoxValue1,
+                                //   activeColor: Colors.green,
+                                onChanged: (bool newValue) {
+                                  print(checkBoxValue1.toString());
+                                  if (newValue)
+                                    setState(() {
+                                      checkBoxValue1 = true;
+                                    });
+                                  else
+                                    checkBoxValue1 = false;
+                                  print(checkBoxValue1.toString() +
+                                      " " +
+                                      checkBoxValue2.toString() +
+                                      ' ' +
+                                      newValue.toString());
+                                }),
+                            Text(
+                              'شحن من خلال فواتير في المستقبل',
+                              textAlign: TextAlign.right,
+                              style: sharedData.optionStyle,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          textDirection: TextDirection.rtl,
+                          children: <Widget>[
+                            Checkbox(
+                                value: checkBoxValue2,
+                                onChanged: (bool newValue) {
+                                  setState(() {
+                                    checkBoxValue2 = newValue;
+                                  });
+                                }),
+                            Text(
+                              'شحن من خلال الفيزا',
+                              textAlign: TextAlign.right,
+                              style: sharedData.optionStyle,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          textDirection: TextDirection.rtl,
+                          children: <Widget>[
+                            Checkbox(
+                                autofocus: true,
+                                value: checkBoxValue3,
+                                //   activeColor: Colors.green,
+                                onChanged: (bool newValue) {
+                                  print(checkBoxValue3.toString());
+                                  if (newValue)
+                                    setState(() {
+                                      checkBoxValue3 = true;
+                                    });
+                                  else
+                                    checkBoxValue3 = false;
+                                  print(checkBoxValue3.toString() +
+                                      " " +
+                                      checkBoxValue4.toString() +
+                                      ' ' +
+                                      newValue.toString());
+                                }),
+                            Text(
+                              'اشحن من ماستر كارد',
+                              textAlign: TextAlign.right,
+                              style: sharedData.optionStyle,
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 9.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: RaisedButton(
+                              child: Text(
+                                'تأكيد',
+                                style: sharedData.textInProfileTextStyle,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              color: sharedData.yellow,
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+              ))),
             );
           });
         });
@@ -299,10 +298,7 @@ class _BalanceScreen extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width - 50,
+                    width: MediaQuery.of(context).size.width - 50,
                     height: 50,
                     child: RaisedButton(
                       color: sharedData.yellow,
@@ -323,10 +319,7 @@ class _BalanceScreen extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width - 50,
+                      width: MediaQuery.of(context).size.width - 50,
                       height: 50,
                       child: Container(
                         decoration: BoxDecoration(
@@ -338,9 +331,13 @@ class _BalanceScreen extends State {
                             // side: BorderSide(color: Colors.red)
                           ),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext c) =>
-                                    BalanceDetails()));
+                            sharedData.listOfUserPayment != null &&
+                                    sharedData.listOfUserPayment.length > 0
+                                ? Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext c) =>
+                                        BalanceDetails()))
+                                : sharedData
+                                    .flutterToast("لاتوجد لديك تحويلات سابقة");
                           },
                           child: Text(
                             sharedData.accountStatementTextField,

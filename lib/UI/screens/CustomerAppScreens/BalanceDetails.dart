@@ -12,12 +12,11 @@ class BalanceDetails extends StatefulWidget {
 }
 
 class _BalanceDetails extends State {
-
   bool isSelect = false;
 
   bool isAscending = true;
 
-  List<UserPayments> list = new List<UserPayments> ();
+  List<UserPayments> list = new List<UserPayments>();
   UserPayments userPayments = new UserPayments();
 
   @override
@@ -80,7 +79,6 @@ class _BalanceDetails extends State {
                     ),
                   ],
                 ),
-
               ),
               DataColumn(
                 label: Row(
@@ -114,35 +112,33 @@ class _BalanceDetails extends State {
               ),
             ],
             rows:
-            list // Loops through dataColumnText, each iteration assigning the value to element
-                .map(
-              ((element) =>
-                  DataRow(
-                    selected: isSelected(),
-                    cells: <DataCell>[
-                      DataCell(Text(
-                        element.totalBalance,
-                        style: sharedData.tableFieldsTextStyle,
-                      )),
-                      //Extracting from Map element the value
-                      DataCell(Text(
-                        element.creditDebt,
-                        style: sharedData.tableFieldsTextStyle,
-                      )),
-                      DataCell(Text(
-                        element.details,
-                        style: sharedData.tableFieldsTextStyle,
-                      )),
-                      DataCell(Text(
-                        element.createdDate,
-                        style: sharedData.tableFieldsTextStyle,
-                      )),
-                    ],
-                  )),
-            )
-                .toList(),
+                list // Loops through dataColumnText, each iteration assigning the value to element
+                    .map(
+                      ((element) => DataRow(
+                            selected: isSelected(),
+                            cells: <DataCell>[
+                              DataCell(Text(
+                                element.totalBalance,
+                                style: sharedData.tableFieldsTextStyle,
+                              )),
+                              //Extracting from Map element the value
+                              DataCell(Text(
+                                element.creditDebt,
+                                style: sharedData.tableFieldsTextStyle,
+                              )),
+                              DataCell(Text(
+                                element.details,
+                                style: sharedData.tableFieldsTextStyle,
+                              )),
+                              DataCell(Text(
+                                element.createdDate,
+                                style: sharedData.tableFieldsTextStyle,
+                              )),
+                            ],
+                          )),
+                    )
+                    .toList(),
           ),
-        )
-    );
+        ));
   }
 }
