@@ -1,19 +1,19 @@
 import 'package:customerapp/Bloc/side_menu_bloc.dart';
-import 'package:customerapp/UI/screens/balance_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/EarnWithUs.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/HelpScareen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/Home.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/balance_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/cart_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/my_orders_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/privacy_policy_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/profile_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/terms_screen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/work_with_us_screen.dart';
 import 'package:customerapp/UI/screens/language_screen.dart';
-import 'package:customerapp/UI/screens/my_orders_screen.dart';
-import 'package:customerapp/UI/screens/ping/Home.dart';
-import 'package:customerapp/UI/screens/ping/profile_screen.dart';
-import 'package:customerapp/UI/screens/privacy_policy_screen.dart';
-import 'package:customerapp/UI/screens/terms_screen.dart';
-import 'package:customerapp/UI/screens/EarnWithUs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../shared_data.dart';
-import '../HelpScareen.dart';
-import '../cart_screen.dart';
 import '../messageing_screen.dart';
-import '../work_with_us_screen.dart';
 import 'SearchBar.dart';
 
 class HomePagee extends StatefulWidget {
@@ -25,7 +25,7 @@ class HomePagee extends StatefulWidget {
 class _HomePageState extends State<HomePagee> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   _HomePageState();
   void _onItemTapped(int index) {
     setState(() {
@@ -35,7 +35,6 @@ class _HomePageState extends State<HomePagee> {
 
   PageController pageController;
   int currentTab = 0;
-
   _changeCurrentTab(int tab) {
     setState(() {
       currentTab = tab;
@@ -46,13 +45,12 @@ class _HomePageState extends State<HomePagee> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
-        new GlobalKey<ScaffoldState>();
+    new GlobalKey<ScaffoldState>();
     final bloc = SideMenuBloc();
     const String homeTextPage = 'الصفحة الرئيسية';
     const String workWithusText = 'اعمل معنا';
     const String cardText = 'سلة المشتريات';
     const String chatText = 'المراسلة';
-
     pageController = new PageController();
     List<Widget> _widgetOptions = <Widget>[
       //ChatScreen(),
@@ -79,6 +77,7 @@ class _HomePageState extends State<HomePagee> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        //  backgroundColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
 
 //        // unselectedItemColor: Colors.black,

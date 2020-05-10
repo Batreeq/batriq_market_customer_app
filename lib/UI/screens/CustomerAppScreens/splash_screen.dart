@@ -2,15 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/tab.dart';
-import 'package:customerapp/UI/screens/DriverAppScreens/DriverOptionsScreen.dart';
- import 'package:customerapp/models/UserBalance.dart';
+import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/models/UserInfo.dart';
-import 'package:customerapp/models/UserPayments.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'HomePage.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,12 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   startHome() async {
     token = await sharedData.readFromStorage(key: 'token');
     print("splash : $token");
-    //isRegistered() ? getSplashData(token) : getSplashData("");
-
-    Navigator.pushReplacement(
-      context,
-      new MaterialPageRoute(builder: (context) => new DriverOptionsScreen()),
-    );
+    isRegistered() ? getSplashData(token) : getSplashData("");
   }
 
   Widget build(BuildContext context) {
@@ -55,16 +47,16 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Center(
           child: Image.asset(
-        "assets/images/logo.png",
-        width: 150,
-        height: 150,
-        fit: BoxFit.fill,
-      )),
+            "assets/images/logo.png",
+            width: 150,
+            height: 150,
+            fit: BoxFit.fill,
+          )),
     );
   }
 
   Future<void> getSplashData(api_token) async {
-    print("tokken $api_token");
+    print("tokken$api_token");
     final url = 'https://jaraapp.com/index.php/api/splash?api_token=$api_token';
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -81,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     extractedData['categories'].forEach((tabdata) {
       ProductTab tab =
-          ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
+      ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
       tabs.add(tab);
     });
     extractedData['homeSliders'].forEach((image) {
@@ -93,9 +85,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (isRegistered()) {
       balance != "0"
           ? sharedData.userBalance = UserBalance(
-              activeBalance: balance['active_balance'].toString(),
-              inactiveBalance: balance['inactive_balance'].toString(),
-              totalBalance: balance['total_balance'].toString())
+          activeBalance: balance['active_balance'].toString(),
+          inactiveBalance: balance['inactive_balance'].toString(),
+          totalBalance: balance['total_balance'].toString())
           : null;
       extractedData['user_payments'].forEach((payment) {
         sharedData.listOfUserPayment.add(UserPayments(
@@ -153,7 +145,7 @@ class _SplashScreenState extends State<SplashScreen> {
     sharedData.helpImage = extractedData['HelpScreen'][0]['image'];
     sharedData.privacyImage = extractedData['PrivacyPolicy'][0]['image'];
     sharedData.termsTitle = extractedData['termsAndConditions'][0]['title'];
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       new MaterialPageRoute(builder: (context) => new HomePagee()),
     );

@@ -9,8 +9,6 @@ import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
  import 'package:customerapp/UI/wigets/custom_tab.dart';
 import 'package:customerapp/DataLayer/tab.dart';
-import 'package:customerapp/UI/screens/product_detail_screen.dart';
-import 'package:customerapp/UI/wigets/custom_tab.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';

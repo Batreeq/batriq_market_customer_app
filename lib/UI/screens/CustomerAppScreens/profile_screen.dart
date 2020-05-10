@@ -11,6 +11,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:requests/requests.dart';
 import 'AddMemberScreen.dart';
 import 'HomePage.dart';
+import 'package:flutter/services.dart';
+import 'dart:io' as Io;
+
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -31,7 +34,7 @@ class _ProfileScreen extends State {
 
   FocusNode nameFocus, phoneFocus, locationFocus, emailFocus;
   bool phoneChanged;
-  UserInfo info ;
+  UserInfo info = new UserInfo();
   List<FamilyMembers> familyMembers;
   Size size;
 
@@ -81,13 +84,13 @@ class _ProfileScreen extends State {
       rows: familyMembers
           // Loops through dataColumnText, each iteration assigning the value to element
           .map(
-            ((element) => DataRow(
+        //Extracting from Map element the value
+      ((element) => DataRow(
                   cells: <DataCell>[
                     DataCell(Text(
                       element.age.toString(),
                       style: sharedData.tableFieldsTextStyle,
                     )),
-                    //Extracting from Map element the value
                     DataCell(Text(
                       element.gender,
                       style: sharedData.tableFieldsTextStyle,
@@ -273,7 +276,6 @@ class _ProfileScreen extends State {
     info = sharedData.userInfo ;
     image = sharedData.profileImage;
 
-
      name = info.name != null ? info.name :'' ;
      phone = info.phone  != null ? info.phone :'' ;
      location =info.location != null ? info.location :'' ;
@@ -301,98 +303,116 @@ class _ProfileScreen extends State {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 2));
-    //  print('token from init ' + token);
 
     size = MediaQuery.of(context).size;
     // token not null so user registered before so his info will get from api and put them in the fields
 
+    defaultImageWidget = base64Image.length > 20
+        ? Container(
+      margin: EdgeInsets.only(top: 40),
+      height: 70,
+      width: 70,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(35),
+        child: Image.memory(
+          base64Decode(base64Image),
+          fit: BoxFit.fill,
+          height: 70,
+          width: 70,
+        ),
+      ),
+    )
+        : Icon(
+      Icons.cloud_upload,
+      size: 70,
+      color: sharedData.mainColor,
+    );
 
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
-        resizeToAvoidBottomInset: true,
-        appBar: sharedData.appBar(context, 'الملف الشخصي', null, (){
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder:
-              (BuildContext context) => HomePagee()));
-        }),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 10.0),
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: <Widget>[
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            child: Icon(Icons.add),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: InkWell(
-                            onTap: () {
-                              chooseImageFromGallery();
-                            },
-                            child: defaultImageWidget),
+      appBar: sharedData.appBar(context, 'الملف الشخصي', null, () {}),
+      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: true,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: InkWell(
+                        onTap: () {
+                          getImage();
+                        },
+                        child: defaultImageWidget,
                       ),
-                    ],
-                  ), // profile picture
-                  Text(
-                    sharedData.name,
-                    style: sharedData.textInProfileTextStyle,
-                  ), // name
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        formFields(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width - 50,
-                            height: 50,
-                            child: RaisedButton(
-                              color: sharedData.yellow,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(4.0),
-                                // side: BorderSide(color: Colors.red)
-                              ),
-                              onPressed: () {
-                                _validateAndSubmit();
-                              },
-                              child: Text(
-                                sharedData.updateProfileTextField,
-                                style: sharedData.textInProfileTextStyle,
-                              ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Icon(Icons.add),
+                        )),
+                  ],
+                ), // profile picture
+                Text(
+                  sharedData.userInfo.name != null
+                      ? sharedData.userInfo.name
+                      : ' ',
+                  style: sharedData.textInProfileTextStyle,
+                ), // name
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      formFields(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 50,
+                          height: 50,
+                          child: RaisedButton(
+                            color: sharedData.yellow,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(4.0),
+                              // side: BorderSide(color: Colors.red)
+                            ),
+                            onPressed: () {
+                              _validateAndSubmit();
+                            },
+                            child: Text(
+                              sharedData.updateProfileTextField,
+                              style: sharedData.textInProfileTextStyle,
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  ), // name, location, location fields and  button update
-                  SizedBox(
-                    height: 20,
+                        ),
+                      )
+                    ],
                   ),
-                  InkWell(
-                    child: Text(
-                      sharedData.textInProfileTextField,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    onTap: () {
-                      familyDialogUI();
-                    },
-                  )
-                  // name
-                ],
-              ),
+                ), // name, location, location fields and  button update
+                SizedBox(
+                  height: 20,
+                ),
+                InkWell(
+                  child: Text(
+                    sharedData.textInProfileTextField,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  onTap: () {
+                    familyDialogUI();
+                  },
+                )
+                // name
+              ],
             ),
           ),
         ),
-
+      ),
     );
   }
 
@@ -771,6 +791,39 @@ class _ProfileScreen extends State {
         emailCon.text.trim().toString() == '')
       return true;
     return EmailValidator.validate(emailCon.text.trim());
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File imageFile = new File(image.path);
+    List<int> imageBytes = imageFile.readAsBytesSync();
+    String base64Images = base64Encode(imageBytes);
+    logPrint("base65: ${base64Images.length}   image string : $base64Images");
+    setState(() {
+      base64Image = base64Images;
+    });
+  }
+
+  static void logPrint(Object object) async {
+    int defaultPrintLength = 1020;
+    if (object == null || object.toString().length <= defaultPrintLength) {
+      print(object);
+    } else {
+      String log = object.toString();
+      int start = 0;
+      int endIndex = defaultPrintLength;
+      int logLength = log.length;
+      int tmpLogLength = log.length;
+      while (endIndex < logLength) {
+        print(log.substring(start, endIndex));
+        endIndex += defaultPrintLength;
+        start += defaultPrintLength;
+        tmpLogLength -= defaultPrintLength;
+      }
+      if (tmpLogLength > 0) {
+        print(log.substring(start, logLength));
+      }
+    }
   }
 
   // to check if the phone valid like Jordan phone pattern (10 characters start with 079, 078 or 077)
