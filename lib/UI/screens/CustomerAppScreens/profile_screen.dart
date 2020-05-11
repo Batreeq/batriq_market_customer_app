@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:customerapp/UI/screens/CustomerAppScreens/AddMemberScreen.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:customerapp/shared_data.dart';
@@ -9,11 +10,9 @@ import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:requests/requests.dart';
-import 'AddMemberScreen.dart';
 import 'HomePage.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' as Io;
-
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -23,7 +22,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State {
-  Future <File> file;
+  Future<File> file;
   String base64Image = '';
   File tempFile;
   final formKey = GlobalKey<FormState>();
@@ -38,10 +37,10 @@ class _ProfileScreen extends State {
   List<FamilyMembers> familyMembers;
   Size size;
 
-  String salary ;
+  String salary;
   String token;
 
-  TextEditingController salaryCon ;
+  TextEditingController salaryCon;
 
   Widget getTable(List<FamilyMembers> familyMembers) {
     return DataTable(
@@ -84,8 +83,8 @@ class _ProfileScreen extends State {
       rows: familyMembers
           // Loops through dataColumnText, each iteration assigning the value to element
           .map(
-        //Extracting from Map element the value
-      ((element) => DataRow(
+            //Extracting from Map element the value
+            ((element) => DataRow(
                   cells: <DataCell>[
                     DataCell(Text(
                       element.age.toString(),
@@ -197,7 +196,7 @@ class _ProfileScreen extends State {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(1.0),
-                        child: getTable (familyMembers),
+                        child: getTable(familyMembers),
                       ),
                       Row(
                         textDirection: TextDirection.rtl,
@@ -273,15 +272,15 @@ class _ProfileScreen extends State {
     super.initState();
     // token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807'; // with family members
     familyMembers = sharedData.familyMembers;
-    info = sharedData.userInfo ;
+    info = sharedData.userInfo;
     image = sharedData.profileImage;
 
-     name = info.name != null ? info.name :'' ;
-     phone = info.phone  != null ? info.phone :'' ;
-     location =info.location != null ? info.location :'' ;
-     email = info.email  != null ? info.email :'' ;
-     salary = info.salary  != null ? info.salary : '' ;
-     image = info.image  != null ? info.image : sharedData.profileImage ;
+    name = info.name != null ? info.name : '';
+    phone = info.phone != null ? info.phone : '';
+    location = info.location != null ? info.location : '';
+    email = info.email != null ? info.email : '';
+    salary = info.salary != null ? info.salary : '';
+    image = info.image != null ? info.image : sharedData.profileImage;
 
     salaryCon = new TextEditingController(text: salary);
     nameCon = new TextEditingController(text: name);
@@ -293,8 +292,8 @@ class _ProfileScreen extends State {
     locationFocus = new FocusNode();
     emailFocus = new FocusNode();
     getToken().then((tokn) {
-     // getUserDataFromAPI(tokn);
-     // token = tokn ;
+      // getUserDataFromAPI(tokn);
+      // token = tokn ;
     });
 
     defaultImageWidget = GFAvatar(
@@ -303,33 +302,31 @@ class _ProfileScreen extends State {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     size = MediaQuery.of(context).size;
     // token not null so user registered before so his info will get from api and put them in the fields
 
     defaultImageWidget = base64Image.length > 20
         ? Container(
-      margin: EdgeInsets.only(top: 40),
-      height: 70,
-      width: 70,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(35),
-        child: Image.memory(
-          base64Decode(base64Image),
-          fit: BoxFit.fill,
-          height: 70,
-          width: 70,
-        ),
-      ),
-    )
+            margin: EdgeInsets.only(top: 40),
+            height: 70,
+            width: 70,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(35),
+              child: Image.memory(
+                base64Decode(base64Image),
+                fit: BoxFit.fill,
+                height: 70,
+                width: 70,
+              ),
+            ),
+          )
         : Icon(
-      Icons.cloud_upload,
-      size: 70,
-      color: sharedData.mainColor,
-    );
+            Icons.cloud_upload,
+            size: 70,
+            color: sharedData.mainColor,
+          );
 
     return Scaffold(
       appBar: sharedData.appBar(context, 'الملف الشخصي', null, () {}),
@@ -655,7 +652,6 @@ class _ProfileScreen extends State {
     );
   }
 
-
   submitUserData(String token) async {
     //  token = '2d0ff96767efed695b53b04e36941b5f8df3ce30d2bdcc4b98db0a29388e299a';
 
@@ -668,12 +664,15 @@ class _ProfileScreen extends State {
           .flutterToast('Fill Your Phone Number to Update Your Profile 😍 ');
     else {
       // if (token != '') {
-      info.name = nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
-      info.location = locationCon.text == null || location == '' ? '' : locationCon.text;
+      info.name =
+          nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
+      info.location =
+          locationCon.text == null || location == '' ? '' : locationCon.text;
       info.email = emailCon.text == null || email == '' ? '' : emailCon.text;
       info.image = image == null || image == '' ? '' : image;
       info.phone = phoneCon.text == null || phone == '' ? '' : phoneCon.text;
-      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+      info.salary =
+          salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
 
       print('will add name =' + nameCon.text);
       print('will add phone =' + phoneCon.text);
@@ -682,7 +681,7 @@ class _ProfileScreen extends State {
       print('will add salary =' + salaryCon.text);
 
       var response;
-      print ('i\'m in submit method before post request ' + info.name );
+      print('i\'m in submit method before post request ' + info.name);
       if (token == null || token == '')
         response = await Requests.post(
           sharedData.registerUrl,
@@ -726,10 +725,9 @@ class _ProfileScreen extends State {
   }
 
   // to open the gallery to select an image
-  chooseImageFromGallery() async  {
-
-      // open gallery to pick image
-      file =  ImagePicker.pickImage(source: ImageSource.gallery);
+  chooseImageFromGallery() async {
+    // open gallery to pick image
+    file = ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       defaultImageWidget = FutureBuilder<File>(
         future: file,
@@ -737,11 +735,11 @@ class _ProfileScreen extends State {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
             // to transfer the image to base64 to upload it it the database
-            print (' file data from snapshot' + snapshot.data.toString());
-           base64Image =  base64Encode( snapshot.data.readAsBytesSync() ) ;
+            print(' file data from snapshot' + snapshot.data.toString());
+            base64Image = base64Encode(snapshot.data.readAsBytesSync());
 
-            print (' image 64 = ' + base64Image);
-            return  Container(
+            print(' image 64 = ' + base64Image);
+            return Container(
               width: 100.0,
               height: 100.0,
               decoration: BoxDecoration(
@@ -749,12 +747,12 @@ class _ProfileScreen extends State {
                 color: sharedData.grayColor12,
               ),
               child: Image.file(
-                snapshot.data ,fit: BoxFit.cover,
+                snapshot.data,
+                fit: BoxFit.cover,
                 height: 100.0,
                 width: 100.0,
               ),
             );
-
 
             /*GFAvatar(
             shape: GFAvatarShape.standard,
@@ -788,8 +786,7 @@ class _ProfileScreen extends State {
   // to check if the email valid like email pattern (name@domain.com)
   bool isValidEmail() {
     if (emailCon.text.trim().toString() == null ||
-        emailCon.text.trim().toString() == '')
-      return true;
+        emailCon.text.trim().toString() == '') return true;
     return EmailValidator.validate(emailCon.text.trim());
   }
 
@@ -847,7 +844,8 @@ class _ProfileScreen extends State {
   }
 
   // change the pointer focus to the next filed after
-  _fieldFocusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+  _fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }

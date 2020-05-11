@@ -296,6 +296,7 @@ class sharedData {
   static FlutterSecureStorage storage = FlutterSecureStorage();
 
   static Future<bool> writeToStorage({String key, String value}) async {
+    print (token) ;
     await storage
         .write(
           key: key,
@@ -403,5 +404,7 @@ class sharedData {
 
   static String orderNo = '20';
   static String stopPointNumber = '1';
+
+  static String whatsappURL = 'https://api.whatsapp.com/send?phone=+962786892862';
 
 }

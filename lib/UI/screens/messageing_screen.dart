@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customerapp/shared_data.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MessagingScreen extends StatefulWidget {
   @override
@@ -10,23 +11,38 @@ class MessagingScreen extends StatefulWidget {
 class _MessagingScreenState extends State<MessagingScreen>
     with TickerProviderStateMixin {
   final List<Msg> _messages = <Msg>[];
+
+  BuildContext ctx ;
   final TextEditingController _textController = new TextEditingController();
   bool _isWriting = false;
   @override
   Widget build(BuildContext ctx) {
+    this.ctx = ctx ;
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child:  Icon(Icons.add),
+        onPressed: (){
+          launch(sharedData.whatsappURL);
+        },
+      ),
+       body: getBody(),
+    );
+  }
+
+   Widget getBody(){
     return Container(
       child: ListView(children: <Widget>[
         Container(
           height: MediaQuery.of(context).size.height - 178,
           child: _messages.length > 0
               ? Container(
-                  child: new ListView.builder(
-                    itemBuilder: (_, int index) => _messages[index],
-                    itemCount: _messages.length,
-                    reverse: true,
-                    padding: new EdgeInsets.all(10.0),
-                  ),
-                )
+            child: new ListView.builder(
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
+              reverse: true,
+              padding: new EdgeInsets.all(10.0),
+            ),
+          )
               : NoMessage(),
         ),
         new Divider(height: 1.5),
@@ -40,7 +56,6 @@ class _MessagingScreenState extends State<MessagingScreen>
       ]),
     );
   }
-
   /// Component for typing text
   Widget _buildComposer() {
     return new IconTheme(

@@ -16,14 +16,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void NavigatorPage() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePagee(),
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -145,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen> {
     sharedData.helpImage = extractedData['HelpScreen'][0]['image'];
     sharedData.privacyImage = extractedData['PrivacyPolicy'][0]['image'];
     sharedData.termsTitle = extractedData['termsAndConditions'][0]['title'];
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       new MaterialPageRoute(builder: (context) => new HomePagee()),
     );
