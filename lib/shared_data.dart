@@ -405,6 +405,6 @@ class sharedData {
   static String orderNo = '20';
   static String stopPointNumber = '1';
 
-  static String whatsappURL = 'https://api.whatsapp.com/send?phone=+962786892862';
+  static String whatsAppURL = 'https://api.whatsapp.com/send?phone=+962786892862';
 
 }

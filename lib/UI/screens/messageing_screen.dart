@@ -22,7 +22,7 @@ class _MessagingScreenState extends State<MessagingScreen>
       floatingActionButton: FloatingActionButton(
         child:  Icon(Icons.add),
         onPressed: (){
-          launch(sharedData.whatsappURL);
+          launch(sharedData.whatsAppURL);
         },
       ),
        body: getBody(),
