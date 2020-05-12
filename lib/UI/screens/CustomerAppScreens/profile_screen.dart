@@ -282,6 +282,7 @@ class _ProfileScreen extends State {
     salary = info.salary != null ? info.salary : '';
     image = info.image != null ? info.image : sharedData.profileImage;
 
+    print (name + phone + location + email + salary + image );
     salaryCon = new TextEditingController(text: salary);
     nameCon = new TextEditingController(text: name);
     phoneCon = new TextEditingController(text: phone);
@@ -304,6 +305,9 @@ class _ProfileScreen extends State {
 
   @override
   Widget build(BuildContext context) {
+    print ('Build ');
+    print ('info '+ name + phone + location + email + salary + image );
+
     size = MediaQuery.of(context).size;
     // token not null so user registered before so his info will get from api and put them in the fields
 
@@ -664,21 +668,34 @@ class _ProfileScreen extends State {
           .flutterToast('Fill Your Phone Number to Update Your Profile 😍 ');
     else {
       // if (token != '') {
-      info.name =
-          nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
-      info.location =
-          locationCon.text == null || location == '' ? '' : locationCon.text;
-      info.email = emailCon.text == null || email == '' ? '' : emailCon.text;
-      info.image = image == null || image == '' ? '' : image;
-      info.phone = phoneCon.text == null || phone == '' ? '' : phoneCon.text;
-      info.salary =
-          salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+      info.name = nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
+      info.location = locationCon.text == null || locationCon.text == '' ? '' : locationCon.text;
+      info.email = emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
+      info.image = info.image == null || info.image == '' ? '' : image;
+      info.phone = phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
+      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+
+      info.name = nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
+      info.location = locationCon.text == null || locationCon.text == '' ? '' : locationCon.text;
+      info.email = emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
+      info.image = info.image == null || info.image == '' ? '' : image;
+      info.phone = phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
+      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+
+
 
       print('will add name =' + nameCon.text);
       print('will add phone =' + phoneCon.text);
       print('will add email =' + emailCon.text);
       print('will add loc =' + locationCon.text);
       print('will add salary =' + salaryCon.text);
+      print('will add image ' + image.toString());
+
+      print('will add to =' + info.apiToken);
+      print('will add phone =' + info.name);
+      print('will add email =' + info.email);
+      print('will add loc =' + info.location);
+      print('will add salary =' + info.salary);
 
       var response;
       print('i\'m in submit method before post request ' + info.name);
@@ -710,6 +727,11 @@ class _ProfileScreen extends State {
           print(' user phone number = ' + info.phone.toString());
           print(' token in submit method = ' + info.apiToken.toString());
           sharedData.writeToStorage(key: 'token', value: info.apiToken);
+          sharedData.userInfo.name = info.name;
+          sharedData.userInfo.phone = info.phone;
+          sharedData.userInfo.location = info.location;
+          sharedData.userInfo.email = info.email;
+          sharedData.userInfo.image = info.image;
         } else
           print('user object which get from json = null');
         sharedData.flutterToast('You registered Sucsessfully 😍 ');
