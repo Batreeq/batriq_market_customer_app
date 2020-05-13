@@ -362,8 +362,9 @@ class sharedData {
       'https://jaraapp.com/index.php/api/register?';
   static const String addMemberUrl =
       'https://jaraapp.com/index.php/api/addFamilyMembers';
-  static const String myOrdersUrl =
-      'https://jaraapp.com/index.php/api/myOrders';
+  static const String myOrdersUrl = 'https://jaraapp.com/index.php/api/myOrders';
+  static const String pointsProductsUrl = 'https://jaraapp.com/index.php/api/getPointsProducts';
+  static const String replacePointsUrl = 'https://jaraapp.com/index.php/api/replacePoints';
 
 
   static String userPoints = '0';

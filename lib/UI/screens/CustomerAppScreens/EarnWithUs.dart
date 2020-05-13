@@ -1,3 +1,4 @@
+import 'package:customerapp/UI/screens/CustomerAppScreens/ReplacePointsUI.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -111,8 +112,11 @@ class _EarnWithUsScreen extends State {
                   child: Text('أستبدل نقاطك',
                     style: sharedData.textInProfileTextStyle,),
                   onPressed: () {
-                    replacementDialogUI();
-                    // Navigator.of(context).pop();
+                    if (sharedData.userInfo.points == null ||sharedData.userInfo.points == ''  )
+                   sharedData.flutterToast('Sorry, You don\'t have points' );
+                 // else
+                   // replacementDialogUI();
+                   Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ReplacePoints()));
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(4.0),
