@@ -1,4 +1,4 @@
- import 'package:customerapp/models/UserBalance.dart';
+import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/models/orderInfo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:customerapp/shared_data.dart';
@@ -51,8 +51,7 @@ class _BalanceDetails extends State {
     userPayments.details = '';
     userPayments.creditDebt = '';
 
-    if (list == null || list.length == 0)
-      list.add(userPayments);
+    if (list == null || list.length == 0) list.add(userPayments);
     //  list.add('Rawan ');
     return Scaffold(
       appBar: sharedData.appBar(context, 'كشف الحساب', null, () {}),

@@ -2,6 +2,7 @@ class Cart {
   String id;
   String productId;
   String title;
+  String date;
   String quantity;
   String price;
   String size;
@@ -14,6 +15,7 @@ class Cart {
       this.price,
       this.size,
       this.image,
+      this.date,
       this.productId});
 
   Map<String, dynamic> toJson() {

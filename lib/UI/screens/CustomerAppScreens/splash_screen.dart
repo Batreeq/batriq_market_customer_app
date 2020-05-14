@@ -16,7 +16,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -39,18 +38,20 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Center(
           child: Image.asset(
-            "assets/images/logo.png",
-            width: 150,
-            height: 150,
-            fit: BoxFit.fill,
-          )),
+        "assets/images/logo.png",
+        width: 150,
+        height: 150,
+        fit: BoxFit.fill,
+      )),
     );
   }
 
   Future<void> getSplashData(api_token) async {
     print("tokken$api_token");
     final url = 'https://jaraapp.com/index.php/api/splash?api_token=$api_token';
+    print("url  :  $url");
     final response = await http.get(url);
+    print("response : ${response.body} $token");
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
       return;
@@ -65,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     extractedData['categories'].forEach((tabdata) {
       ProductTab tab =
-      ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
+          ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
       tabs.add(tab);
     });
     extractedData['homeSliders'].forEach((image) {
@@ -77,9 +78,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (isRegistered()) {
       balance != "0"
           ? sharedData.userBalance = UserBalance(
-          activeBalance: balance['active_balance'].toString(),
-          inactiveBalance: balance['inactive_balance'].toString(),
-          totalBalance: balance['total_balance'].toString())
+              activeBalance: balance['active_balance'].toString(),
+              inactiveBalance: balance['inactive_balance'].toString(),
+              totalBalance: balance['total_balance'].toString())
           : null;
       extractedData['user_payments'].forEach((payment) {
         sharedData.listOfUserPayment.add(UserPayments(

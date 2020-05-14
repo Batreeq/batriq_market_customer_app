@@ -33,23 +33,23 @@ class Products {
   String detailsTitle;
   String detailsImage;
   String notice;
-  Null createdAt;
-  Null updatedAt;
+  var createdAt;
+  var updatedAt;
 
   Products(
       {this.id,
-        this.categoryId,
-        this.name,
-        this.size,
-        this.price,
-        this.image,
-        this.quantity,
-        this.detailsText,
-        this.detailsTitle,
-        this.detailsImage,
-        this.notice,
-        this.createdAt,
-        this.updatedAt});
+      this.categoryId,
+      this.name,
+      this.size,
+      this.price,
+      this.image,
+      this.quantity,
+      this.detailsText,
+      this.detailsTitle,
+      this.detailsImage,
+      this.notice,
+      this.createdAt,
+      this.updatedAt});
 
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -85,4 +85,3 @@ class Products {
     return data;
   }
 }
-

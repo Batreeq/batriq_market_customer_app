@@ -1,17 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:customerapp/shared_data.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+
+import '../cites.dart';
 
 enum SingingCharacter { lafayette, jefferson }
 
 class ConfiremOrderScreen extends StatefulWidget {
   bool isCash = true;
   String cartNum;
+  var selectedTime;
   ConfiremOrderScreen({this.cartNum});
+
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(locationData.latitude, locationData.longitude),
     zoom: 19.151926040649414,
@@ -27,13 +32,139 @@ class ConfiremOrderScreen extends StatefulWidget {
 }
 
 class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
+  List deliveryTimes = [];
+  List filteredregions =
+      regions.where((region) => region['city'].toString() == 'Amman').toList();
+  String selectedCity = 'Amman';
+  String selectedRegion;
   LatLng cameraLocation;
   bool isFullScreen = false;
+
+  Widget buildCityWidget() {
+    return Container(
+      height: 90,
+      child: DropDownFormField(
+        titleText: 'اختر المدينة',
+        hintText: '',
+        value: selectedCity,
+        onSaved: (value) {
+//          setState(() {
+//            selectedRegion = value;
+//          });
+        },
+        onChanged: (value) {
+          setState(() {
+            selectedCity = value;
+            getRegionsByCityName(selectedCity);
+          });
+        },
+        dataSource: cites,
+        textField: 'display',
+        valueField: 'value',
+      ),
+    );
+  }
+
+  getDeliveryTimes(String regionName) async {
+    deliveryTimes = [];
+    final region = (regions.firstWhere(
+        (regionData) => regionData['location'].toString() == regionName));
+    int cityId = region['id'];
+    final url = "https://jaraapp.com/api/getDeliveryPrice?location_id=221";
+    print("url  :  $url");
+    final response = await http.get(url);
+    print("response : ${response.body} ");
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    if (extractedData == null) {
+      return;
+    }
+    extractedData['times_prices'].forEach((time) {
+      deliveryTimes.add({
+        'id': time['id'],
+        'time': time['time'],
+        'price': time['price'],
+      });
+    });
+  }
+
+  buildDeliveryTimes(deliveryTimes) {
+    List<bool> inputs = new List<bool>();
+    for (int i = 0; i < deliveryTimes.length; i++) {
+      inputs.add(false);
+    }
+    return StatefulBuilder(
+      builder: (context, setState) => new Container(
+        width: MediaQuery.of(context).size.width - 30,
+        child: new ListView.builder(
+            itemCount: inputs.length,
+            itemBuilder: (BuildContext context, int index) {
+              return new Card(
+                child: new Container(
+                  padding: new EdgeInsets.all(10.0),
+                  child: new Column(
+                    children: <Widget>[
+                      new CheckboxListTile(
+                          value: inputs[index],
+                          title: new Text(
+                            deliveryTimes[index]['time'] +
+                                "         " +
+                                deliveryTimes[index]['price'] +
+                                "  JD  ",
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (bool val) {
+                            setState(() {
+                              inputs = List.filled(inputs.length, false);
+                              inputs[index] = val;
+                              widget.selectedTime =
+                                  deliveryTimes[index]['time'];
+                            });
+                          })
+                    ],
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
+  }
+
+  Widget buildRegionWidget() {
+    return Container(
+      height: 90,
+      child: DropDownFormField(
+        titleText: 'اختر المنطقة',
+        hintText: '',
+        value: selectedRegion,
+        onSaved: (value) {},
+        onChanged: (value) {
+          setState(() {
+            selectedRegion = value;
+            getDeliveryTimes(selectedRegion);
+          });
+        },
+        dataSource: filteredregions,
+        textField: 'location',
+        valueField: 'location',
+      ),
+    );
+  }
+
+  getRegionsByCityName(String city) {
+    filteredregions =
+        regions.where((region) => region['city'].toString() == city).toList();
+    selectedRegion = null;
+  }
+
   Completer<GoogleMapController> _controller = Completer();
+  final keyy = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: keyy,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'تأكيد الطلب',
@@ -61,19 +192,12 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: _buildregionField(),
-                          ),
-                          SizedBox(
-                            width: 40,
-                          ),
-                          Expanded(
-                            child: _buildCityField(),
-                          ),
-                        ],
-                      ),
+                      child: buildCityWidget(),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: buildRegionWidget(),
                     ),
                     _buildAddress(),
                     _buildNotesField(),
@@ -280,18 +404,49 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   }
 
   void _modalBottomSheetMenu() {
-    SingingCharacter _character = SingingCharacter.lafayette;
     showModalBottomSheet(
         context: context,
         builder: (builder) {
-          return new Container(
-            width: 260.0,
-            height: 230.0,
-            decoration: new BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: const Color(0xFFFFFF),
-              borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-            ),
+          return Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(10),
+                child: new Text(
+                  'اختر فترة التوصيل',
+                  style: TextStyle(fontSize: 16, color: Colors.orange),
+                ),
+              ),
+              Flexible(
+                child: deliveryTimes != null
+                    ? buildDeliveryTimes(deliveryTimes)
+                    : Container(),
+              ),
+              Container(
+                margin: EdgeInsets.all(15),
+                height: 40,
+                width: double.infinity,
+                child: Container(
+                  color: sharedData.mainColor,
+                  child: MaterialButton(
+                    child: Text(
+                      'إرسال الطلب',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      if (widget.selectedTime != null) {
+                        _submitForm();
+                        Navigator.of(context).pop();
+                      } else {
+                        sharedData.flutterToast('اختر فترة  التوصيل');
+                      }
+                    },
+                  ),
+                ),
+              )
+            ],
           );
         });
   }
@@ -338,34 +493,16 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     );
   }
 
-  Widget _buildregionField() {
-    return TextFormField(
-      decoration: InputDecoration(
-          labelText: 'المنطقة', labelStyle: TextStyle(fontSize: 14)),
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'اكتب المنطقة';
-        }
-      },
-      onSaved: (String value) {
-        formData['region'] = value;
-      },
-    );
-  }
-
-  Widget _buildCityField() {
-    return TextFormField(
-      decoration: InputDecoration(
-          labelText: 'المدينة', labelStyle: TextStyle(fontSize: 14)),
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'اكتب المدينة';
-        }
-      },
-      onSaved: (String value) {
-        formData['city'] = value;
-      },
-    );
+  void showSnackBar(message) {
+    keyy?.currentState?.showSnackBar(SnackBar(
+      duration: Duration(seconds: 2),
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.black, fontFamily: 'default'),
+        textAlign: TextAlign.center,
+      ),
+      backgroundColor: sharedData.mainColor,
+    ));
   }
 
   Widget _buildSubmitButton(context) {
@@ -376,7 +513,10 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       child: RaisedButton(
         color: sharedData.mainColor,
         onPressed: () {
-          _submitForm();
+          deliveryTimes.length > 0
+              ? _modalBottomSheetMenu()
+              : showSnackBar('اختر المدينة ثم المنطقة');
+//          _submitForm();
         },
         child: Text(
           'اطلب الان',
@@ -434,30 +574,32 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   }
 
   void _submitForm() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save(); //onSaved is called!
-      confirmOrder(formData);
-    }
+    confirmOrder(formData);
   }
 
   bool isloading = false;
+
   Future<void> confirmOrder(Map<String, dynamic> params) async {
     params['delivery_type'] = "???";
     params['payment_type'] = widget.isCash ? "كاش" : "فيزا";
-    params['delivery_type'] = "???";
-    params['api_token'] = token;
+//    params['delivery_type'] = "???";
+    params['api_token'] = isRegistered() ? token : "";
     params['cart_num'] = widget.cartNum;
-    params['total_price'] = "120";
-    params['delivery_time'] = "12 pm";
+    params['city'] = selectedCity;
+    params['region'] = selectedRegion;
+//    params['total_price'] = "120";
+    params['delivery_time'] = widget.selectedTime;
+    print("time : ${widget.selectedTime}");
     setState(() {
       isloading = true;
     });
-    final Uri url = Uri.parse('https://jaraapp.com/index.php/api/confirmOrder');
-    await http.post(url, body: params);
+    final url = Uri.parse('https://jaraapp.com/index.php/api/confirmOrder');
+    final response = await http.post(url, body: params);
     setState(() {
       isloading = false;
     });
-    Navigator.of(context).pop();
+//    Navigator.of(context).pop();
+    print("resss :  ${response.statusCode}");
   }
 
   @override

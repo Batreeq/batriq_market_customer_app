@@ -25,7 +25,7 @@ class HomePagee extends StatefulWidget {
 class _HomePageState extends State<HomePagee> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   _HomePageState();
   void _onItemTapped(int index) {
     setState(() {
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePagee> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
-    new GlobalKey<ScaffoldState>();
+        new GlobalKey<ScaffoldState>();
     final bloc = SideMenuBloc();
     const String homeTextPage = 'الصفحة الرئيسية';
     const String workWithusText = 'اعمل معنا';
@@ -68,9 +68,34 @@ class _HomePageState extends State<HomePagee> {
           CustomAppBar(
             scaffoldKey: _scaffoldKey,
           ),
+          Container(
+            height: 50,
+            color: sharedData.mainColor,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => SearchPage()));
+              },
+              child: Container(
+                height: 50,
+                margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
+                ),
+                child: Center(
+                  child: Text(
+                    "ابحث في جارا ...",
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                ),
+              ),
+            ),
+          ),
           SingleChildScrollView(
             child: Container(
-              height: MediaQuery.of(context).size.height - 150,
+              height: MediaQuery.of(context).size.height - 190,
               child: _widgetOptions.elementAt(_selectedIndex),
             ),
           ),

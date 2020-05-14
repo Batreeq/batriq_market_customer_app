@@ -7,7 +7,7 @@ import 'package:customerapp/DataLayer/CartName.dart';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
- import 'package:customerapp/UI/wigets/custom_tab.dart';
+import 'package:customerapp/UI/wigets/custom_tab.dart';
 import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/shared_data.dart';
@@ -19,7 +19,6 @@ import 'package:http/http.dart' as http;
 class ProductsScreen extends StatefulWidget {
   String offerId;
   ProductsScreen({this.offerId});
-
   @override
   _ProductsScreenState createState() => _ProductsScreenState();
 }
@@ -167,7 +166,6 @@ class _ProductsState extends State<Products> {
                   double totalCost = data != null
                       ? double.parse(data[1])
                       : double.parse(productss[i].price);
-
                   if (data == null) {
                     count = 1;
                     totalCost = double.parse(productss[i].price);
@@ -539,7 +537,7 @@ class _ProductsState extends State<Products> {
         CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
     List<bool> inputs = new List<bool>();
     CartName mainCart = CartName(CartNum: "1", cartTitle: "السلة الرئيسية");
-    if (!cartNames.contains(mainCart)) {
+    if (cartNames[0].CartNum != "1") {
       cartNames.add(CartName(cartTitle: "السلة الرئيسية", CartNum: "1"));
     }
     for (int i = 0; i < cartNames.length; i++) {

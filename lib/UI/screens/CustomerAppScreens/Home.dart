@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import '../../../shared_data.dart';
 import 'BalanceDetails.dart';
 
-
 class Home extends StatelessWidget {
   Widget getSlider() {
     return Container(
@@ -79,7 +78,7 @@ class Home extends StatelessWidget {
   Widget buildGrideList(context) {
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
       itemCount: sharedData.catigoriesData.length,
       itemBuilder: (ctx, i) {
         final catigory = sharedData.catigoriesData[i];

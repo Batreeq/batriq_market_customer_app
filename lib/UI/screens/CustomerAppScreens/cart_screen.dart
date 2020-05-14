@@ -50,23 +50,21 @@ class _CartScreenState extends State<CartScreen> {
         ),
         isloading
             ? Center(
-          child: Container(
-            child: SpinKitPulse(
-                duration: Duration(milliseconds: 1000),
-                color: sharedData.mainColor,
-                size: 70
+                child: Container(
+                  child: SpinKitPulse(
+                      duration: Duration(milliseconds: 1000),
+                      color: sharedData.mainColor,
+                      size: 70
 //                    lineWidth: 2,
-            ),
-            width: 100,
-            height: 100,
-          ),
-        )
+                      ),
+                  width: 100,
+                  height: 100,
+                ),
+              )
             : Container()
       ],
     );
   }
-
-  String token;
 
   double totalCost = 0.0;
   List<Cart> data;
@@ -226,15 +224,15 @@ class _CartScreenState extends State<CartScreen> {
             new Expanded(
               child: new Container(
                   child: new TextField(
-                    keyboardType: TextInputType.phone,
-                    onChanged: (v) {
-                      name = v;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintStyle: TextStyle(fontSize: 13),
-                        hintText: 'اكتب رقم هاتف المرسل اليه'),
-                  )),
+                keyboardType: TextInputType.phone,
+                onChanged: (v) {
+                  name = v;
+                },
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintStyle: TextStyle(fontSize: 13),
+                    hintText: 'اكتب رقم هاتف المرسل اليه'),
+              )),
               flex: 2,
             ),
 
@@ -251,8 +249,7 @@ class _CartScreenState extends State<CartScreen> {
                     if (name.length > 2) {
                       shareCart(name, cartNum, ctx);
 //                      Navigator.of(context).pop();
-                    }
-                    else
+                    } else
                       sharedData.flutterToast("رقم الهاتف غير صحيح");
                   },
                   child: new Text(
@@ -297,7 +294,7 @@ class _CartScreenState extends State<CartScreen> {
             elevation: 10,
             margin: EdgeInsets.all(10),
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: Column(
               children: <Widget>[
                 buildGroupDevider(data[index].groupName),
@@ -371,10 +368,9 @@ class _CartScreenState extends State<CartScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              ConfiremOrderScreen(
-                cartNum: cartNum,
-              ),
+          builder: (context) => ConfiremOrderScreen(
+            cartNum: cartNum,
+          ),
         ),
       );
     } else {
@@ -410,10 +406,9 @@ class _CartScreenState extends State<CartScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            ConfiremOrderScreen(
-              cartNum: "1",
-            ),
+        builder: (context) => ConfiremOrderScreen(
+          cartNum: "1",
+        ),
       ),
     );
     print(response.body);
@@ -438,11 +433,11 @@ class _CartScreenState extends State<CartScreen> {
   Widget buildGroupItem(context, CartGroup cartGroup, bloc) {
     return Column(
         children: mapIndexed(cartGroup.groupItems,
-                (index, item) => buildItemm(context, item, bloc)).toList());
+            (index, item) => buildItemm(context, item, bloc)).toList());
   }
 
-  Iterable<E> mapIndexed<E, T>(Iterable<T> items,
-      E Function(int index, T item) f) sync* {
+  Iterable<E> mapIndexed<E, T>(
+      Iterable<T> items, E Function(int index, T item) f) sync* {
     var index = 0;
 
     for (final item in items) {
@@ -618,10 +613,7 @@ class _CartScreenState extends State<CartScreen> {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
       height: 140,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         shape: RoundedRectangleBorder(
@@ -677,7 +669,7 @@ class _CartScreenState extends State<CartScreen> {
                                 color: Colors.red,
                               ),
                               materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
+                                  MaterialTapTargetSize.shrinkWrap,
                               onPressed: () {
                                 if (isRegistered()) {
                                   deleteFromCart(cart.id);
@@ -695,7 +687,6 @@ class _CartScreenState extends State<CartScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-
                           ///total price
                           Text(
                             "عروض اصنافي" + "  JD",
@@ -722,7 +713,6 @@ class _CartScreenState extends State<CartScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-
                                 ///plus
                                 Container(
                                     height: 40,
@@ -736,9 +726,16 @@ class _CartScreenState extends State<CartScreen> {
                                                     'user_cart',
                                                     cart.id,
                                                     (int.parse(cart.quantity) +
-                                                        1)
+                                                            1)
                                                         .toString());
                                                 bloc.fetchCartData();
+                                              } else {
+                                                updateCart(
+                                                    cart.id,
+                                                    (int.parse(cart.quantity) +
+                                                            1)
+                                                        .toString(),
+                                                    bloc);
                                               }
                                             },
                                             padding: EdgeInsets.all(0.0),
@@ -776,11 +773,21 @@ class _CartScreenState extends State<CartScreen> {
                                                     cart.id,
                                                     int.parse(cart.quantity) > 1
                                                         ? (int.parse(cart
-                                                        .quantity) -
-                                                        1)
-                                                        .toString()
+                                                                    .quantity) -
+                                                                1)
+                                                            .toString()
                                                         : 1.toString());
                                                 bloc.fetchCartData();
+                                              } else {
+                                                int.parse(cart.quantity) > 1
+                                                    ? updateCart(
+                                                        cart.id,
+                                                        (int.parse(cart
+                                                                    .quantity) -
+                                                                1)
+                                                            .toString(),
+                                                        bloc)
+                                                    : print("");
                                               }
                                             },
                                             padding: EdgeInsets.all(0.0),
@@ -809,13 +816,29 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-
     readToken();
     !isRegistered() ? bloc.fetchCartData() : bloc.getCartData(token);
   }
 
+  Future<void> updateCart(productId, quantity, CartGroupBloc bloc) async {
+    print("boom $productId  $quantity  $token");
+    var params = Map<String, dynamic>();
+    setState(() {
+      isloading = true;
+    });
+    params['api_token'] = token;
+    params['cart_id'] = productId;
+    params['quantity'] = quantity;
+    final url = Uri.parse('https://jaraapp.com/index.php/api/updateItem');
+    final response = await http.post(url, body: params);
+    bloc.getCartData(token);
+    setState(() {
+      isloading = false;
+    });
+  }
+
   readToken() async {
     token = await sharedData.readFromStorage(key: 'token');
-    print (token);
+    print(token);
   }
 }

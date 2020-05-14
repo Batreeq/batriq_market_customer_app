@@ -33,6 +33,12 @@ Pass: o2vA3DN7ab3U4HX
 // cart
 POST https://jaraapp.com/api/addMultiToCart
 
+//cites
+https://jaraapp.com/api/getCities
+
+GET https://jaraapp.com/api/getLocations?city=Amman
+GET https://jaraapp.com/api/getDeliveryPrice?location_id=221
+
 
 علا:
 - ايقونة الابلكيشن تحويلها ل transparent

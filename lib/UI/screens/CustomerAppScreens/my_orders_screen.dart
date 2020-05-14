@@ -1,4 +1,7 @@
 import 'dart:math';
+import 'package:customerapp/DataLayer/Cart.dart';
+import 'package:customerapp/DataLayer/Product.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/my_orders_filter.dart';
 import 'package:customerapp/models/ListOfMyOrders.dart';
 import 'package:customerapp/models/orderInfo.dart';
 import 'package:customerapp/shared_data.dart';
@@ -147,22 +150,92 @@ class _MyOrdersScreen extends State {
                       width: 100,
                       child: new Container(
                           child: new TextField(
-                            onChanged: (v) {
-                              price = v;
-                              filteredOrders(
-                                  wholeList, oldTime, selectedDate, price);
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(), hintText: 'السعر'),
-                          )),
+                        onChanged: (v) {
+                          price = v;
+                          filteredOrders(
+                              wholeList, oldTime, selectedDate, price);
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(), hintText: 'السعر'),
+                      )),
                     ),
                   ),
                 ],
               ),
             ),
-            getTable()
+            getTable(),
+            buildButton(),
           ],
+        ),
+      ),
+    );
+  }
+
+  buildButton() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              margin: EdgeInsets.all(5),
+              height: 40,
+              width: double.infinity,
+              child: Container(
+                color: sharedData.mainColor,
+                child: MaterialButton(
+                  child: Text(
+                    "إحصائيات صنف",
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    navigateToFilter(categories, "إحصائيات صنف");
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              margin: EdgeInsets.all(5),
+              height: 40,
+              width: double.infinity,
+              child: Container(
+                color: sharedData.mainColor,
+                child: MaterialButton(
+                  child: Text(
+                    "إحصائيات نوع",
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    navigateToFilter(carts, "إحصائيات نوع");
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  navigateToFilter(orders, title) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyOrdersFilter(
+          orders: orders,
+          title: title,
         ),
       ),
     );
@@ -172,82 +245,82 @@ class _MyOrdersScreen extends State {
     return Center(
         child: listOfMyOrders.orders != null
             ? Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DataTable(
-              columnSpacing: 20,
-              columns: [
-                DataColumn(
-                  label: Row(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_down),
-                      Text(
-                        'السعر',
-                        style: sharedData.tableFieldsTextStyle,
+                padding: const EdgeInsets.all(8.0),
+                child: DataTable(
+                  columnSpacing: 20,
+                  columns: [
+                    DataColumn(
+                      label: Row(
+                        children: <Widget>[
+                          Icon(Icons.keyboard_arrow_down),
+                          Text(
+                            'السعر',
+                            style: sharedData.tableFieldsTextStyle,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                DataColumn(
-                  label: Row(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_down),
-                      Text(
-                        'الصنف',
-                        style: sharedData.tableFieldsTextStyle,
+                    ),
+                    DataColumn(
+                      label: Row(
+                        children: <Widget>[
+                          Icon(Icons.keyboard_arrow_down),
+                          Text(
+                            'الصنف',
+                            style: sharedData.tableFieldsTextStyle,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                DataColumn(
-                  label: Row(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_down),
-                      Text(
-                        'وقت الطلبية',
-                        style: sharedData.tableFieldsTextStyle,
+                    ),
+                    DataColumn(
+                      label: Row(
+                        children: <Widget>[
+                          Icon(Icons.keyboard_arrow_down),
+                          Text(
+                            'وقت الطلبية',
+                            style: sharedData.tableFieldsTextStyle,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ],
-              rows: // Loops through dataColumnText, each iteration assigning the value to element
-
-              listOfMyOrders.orders.map((element) {
-                //Extracting from Map element the value
-                List<String> dateSplit = element.createdAt.split('-');
-                return DataRow(
-                  selected: isSelected(),
-                  cells: <DataCell>[
-                    DataCell(
-                        Text(
-                          element.totalPrice.toString() + 'JD',
-                          style: sharedData.tableFieldsTextStyle,
-                        ), onTap: () {
-                      goToOrderDetails(
-                          element.orderDetails, element.createdDate);
-                    }),
-                    DataCell(
-                        Text(
-                          'متفرقة',
-                          style: sharedData.tableFieldsTextStyle,
-                        ), onTap: () {
-                      goToOrderDetails(
-                          element.orderDetails, element.createdDate);
-                    }),
-                    DataCell(
-                        Text(
-                          element.createdDate,
-                          style: sharedData.tableFieldsTextStyle,
-                        ), onTap: () {
-                      goToOrderDetails(
-                        element.orderDetails,
-                        element.createdDate,
-                      );
-                    }),
+                    ),
                   ],
-                );
-              }).toList(),
-            ))
+                  rows: // Loops through dataColumnText, each iteration assigning the value to element
+
+                      listOfMyOrders.orders.map((element) {
+                    //Extracting from Map element the value
+                    List<String> dateSplit = element.createdAt.split('-');
+                    return DataRow(
+                      selected: isSelected(),
+                      cells: <DataCell>[
+                        DataCell(
+                            Text(
+                              element.totalPrice.toString() + 'JD',
+                              style: sharedData.tableFieldsTextStyle,
+                            ), onTap: () {
+                          goToOrderDetails(
+                              element.orderDetails, element.createdDate);
+                        }),
+                        DataCell(
+                            Text(
+                              'متفرقة',
+                              style: sharedData.tableFieldsTextStyle,
+                            ), onTap: () {
+                          goToOrderDetails(
+                              element.orderDetails, element.createdDate);
+                        }),
+                        DataCell(
+                            Text(
+                              element.createdDate,
+                              style: sharedData.tableFieldsTextStyle,
+                            ), onTap: () {
+                          goToOrderDetails(
+                            element.orderDetails,
+                            element.createdDate,
+                          );
+                        }),
+                      ],
+                    );
+                  }).toList(),
+                ))
             : Container());
   }
 
@@ -277,16 +350,41 @@ class _MyOrdersScreen extends State {
       });
   }
 
+  List<Cart> carts = [];
+  List<Cart> categories = [];
   void getUserOrders(String token) async {
     print('token in before do get orders request $token');
     sharedData.showLoadingDialog(context);
     if (token != '') {
       final response = await Requests.post(sharedData.myOrdersUrl,
-          body: {'api_token': token},
+          body: {
+            'api_token':
+                "03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807"
+          },
           bodyEncoding: RequestBodyEncoding.FormURLEncoded);
       if (response.statusCode == 200) {
         response.raiseForStatus();
         dynamic json = response.json();
+
+        json['products_statistics'].forEach((cartJson) {
+          Cart cart = Cart(
+            title: cartJson['product_name'],
+            price: cartJson['total_price'],
+            quantity: cartJson['quantity'],
+            date: cartJson['date'],
+          );
+          carts.add(cart);
+        });
+
+        json['categories_statistics'].forEach((cartJson) {
+          Cart cart = Cart(
+            title: cartJson['catrgory_name'],
+            price: cartJson['total_price'],
+            quantity: cartJson['quantity'],
+            date: cartJson['date'],
+          );
+          categories.add(cart);
+        });
         setState(() {
           listOfMyOrders = ListOfMyOrders.fromJson(json);
         });

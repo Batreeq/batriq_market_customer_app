@@ -2,7 +2,6 @@ import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'UI/screens/CustomerAppScreens/HomePage.dart';
 import 'UI/screens/CustomerAppScreens/splash_screen.dart';
 
@@ -17,7 +16,8 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
+      statusBarColor:
+          sharedData.mainColor, //or set color with: Color(0xFF0000FF)
     ));
     return new MaterialApp(
       localizationsDelegates: [

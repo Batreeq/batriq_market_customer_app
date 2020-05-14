@@ -12,6 +12,7 @@ class CartGroupBloc implements Bloc {
   Future<void> getCartData(token) async {
     final url =
         "https://jaraapp.com/index.php/api/getUserCart?api_token=$token";
+    print("token_cart$token");
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {

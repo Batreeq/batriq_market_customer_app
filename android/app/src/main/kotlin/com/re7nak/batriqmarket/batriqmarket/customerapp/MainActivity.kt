@@ -30,7 +30,7 @@ class MainActivity: FlutterActivity() {
 
     private fun askSpeechInput() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-JO");
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "تحدث الان");
         startActivityForResult(intent, 1999);
     }

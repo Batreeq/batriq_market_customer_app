@@ -26,7 +26,7 @@ import 'package:http/http.dart' as http;
 import 'package:customerapp/Bloc/appBarTitleBloc.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import '../../../shared_data.dart';
- import 'package:customerapp/shared_data.dart';
+import 'package:customerapp/shared_data.dart';
 
 class CustomAppBar extends StatelessWidget {
   int currentPage = 1;
@@ -39,43 +39,36 @@ class CustomAppBar extends StatelessWidget {
       height: 75,
       child: Stack(
         children: <Widget>[
-          Image.asset(
-            'assets/images/app_bar_background.png',
+          Container(
             height: 75,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
+            color: sharedData.mainColor,
           ),
           Positioned(
             right: 0,
-            bottom: 10,
+            bottom: 0,
             child: FlatButton(
               padding: EdgeInsets.all(0),
               onPressed: () {
                 scaffoldKey.currentState.openDrawer();
               },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: Image.asset(
-                  'assets/images/menu.png',
-                  height: 30,
-                  width: 30,
-                ),
+              child: Image.asset(
+                'assets/images/menu.png',
+                height: 30,
+                width: 30,
+                color: Colors.black,
               ),
             ),
           ),
           Positioned(
             left: 20,
-            bottom: 5,
+            bottom: 0,
             child: Center(
               child: IconButton(
                 icon: Icon(
-                  Icons.search,
-                  color: Colors.black, // Here
+                  Icons.add_shopping_cart,
+                  color: Colors.black,
                 ),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => SearchPage()));
-                },
+                onPressed: () {},
               ),
             ),
           ),
@@ -531,7 +524,7 @@ class _SearchPage extends State<SearchPage> {
         CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
     List<bool> inputs = new List<bool>();
     CartName mainCart = CartName(CartNum: "1", cartTitle: "السلة الرئيسية");
-    if (!cartNames.contains(mainCart)) {
+    if (cartNames[0].CartNum != "1") {
       cartNames.add(CartName(cartTitle: "السلة الرئيسية", CartNum: "1"));
     }
     for (int i = 0; i < cartNames.length; i++) {
