@@ -13,8 +13,6 @@ class ReplacePoints extends StatefulWidget {
 }
 
 class _ReplacePoints extends State {
-
-
   BuildContext context;
 
   PointsProducts products;
@@ -76,18 +74,28 @@ class _ReplacePoints extends State {
   }
 
   Widget buildGridList(context) {
-    return ListView.builder(
-      // physics: NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only( right : 0 , left: 0 , top: 8 , bottom: 8  ),
-      itemCount: products.pointsProducts.length,
-      itemBuilder: (ctx, i) {
-        return Container(
-          child:
-          ProductItemValue(
-            product: products.pointsProducts.elementAt(i),
-          ),
-        );
-      },
+    return Align(
+      alignment: Alignment.topCenter,
+      child: GridView.builder(
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 0,
+          /*        childAspectRatio: MediaQuery.of(context).size.width /
+          (MediaQuery.of(context).size.height / 2),*/
+          mainAxisSpacing: 18,
+        ),
+        // physics: NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(right: 5, left: 0, top: 8, bottom: 8),
+        itemCount: products.pointsProducts.length,
+        itemBuilder: (ctx, i) {
+          return Container(
+            child: ProductItemValue(
+              product: products.pointsProducts.elementAt(i),
+            ),
+          );
+        },
+      ),
     );
   }
 }

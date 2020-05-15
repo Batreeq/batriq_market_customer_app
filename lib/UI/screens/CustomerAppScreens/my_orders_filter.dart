@@ -1,5 +1,4 @@
 import 'package:customerapp/DataLayer/Cart.dart';
-import 'package:customerapp/models/ListOfMyOrders.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/cupertino.dart';

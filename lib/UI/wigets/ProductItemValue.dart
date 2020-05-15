@@ -26,78 +26,82 @@ class _ProductItemValue extends State {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: InkWell(
-          borderRadius: BorderRadius.all(Radius.circular(2)),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ProductsScreen(
-                      offerId: product.id.toString(),
-                    ),
-              ),
-            );
-          },
-          child: Wrap(
-            direction: Axis.vertical,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: 80.0,
-                    width: 80.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                      image: DecorationImage(
-                          image:
-                          CachedNetworkImageProvider(product.productImage),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                          color: Colors.white10.withOpacity(0.5),
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: sharedData.grayColor12),
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(2)),
+                onTap: () {
+                  setState(() {
+                    if (_state == 0) {
+                      replacePoint();
+                    }
+                  });
+                },
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: 70.0,
+                          width: 115.0,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(3.0)),
+                            image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                    product.productImage),
+                                fit: BoxFit.cover),
+                          ),
                         ),
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              product.productName + '',
-                              textAlign: TextAlign.center,
-                              style: sharedData.optionStyle,
-                              softWrap: true,
-                            ),
-                            Text(
-                              product.points + ' نقطة',
-                              textAlign: TextAlign.center,
-                              style: sharedData.size19Style,
-                              softWrap: true,
-                            ),
-                          ],
-                        )),
-                  ),
-                  new RaisedButton(
-                    child: setUpButtonChild(),
-                    onPressed: () {
-                      setState(() {
-                        if (_state == 0) {
-                          replacePoint();
-                        }
-                      });
-                    },
-                    elevation: 4.0,
-                    // minWidth: double.infinity,
-                    color: sharedData.yellow,
-                  ),
-                ],
-              ),
-            ],
-          )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(3.0)),
+                                color: Colors.white10.withOpacity(0.5),
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    width: 130,
+                                    child: Text(
+                                      product.productName + '',
+                                      textAlign: TextAlign.center,
+                                      style: sharedData.pointsTextStyle,
+                                      softWrap: true,
+                                      maxLines: 10,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    child: Text(
+                                      product.points + ' نقطة',
+                                      textAlign: TextAlign.center,
+                                      style: sharedData.pointsStyle,
+                                      softWrap: true,
+                                      maxLines: 3,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          ),
+        ),
+      ),
     );
   }
 
@@ -112,38 +116,50 @@ class _ProductItemValue extends State {
     setState(() {
       _state = 1;
     });
-    var response;
-    print('i\'m in submit method ');
-    print (token );
-    response = await Requests.post(sharedData.replacePointsUrl,
-        body: toJson(token, id));
 
-    if (response != null) {
-      print(response.json());
-      print(response.statusCode);
-    } else
-      print('response is null');
+    int userPoints = int.parse(sharedData.userInfo.points);
+    int productPoints = int.parse(product.points);
+    if (token == null || token == '')
+      sharedData.flutterToast('عذرا ليس لديك حساب');
+    else if (userPoints < productPoints)
+      sharedData.flutterToast('عذرا لا تمتلك النقاط الكافية ');
+    else {
+      var response;
+      print('i\'m in submit method ');
+      print(token);
+      response = await Requests.post(sharedData.replacePointsUrl,
+          body: toJson(token, id));
 
-    await Future.delayed(Duration(seconds: 3));
+      if (response != null) {
+        print(response.json());
+        print(response.statusCode);
+      } else
+        print('response is null');
 
-    if (response.statusCode == 200) {
-      response.raiseForStatus();
-      dynamic json = response.json();
+      await Future.delayed(Duration(seconds: 3));
 
-      setState(() {
-        _state = 200;
-      });
+      if (response.statusCode == 200) {
+        response.raiseForStatus();
+        dynamic json = response.json();
+
+        sharedData.flutterToast('تم استبدال نقاطك ');
+        setState(() {
+          _state = 200;
+          sharedData.userInfo.points = (int.parse(sharedData.userInfo.points) -
+              int.parse(product.points))
+              .toString();
+        });
+      } else
+        setState(() {
+          _state = 0;
+        });
     }
-    else
-      setState(() {
-        _state = 0 ;
-      });
   }
 
   Map<String, dynamic> toJson(String token, int id) {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (product != null) {
-      data['points_product'] = this.product.id;
+      data['points_poduct'] = this.product.id;
       data['api_token'] = token;
     }
     return data;

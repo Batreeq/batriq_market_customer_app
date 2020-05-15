@@ -18,8 +18,8 @@ class ProductsFromPoints {
   String productName;
   String productImage;
   String points;
-  Null createdAt;
-  Null updatedAt;
+  String createdAt;
+  String updatedAt;
 
   ProductsFromPoints(
       {this.id,
