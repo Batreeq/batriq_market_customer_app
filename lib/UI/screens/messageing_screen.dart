@@ -20,7 +20,7 @@ class _MessagingScreenState extends State<MessagingScreen>
     this.ctx = ctx ;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child:  Icon(Icons.add),
+        child:  Image.asset('assets/images/icons/whatsapp.png'),
         onPressed: (){
           launch(sharedData.whatsAppURL);
         },

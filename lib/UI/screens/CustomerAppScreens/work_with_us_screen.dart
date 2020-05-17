@@ -97,7 +97,7 @@ class _WorkWithUsScreen extends State {
 
   @override
   void initState() {
-    appbarBloc.setTitle("سلة المشتريات");
+    appbarBloc.setTitle("اعمل معنا");
     super.initState();
   }
 }

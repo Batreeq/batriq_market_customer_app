@@ -77,6 +77,7 @@ flutter:
     - fonts/
     - assets/images/icons/home.png
     - assets/images/icons/card.png
+    - assets/images/icons/whatsapp.png
     - assets/images/icons/chat.png
     - assets/images/icons/team.png
     - assets/images/icons/forward.png

@@ -124,6 +124,7 @@ class _ProductItemValue extends State {
     else if (userPoints < productPoints)
       sharedData.flutterToast('عذرا لا تمتلك النقاط الكافية ');
     else {
+      sharedData.showLoadingDialog(context);
       var response;
       print('i\'m in submit method ');
       print(token);
@@ -153,6 +154,7 @@ class _ProductItemValue extends State {
         setState(() {
           _state = 0;
         });
+      Navigator.of(context).pop();
     }
   }
 

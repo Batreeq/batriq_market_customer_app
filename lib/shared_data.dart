@@ -429,4 +429,5 @@ class sharedData {
 
   static String whatsAppURL =
       'https://api.whatsapp.com/send?phone=+962786892862';
+  static int selectedIndex = 0;
 }

@@ -57,7 +57,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    appbarBloc.setTitle("الرئيسية");
+    appbarBloc.setTitle("الصفحة الرئيسية");
 
     return SingleChildScrollView(
       child: Container(
@@ -77,7 +77,7 @@ class Home extends StatelessWidget {
 
   Widget buildGrideList(context) {
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
+    //  physics: NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
       itemCount: sharedData.catigoriesData.length,
       itemBuilder: (ctx, i) {

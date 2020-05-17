@@ -5,7 +5,6 @@ import 'package:customerapp/Bloc/bloc_provider.dart';
 import 'package:customerapp/DataLayer/Cart.dart';
 import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/DataLayer/CartName.dart';
-import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
@@ -27,6 +26,8 @@ import 'package:customerapp/Bloc/appBarTitleBloc.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import '../../../shared_data.dart';
 import 'package:customerapp/shared_data.dart';
+
+import 'HomePage.dart';
 
 class CustomAppBar extends StatelessWidget {
   int currentPage = 1;
@@ -68,7 +69,10 @@ class CustomAppBar extends StatelessWidget {
                   Icons.add_shopping_cart,
                   color: Colors.black,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  sharedData.selectedIndex = 2 ;
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext c)=> HomePagee())) ;
+                },
               ),
             ),
           ),

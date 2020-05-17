@@ -23,6 +23,7 @@ class HomePagee extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePagee> {
+  Size size ;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePagee> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      sharedData. selectedIndex = index ;
     });
   }
 
@@ -42,8 +44,45 @@ class _HomePageState extends State<HomePagee> {
     });
   }
 
+
+  Widget getSearchBarUI() {
+    return Center(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        textDirection: TextDirection.rtl,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+                child: Text(
+                  "ابحث في جارا ...",
+                  style: TextStyle(fontSize: 13, color: Colors.grey),
+                ),
+            ),
+          ),
+          SizedBox(width: size.width - 250,),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                InkWell(
+                    child: Icon(Icons.keyboard_voice ,color:  Colors.grey,)
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+
+ _selectedIndex = sharedData.selectedIndex ;
+     size = MediaQuery.of(context).size ;
+
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
     final bloc = SideMenuBloc();
@@ -85,10 +124,7 @@ class _HomePageState extends State<HomePagee> {
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
                 ),
                 child: Center(
-                  child: Text(
-                    "ابحث في جارا ...",
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
+                  child: getSearchBarUI()
                 ),
               ),
             ),
