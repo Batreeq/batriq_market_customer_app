@@ -657,8 +657,6 @@ class _ProfileScreen extends State {
   }
 
   submitUserData(String token) async {
-    //  token = '2d0ff96767efed695b53b04e36941b5f8df3ce30d2bdcc4b98db0a29388e299a';
-
     if (token != null && token != '') info.apiToken = token;
 
     if (token == null ||
