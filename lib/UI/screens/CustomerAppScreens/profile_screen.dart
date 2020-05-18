@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/AddMemberScreen.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
@@ -273,19 +274,18 @@ class _ProfileScreen extends State {
   @override
   void initState() {
     super.initState();
-    // token = '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807'; // with family members
+
     familyMembers = sharedData.familyMembers;
     info = sharedData.userInfo;
     image = sharedData.profileImage;
-
     name = info.name != null ? info.name : '';
     phone = info.phone != null ? info.phone : '';
     location = info.location != null ? info.location : '';
     email = info.email != null ? info.email : '';
     salary = info.salary != null ? info.salary : '';
     image = info.image != null ? info.image : sharedData.profileImage;
-
     print(name + phone + location + email + salary + image);
+
     salaryCon = new TextEditingController(text: salary);
     nameCon = new TextEditingController(text: name);
     phoneCon = new TextEditingController(text: phone);
@@ -316,26 +316,33 @@ class _ProfileScreen extends State {
         .size;
     // token not null so user registered before so his info will get from api and put them in the fields
 
-    defaultImageWidget = base64Image.length > 20
-        ? Container(
-      margin: EdgeInsets.only(top: 40),
-      height: 70,
-      width: 70,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(35),
-        child: Image.memory(
-          base64Decode(base64Image),
-          fit: BoxFit.fill,
-          height: 70,
-          width: 70,
+
+    if (base64Image.length > 20)
+      defaultImageWidget = Container(
+        margin: EdgeInsets.only(top: 40),
+        height: 70,
+        width: 70,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(35),
+          child: Image.memory(
+            base64Decode(base64Image),
+            fit: BoxFit.fill,
+            height: 70,
+            width: 70,
+          ),
         ),
-      ),
-    )
-        : Icon(
-      Icons.cloud_upload,
-      size: 70,
-      color: sharedData.mainColor,
-    );
+      );
+    else if (info.image == '' || info.image == null)
+      defaultImageWidget = Icon(
+        Icons.cloud_upload,
+        size: 70,
+        color: sharedData.mainColor,
+      );
+    else
+      defaultImageWidget = GFAvatar(
+        size: 70,
+        backgroundImage: NetworkImage(image),
+      );
 
     return Scaffold(
       appBar: sharedData.appBar(context, 'الملف الشخصي', null, () {}),
@@ -684,23 +691,17 @@ class _ProfileScreen extends State {
       info.email =
       emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
       info.image = info.image == null || info.image == '' ? '' : image;
-      info.phone =
-      phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
-      info.salary =
-      salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+      info.image = base64Image == '' ? info.image  : base64Image;
 
-      info.name =
-      nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
-      info.location =
-      locationCon.text == null || locationCon.text == '' ? '' : locationCon
-          .text;
-      info.email =
-      emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
-      info.image = info.image == null || info.image == '' ? '' : image;
       info.phone =
       phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
-      info.salary =
-      salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+
+      info.name = nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
+      info.location = locationCon.text == null || locationCon.text == '' ? '' : locationCon.text;
+      info.email = emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
+      info.phone = phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
+      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
 
 
       print('will add name =' + nameCon.text);
@@ -710,7 +711,7 @@ class _ProfileScreen extends State {
       print('will add salary =' + salaryCon.text);
       print('will add image ' + image.toString());
 
-      print('will add to =' + info.apiToken);
+     // print('will add to =' + info.apiToken);
       print('will add phone =' + info.name);
       print('will add email =' + info.email);
       print('will add loc =' + info.location);
