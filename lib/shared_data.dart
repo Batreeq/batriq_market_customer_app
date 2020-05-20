@@ -256,6 +256,8 @@ class sharedData {
         fontSize: 16.0);
   }
 
+  static String getUserCartsUrl = "https://jaraapp.com/index.php/api/getUserCart?api_token=";
+
   static String token;
 
   static Future<void> ackAlert(
@@ -287,25 +289,6 @@ class sharedData {
         );
       },
     );
-  }
-
-  //to get token locally from sharedPreferences and save the value to the static "token"  variable
-  static Future<String> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    token = await prefs.get(
-      'token',
-    );
-    token =
-        '03ec18b8f8c4252e2794aa316dba652147f4b559871e8061bf6d420a9e9d4807'; // with family members
-    token =
-        '71b57bad20073f55373c27cb681c6a84d6ec2d1ddd7f4d2b8d5164e98728f88c'; // without
-
-    if (token != null)
-      print('token when init ' + token);
-    else
-      print('no old token ');
-
-    return token;
   }
 
   static FlutterSecureStorage storage = FlutterSecureStorage();

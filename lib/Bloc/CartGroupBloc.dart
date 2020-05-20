@@ -3,23 +3,35 @@ import 'dart:convert';
 import 'package:customerapp/DataLayer/Cart.dart';
 import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/UserCarts.dart';
+import 'package:customerapp/shared_data.dart';
+import 'package:requests/requests.dart';
 import 'bloc.dart';
 import 'package:http/http.dart' as http;
 
 class CartGroupBloc implements Bloc {
-  final _controller = StreamController<List<CartGroup>>();
-  Stream<List<CartGroup>> get cartDataStream => _controller.stream;
+  final _controller = StreamController<UserCarts>();
+  Stream<UserCarts> get cartDataStream => _controller.stream;
+
+  UserCarts userCarts = new UserCarts();
   Future<void> getCartData(token) async {
-    final url =
-        "https://jaraapp.com/index.php/api/getUserCart?api_token=$token";
     print("token_cart$token");
-    final response = await http.get(url);
-    final extractedData = json.decode(response.body) as Map<String, dynamic>;
-    if (extractedData == null) {
-      return;
+    final response = await Requests.get(sharedData.getUserCartsUrl + token);
+
+    if (response != null) {
+      print(response.json());
+      print(response.statusCode);
+    } else
+      print('response is null');
+
+    if (response.statusCode == 200 ){
+      response.raiseForStatus();
+      dynamic json = response.json();
+      userCarts = UserCarts.fromJson(json);
     }
-    List<CartGroup> userCarts = [];
-    extractedData['user_cart'].forEach((group) {
+
+
+ /*    extractedData['user_cart'].forEach((group) {
       List<Cart> groupData = [];
       group.forEach((cart) {
         Cart cartitem = Cart(
@@ -28,7 +40,8 @@ class CartGroupBloc implements Bloc {
             quantity: cart['quantity'],
             price: cart['price'],
             image: cart['product_details']['image'],
-            size: cart['product_details']['size']);
+            size: cart['product_details']['size']
+        );
         groupData.add(cartitem);
       });
       CartGroup cartGroup = CartGroup(
@@ -36,13 +49,13 @@ class CartGroupBloc implements Bloc {
           groupName: group[0]['cart_title'],
           groupItems: groupData);
       userCarts.add(cartGroup);
-    });
+    });*/
     print(token);
     _controller.sink.add(userCarts);
   }
 
   Future<void> fetchCartData() async {
-    List<CartGroup> carts = [];
+/*    List<UserCarts> carts = [];
     final dataList = await DBHelper.getData('user_cart');
     List<Cart> items = dataList.map((item) {
       print("object${item['count']}");
@@ -58,7 +71,7 @@ class CartGroupBloc implements Bloc {
     CartGroup cartGroup =
         CartGroup(groupName: "السلة الرئيسية", groupItems: items, groupId: "1");
     carts.add(cartGroup);
-    _controller.sink.add(carts);
+    _controller.sink.add(carts);*/
   }
 
   @override

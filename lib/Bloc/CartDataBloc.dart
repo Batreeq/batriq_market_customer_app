@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:customerapp/DataLayer/Cart.dart';
-import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/UserCarts.dart';
+
 import 'bloc.dart';
 
 class CartDataBloc implements Bloc {

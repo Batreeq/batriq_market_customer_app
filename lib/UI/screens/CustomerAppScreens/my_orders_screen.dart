@@ -68,8 +68,8 @@ class _MyOrdersScreen extends State {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      width: 130,
-                      child: FlatButton(
+                      width: 150,
+                       child: FlatButton(
                         shape: Border.all(
                           color: sharedData.grayColor12,
                         ),
@@ -105,7 +105,7 @@ class _MyOrdersScreen extends State {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      width: 130,
+                      width: 150,
                       child: FlatButton(
                         shape: Border.all(
                           color: sharedData.grayColor12,
@@ -127,38 +127,6 @@ class _MyOrdersScreen extends State {
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                textDirection: TextDirection.rtl,
-                children: <Widget>[
-                  Text(
-                    'السعر',
-                    style: sharedData.tableFieldsTextStyle,
-                  ),
-                  SizedBox(
-                    width: 25,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 100,
-                      child: new Container(
-                          child: new TextField(
-                        onChanged: (v) {
-                          price = v;
-                          filteredOrders(
-                              wholeList, oldTime, selectedDate, price);
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(), hintText: 'السعر'),
-                      )),
                     ),
                   ),
                 ],
@@ -247,7 +215,7 @@ class _MyOrdersScreen extends State {
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DataTable(
-                  columnSpacing: 20,
+                  columnSpacing: 15,
                   columns: [
                     DataColumn(
                       label: Row(
@@ -286,9 +254,7 @@ class _MyOrdersScreen extends State {
                   rows: // Loops through dataColumnText, each iteration assigning the value to element
 
                       listOfMyOrders.orders.map((element) {
-                    //Extracting from Map element the value
-                    List<String> dateSplit = element.createdAt.split('-');
-                    return DataRow(
+                      return DataRow(
                       selected: isSelected(),
                       cells: <DataCell>[
                         DataCell(
@@ -309,7 +275,7 @@ class _MyOrdersScreen extends State {
                         }),
                         DataCell(
                             Text(
-                              element.createdDate,
+                              element.createdAt,
                               style: sharedData.tableFieldsTextStyle,
                             ), onTap: () {
                           goToOrderDetails(
@@ -350,8 +316,8 @@ class _MyOrdersScreen extends State {
       });
   }
 
-  List<Cart> carts = [];
-  List<Cart> categories = [];
+  List<CartToAdd> carts = [];
+  List<CartToAdd> categories = [];
   void getUserOrders(String token) async {
     print('token in before do get orders request $token');
     sharedData.showLoadingDialog(context);
@@ -367,7 +333,7 @@ class _MyOrdersScreen extends State {
         dynamic json = response.json();
 
         json['products_statistics'].forEach((cartJson) {
-          Cart cart = Cart(
+          CartToAdd cart = CartToAdd(
             title: cartJson['product_name'],
             price: cartJson['total_price'],
             quantity: cartJson['quantity'],
@@ -377,7 +343,7 @@ class _MyOrdersScreen extends State {
         });
 
         json['categories_statistics'].forEach((cartJson) {
-          Cart cart = Cart(
+          CartToAdd cart = CartToAdd(
             title: cartJson['catrgory_name'],
             price: cartJson['total_price'],
             quantity: cartJson['quantity'],

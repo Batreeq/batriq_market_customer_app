@@ -1,4 +1,4 @@
-class Cart {
+class CartToAdd {
   String id;
   String productId;
   String title;
@@ -8,7 +8,7 @@ class Cart {
   String size;
   String image;
 
-  Cart(
+  CartToAdd(
       {this.id,
       this.title,
       this.quantity,

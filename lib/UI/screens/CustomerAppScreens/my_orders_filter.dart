@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyOrdersFilter extends StatefulWidget {
-  List<Cart> orders;
+  List<CartToAdd> orders;
   String title;
   int state;
   MyOrdersFilter({this.orders, this.title});
@@ -15,7 +15,7 @@ class MyOrdersFilter extends StatefulWidget {
 }
 
 class _MyOrdersFilterState extends State<MyOrdersFilter> {
-  List<Cart> filteredList;
+  List<CartToAdd> filteredList;
   @override
   Widget build(BuildContext context) {
     filterList();
@@ -32,7 +32,7 @@ class _MyOrdersFilterState extends State<MyOrdersFilter> {
         if (i == 0) {
           return buildFilter();
         } else if (i == 1) {
-          Cart cart = Cart(
+          CartToAdd cart = CartToAdd(
               quantity: "الكمية",
               title: "الاسم",
               price: "السعر",
@@ -46,7 +46,7 @@ class _MyOrdersFilterState extends State<MyOrdersFilter> {
     );
   }
 
-  buildProductItem(int i, Cart cart) {
+  buildProductItem(int i, CartToAdd cart) {
     return Container(
       height: i == 1 ? 40 : 60,
       margin: EdgeInsets.symmetric(horizontal: 10),

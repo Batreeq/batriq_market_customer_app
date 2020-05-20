@@ -5,7 +5,7 @@ import 'package:customerapp/DataLayer/Cart.dart';
 class CartGroup {
   String groupId;
   String groupName;
-  List<Cart> groupItems;
+  List<CartToAdd> groupItems;
 
   CartGroup({this.groupId, this.groupName, this.groupItems});
 }

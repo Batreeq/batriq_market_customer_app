@@ -403,7 +403,7 @@ class _ProductsState extends State<Products> {
                                               onPressed: () {
                                                 if (token != null &&
                                                     token.length > 10) {
-                                                  getCartNames(Cart(
+                                                  getCartNames(CartToAdd(
                                                       id: "",
                                                       image: "",
                                                       price: productss[i].price,
@@ -442,7 +442,7 @@ class _ProductsState extends State<Products> {
         });
   }
 
-  getCartNames(Cart cart) async {
+  getCartNames(CartToAdd cart) async {
     setState(() {
       isloading = true;
     });
@@ -530,22 +530,24 @@ class _ProductsState extends State<Products> {
     widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
   }
 
-  showAlert(List<CartName> cartNames, Cart cart) {
-    List<Cart> carts = [];
+  showAlert(List<CartName> cartNames, CartToAdd cart) {
+    List<CartToAdd> carts = [];
     carts.add(cart);
     CartGroup groups =
         CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
     List<bool> inputs = new List<bool>();
     CartName mainCart = CartName(CartNum: "1", cartTitle: "السلة الرئيسية");
-    if (cartNames[0].CartNum != "1") {
-      cartNames.add(CartName(cartTitle: "السلة الرئيسية", CartNum: "1"));
-    }
-    for (int i = 0; i < cartNames.length; i++) {
-      if (cartNames[i].CartNum == "1") {
-        inputs.add(true);
-      } else
-        inputs.add(false);
-    }
+    if (cartNames != null )
+      if (cartNames[0].CartNum != "1") {
+        cartNames.add(CartName(cartTitle: "السلة الرئيسية", CartNum: "1"));
+      }
+    if ( cartNames != null )
+        for (int i = 0; i < cartNames.length; i++) {
+        if (cartNames[i].CartNum == "1") {
+          inputs.add(true);
+        } else
+          inputs.add(false);
+      }
     return StatefulBuilder(
       builder: (context, setState) => new AlertDialog(
         content: new Container(
@@ -589,7 +591,8 @@ class _ProductsState extends State<Products> {
                         context,
                         groups,
                         (int.parse(cartNames[cartNames.length - 1].CartNum) + 1)
-                            .toString());
+                            .toString()
+                );
               }),
         ),
       ),

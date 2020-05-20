@@ -490,7 +490,7 @@ class _SearchPage extends State<SearchPage> {
                   color: sharedData.mainColor,
                   onPressed: () {
                     if (token != null && token.length > 10) {
-                      getCartNames(Cart(
+                      getCartNames(CartToAdd(
                           id: "",
                           image: "",
                           price: product.price,
@@ -521,8 +521,8 @@ class _SearchPage extends State<SearchPage> {
     });
   }
 
-  showAlert(List<CartName> cartNames, Cart cart) {
-    List<Cart> carts = [];
+  showAlert(List<CartName> cartNames, CartToAdd cart) {
+    List<CartToAdd> carts = [];
     carts.add(cart);
     CartGroup groups =
         CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
@@ -750,7 +750,7 @@ class _SearchPage extends State<SearchPage> {
     sharedData.flutterToast("تم بنجاح");
   }
 
-  getCartNames(Cart cart) async {
+  getCartNames(CartToAdd cart) async {
     setState(() {
       isloading = true;
     });
