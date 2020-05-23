@@ -39,6 +39,7 @@ class Orders {
   String createdAt;
   String updatedAt;
   String createdDate;
+  String createdTime;
 
   Orders(
       {this.id,
@@ -57,7 +58,8 @@ class Orders {
         this.status,
         this.createdAt,
         this.updatedAt,
-        this.createdDate});
+        this.createdDate,
+        this.createdTime});
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -82,6 +84,7 @@ class Orders {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     createdDate = json['created_date'];
+    createdTime = json['created_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -105,6 +108,7 @@ class Orders {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['created_date'] = this.createdDate;
+    data['created_time'] = this.createdTime;
     return data;
   }
 }

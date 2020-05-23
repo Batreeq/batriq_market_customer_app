@@ -19,12 +19,12 @@ class _MessagingScreenState extends State<MessagingScreen>
   Widget build(BuildContext ctx) {
     this.ctx = ctx ;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         child:  Image.asset('assets/images/icons/whatsapp.png'),
         onPressed: (){
           launch(sharedData.whatsAppURL);
         },
-      ),
+      ),*/
        body: getBody(),
     );
   }
@@ -66,6 +66,10 @@ class _MessagingScreenState extends State<MessagingScreen>
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
+              IconButton(onPressed: (){
+                launch(sharedData.whatsAppURL);
+              },
+                icon: Image.asset("assets/images/icons/whatsapp.png",height: 26,width: 26,)),
               new Container(
                   margin: new EdgeInsets.symmetric(horizontal: 3.0),
                   child: Theme.of(context).platform == TargetPlatform.iOS
@@ -80,6 +84,7 @@ class _MessagingScreenState extends State<MessagingScreen>
 //                              ? () => _submitMsg(_textController.text)
 //                              : null,
                         )),
+
               new Flexible(
                 child: Padding(
                   padding: EdgeInsets.only(

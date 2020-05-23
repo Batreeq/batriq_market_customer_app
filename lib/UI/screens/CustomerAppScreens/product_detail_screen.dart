@@ -89,7 +89,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 height: 370,
                 width: double.infinity,
               ),
-              Center(
+
+           //-----------------------------We will need this UI later don't delete it  --------------------------------------
+           /*   Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Text(
@@ -136,7 +138,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     )
                   ],
                 ),
-              ),
+              ),*/
             ],
           ),
         ));
