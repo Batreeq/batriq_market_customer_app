@@ -107,6 +107,8 @@ class _HomePageState extends State<HomePagee> {
           CustomAppBar(
             scaffoldKey: _scaffoldKey,
           ),
+
+          /*ٍ*Search BarUI*/
           Container(
             height: 50,
             color: sharedData.mainColor,
@@ -129,6 +131,8 @@ class _HomePageState extends State<HomePagee> {
               ),
             ),
           ),
+
+
           SingleChildScrollView(
             child: Container(
               height: MediaQuery.of(context).size.height - 190,

@@ -263,7 +263,7 @@ class _MyOrdersScreen extends State {
                               style: sharedData.tableFieldsTextStyle,
                             ), onTap: () {
                           goToOrderDetails(
-                              element.orderDetails, element.createdDate);
+                              element.orderDetails,"${element.createdTime} ${element.createdDate}");
                         }),
                         DataCell(
                             Text(
@@ -271,16 +271,16 @@ class _MyOrdersScreen extends State {
                               style: sharedData.tableFieldsTextStyle,
                             ), onTap: () {
                           goToOrderDetails(
-                              element.orderDetails, element.createdDate);
+                              element.orderDetails,"${element.createdTime} ${element.createdDate}");
                         }),
                         DataCell(
                             Text(
-                              element.createdAt,
+                              "${element.createdTime} ${element.createdDate}",
                               style: sharedData.tableFieldsTextStyle,
                             ), onTap: () {
                           goToOrderDetails(
                             element.orderDetails,
-                            element.createdDate,
+                            "${element.createdTime} ${element.createdDate}",
                           );
                         }),
                       ],
