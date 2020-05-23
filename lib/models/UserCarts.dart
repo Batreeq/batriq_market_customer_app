@@ -1,7 +1,8 @@
 class UserCarts {
   List<Cart> userCart;
+  String name ,groupId;
 
-  UserCarts({this.userCart});
+  UserCarts({this.userCart , this.name , this.groupId});
 
   UserCarts.fromJson(Map<String ,  dynamic> json) {
     if (json ['user_cart'] != null) {
@@ -25,7 +26,7 @@ class Cart {
   String userId;
   int quantity;
   String price;
-  int totalPrice;
+  String totalPrice;
   String status;
   String createdAt;
   String updatedAt;
@@ -99,7 +100,7 @@ class ProductDetailsFromCart {
   String size;
   String price;
   String image;
-  String quantity;
+  int quantity;
   String detailsText;
   String detailsTitle;
   String detailsImage;

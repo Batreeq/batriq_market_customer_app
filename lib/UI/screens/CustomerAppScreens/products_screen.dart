@@ -10,11 +10,14 @@ import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.
 import 'package:customerapp/UI/wigets/custom_tab.dart';
 import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/UserCarts.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:mutex/mutex.dart';
+
 
 class ProductsScreen extends StatefulWidget {
   String offerId;
@@ -64,7 +67,6 @@ class TabsController extends StatelessWidget {
       ),
     );
   }
-
   List<Tab> buildtabs() {
     List<Tab> tabsList = [];
     for (int i = 0; i < tabs.length; i++) {
@@ -120,8 +122,16 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   bool isloading = true;
+
+  bool firstTime = true ;
+
+  Mutex m = Mutex();
+
+  @override
   @override
   Widget build(BuildContext context) {
+   // firstTime = true ;
+    print (firstTime .toString());
     return Stack(
       children: <Widget>[
         buildProductList(context),
@@ -132,7 +142,6 @@ class _ProductsState extends State<Products> {
                       duration: Duration(milliseconds: 1000),
                       color: sharedData.mainColor,
                       size: 70
-//                    lineWidth: 2,
                       ),
                   width: 100,
                   height: 100,
@@ -305,23 +314,29 @@ class _ProductsState extends State<Products> {
                                                                   .expand(),
                                                           child: FlatButton(
                                                               onPressed: () {
-                                                                count++;
-                                                                final double
-                                                                    totalCost =
-                                                                    double.parse(
-                                                                            productss[i].price) *
-                                                                        count;
-                                                                bloc.setCount(<
-                                                                    String>[
-                                                                  count
-                                                                      .toString(),
-                                                                  totalCost
-                                                                      .toString(),
-                                                                  i.toString()
-                                                                ]);
 
-                                                                counts[i] = count
-                                                                    .toString();
+                                                                count++;
+                                                                Future.delayed(Duration(seconds: 3)).then((v) async {
+                                                                  await m.acquire();
+                                                                 try{
+                                                                   if (firstTime){
+                                                                     firstTime = false ;
+                                                                      getCartsDialog(count , i  );
+                                                                   }
+                                                                   print ('is first time = ' + firstTime.toString());
+                                                                 }
+                                                                 finally{
+                                                                   m.release();
+                                                                   //firstTime= true;
+                                                                   final double totalCost = double.parse(productss[i].price) * count;
+                                                                   bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                                                   counts[i] = count.toString();
+                                                                 }
+                                                                  count = 1;
+                                                                  final double totalCost = double.parse(productss[i].price) * count;
+                                                                  bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                                                  counts[i] = count.toString();
+                                                                });
                                                               },
                                                               padding:
                                                                   EdgeInsets
@@ -394,7 +409,7 @@ class _ProductsState extends State<Products> {
                                             ),
 
                                             ///add to cart
-                                            IconButton(
+                                           /* IconButton(
                                               icon: Icon(
                                                 Icons.add_shopping_cart,
                                                 size: 30,
@@ -403,16 +418,11 @@ class _ProductsState extends State<Products> {
                                               onPressed: () {
                                                 if (token != null &&
                                                     token.length > 10) {
-                                                  getCartNames(CartToAdd(
-                                                      id: "",
-                                                      image: "",
+                                                  getCartNames(Cart(
                                                       price: productss[i].price,
-                                                      size: "",
-                                                      title: "",
-                                                      quantity:
-                                                          count.toString(),
-                                                      productId:
-                                                          productss[i].id));
+                                                      cartTitle: "",
+                                                      quantity: count,
+                                                      productId: productss[i].id));
                                                 } else {
                                                   addProductToCart(
                                                       productss[i].title,
@@ -423,7 +433,7 @@ class _ProductsState extends State<Products> {
                                                       productss[i].image);
                                                 }
                                               },
-                                            )
+                                            )*/
                                           ],
                                         ),
                                       )
@@ -442,7 +452,35 @@ class _ProductsState extends State<Products> {
         });
   }
 
-  getCartNames(CartToAdd cart) async {
+  getCartsDialog (int count , int i ) {
+    if (token != null && token.length > 10) {
+      getCartNames(Cart(
+          price: productss[i].price,
+          cartTitle: "",
+          quantity: count,
+          productId: productss[i].id));
+    } else {
+      addProductToCart(
+          productss[i].title,
+          productss[i].id,
+          productss[i].price,
+          productss[i].size,
+          count.toString(),
+          productss[i].image);
+      firstTime = false;
+    }
+    print(firstTime.toString());
+
+  /*  m.acquire();
+    try{
+      firstTime = true ;
+    }
+    finally{
+      m.release() ;
+    }*/
+  }
+
+  getCartNames(Cart cart) async {
     setState(() {
       isloading = true;
     });
@@ -464,8 +502,8 @@ class _ProductsState extends State<Products> {
     });
   }
 
-  cartGroupToJson(CartGroup group) {
-    final json = jsonEncode(group.groupItems.map((i) {
+  cartGroupToJson(UserCarts group) {
+    final json = jsonEncode(group.userCart.map((i) {
       final cartData = i.toJson();
       final groupData = {'cart_num': group.groupId, 'total_price': '130'};
       cartData.addAll(groupData);
@@ -516,6 +554,7 @@ class _ProductsState extends State<Products> {
   void initState() {
     super.initState();
     getProducts();
+   // firstTime = true ;
   }
 
   void addProductToCart(name, id, price, size, count, image) {
@@ -526,15 +565,16 @@ class _ProductsState extends State<Products> {
       'count': count,
       'size': size,
       'image': image,
+    }).then((v){
+      widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
     });
-    widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
   }
 
-  showAlert(List<CartName> cartNames, CartToAdd cart) {
-    List<CartToAdd> carts = [];
+  showAlert(List<CartName> cartNames, Cart cart) {
+    List<Cart> carts = [];
     carts.add(cart);
-    CartGroup groups =
-        CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
+   // CartGroup groups = CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
+    UserCarts groups = UserCarts(groupId: "1", userCart: carts, name : "السلة الرئيسية");
     List<bool> inputs = new List<bool>();
     CartName mainCart = CartName(CartNum: "1", cartTitle: "السلة الرئيسية");
     if (cartNames != null )
@@ -616,7 +656,7 @@ class _ProductsState extends State<Products> {
     widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
   }
 
-  Widget buildButton(context, CartGroup carts, String lastIndex) {
+  Widget buildButton(context, UserCarts carts, String lastIndex) {
     return Container(
       height: 40,
       margin: EdgeInsets.only(top: 20),
@@ -671,7 +711,7 @@ class _ProductsState extends State<Products> {
     );
   }
 
-  Widget addCartDialog(CartGroup carts) {
+  Widget addCartDialog(UserCarts carts) {
     String name = "";
     return new AlertDialog(
       content: new Container(

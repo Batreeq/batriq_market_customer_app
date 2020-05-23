@@ -38,15 +38,15 @@ class CategoryItemValue extends StatelessWidget {
             ),
             child: Center(
                 child: Text(
-              catigory.name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.5,
-                letterSpacing: 0.7,
-                fontWeight: FontWeight.w800,
-              ),
-            )),
+                  catigory.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.5,
+                    letterSpacing: 0.7,
+                    fontWeight: FontWeight.w800,
+                  ),
+                )),
           ),
         ),
       ),

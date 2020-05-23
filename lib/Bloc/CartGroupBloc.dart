@@ -13,13 +13,13 @@ class CartGroupBloc implements Bloc {
   final _controller = StreamController<UserCarts>();
   Stream<UserCarts> get cartDataStream => _controller.stream;
 
-  UserCarts userCarts = new UserCarts();
+  static UserCarts userCarts = new UserCarts();
   Future<void> getCartData(token) async {
     print("token_cart$token");
     final response = await Requests.get(sharedData.getUserCartsUrl + token);
 
     if (response != null) {
-      print(response.json());
+     // print(response.json());
       print(response.statusCode);
     } else
       print('response is null');
@@ -28,6 +28,13 @@ class CartGroupBloc implements Bloc {
       response.raiseForStatus();
       dynamic json = response.json();
       userCarts = UserCarts.fromJson(json);
+     for( Cart c in userCarts.userCart){
+       print ("cart title " + c.cartTitle  + ' cart quantity ' + c.quantity.toString());
+       for(ProductDetailsFromCart p in  c.productDetails){
+      // print (p.name +  ' product quantity '+ p.quantity.toString() );
+       }
+       print ('**');
+     }
     }
 
 
@@ -55,23 +62,21 @@ class CartGroupBloc implements Bloc {
   }
 
   Future<void> fetchCartData() async {
-/*    List<UserCarts> carts = [];
+    List<UserCarts> carts = [];
     final dataList = await DBHelper.getData('user_cart');
     List<Cart> items = dataList.map((item) {
       print("object${item['count']}");
       return Cart(
-          title: item['name'],
-          image: item['image'],
-          price: item['pric+e'],
+          cartTitle: item['name'],
+          totalPrice: item['pric+e'],
           id: item['id'],
-          quantity: item['count'],
-          size: item['size']);
+          quantity: item['count'],);
     }).toList();
 
-    CartGroup cartGroup =
-        CartGroup(groupName: "السلة الرئيسية", groupItems: items, groupId: "1");
-    carts.add(cartGroup);
-    _controller.sink.add(carts);*/
+    //CartGroup cartGroup = CartGroup(groupName: "السلة الرئيسية", groupItems: items, groupId: "1");
+    UserCarts userCarts = UserCarts(name: "السلة الرئيسية" , userCart: items , groupId: "1" );
+    carts.add(userCarts);
+    _controller.sink.add(userCarts);
   }
 
   @override

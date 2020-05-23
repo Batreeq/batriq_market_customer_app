@@ -181,7 +181,7 @@ class _CartScreenState extends State<CartScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen(data[index].productDetails)));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen(data[index])));
                 },
                 child: Column(
                   children: <Widget>[
@@ -209,7 +209,7 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () {
-                                  // confirmOrder(data[index].id, data[index].groupItems);
+                                  //confirmOrder(data[index].id, data[index].productDetails);
                                 },
                               ),
                             ),
@@ -251,7 +251,7 @@ class _CartScreenState extends State<CartScreen> {
         });
   }
 
-  confirmOrder(cartNum, List<CartToAdd> carts) {
+  confirmOrder(cartNum, ProductDetailsFromCart carts) {
     if (isRegistered()) {
       Navigator.push(
         context,
@@ -262,13 +262,12 @@ class _CartScreenState extends State<CartScreen> {
         ),
       );
     } else {
-      sendCartToApi(CartGroup(
-          groupId: "1", groupItems: carts, groupName: "السلة الرئيسية"));
+     // sendCartToApi(UserCarts(groupId: "1", userCart : carts, name: "السلة الرئيسية"));
     }
   }
 
-  cartGroupToJson(CartGroup group) {
-    final json = jsonEncode(group.groupItems.map((i) {
+  cartGroupToJson(UserCarts group) {
+    final json = jsonEncode(group.userCart.map((i) {
       final cartData = i.toJson();
       final groupData = {'cart_num': group.groupId, 'total_price': '130'};
       cartData.addAll(groupData);
@@ -320,11 +319,10 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget buildGroupItem(context, List<Cart> cartGroup, bloc) {
     return Column(
-        children: mapIndexed(cartGroup, (index, item) => buildItemm(context, item, bloc)).toList());
+        children: mapIndexed(cartGroup, (index, item) => buildItemm(context, item, bloc , index )).toList());
   }
 
-  Iterable<E> mapIndexed<E, T>(
-      Iterable<T> items, E Function(int index, T item) f) sync* {
+  Iterable<E> mapIndexed<E, T>(Iterable<T> items, E Function(int index, T item) f) sync* {
     var index = 0;
 
     for (final item in items) {
@@ -333,7 +331,7 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
-  Widget buildItemm(context, Cart cart, CartGroupBloc bloc) {
+  Widget buildItemm(context, Cart cart, CartGroupBloc bloc , int index ) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
       height: 140,
@@ -422,7 +420,7 @@ class _CartScreenState extends State<CartScreen> {
 
                           ///price
                           Text(
-                            cart.price.toString() + "  JD",
+                            cart.price + "  JD",
                             style: TextStyle(
                                 color: sharedData.mainColor,
                                 fontSize: 16,

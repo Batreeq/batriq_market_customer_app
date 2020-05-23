@@ -5,7 +5,6 @@ import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../shared_data.dart';
-import 'BalanceDetails.dart';
 
 class Home extends StatelessWidget {
   Widget getSlider() {

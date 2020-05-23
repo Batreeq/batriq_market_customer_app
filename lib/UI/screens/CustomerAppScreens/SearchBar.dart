@@ -9,6 +9,7 @@ import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/UserCarts.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -114,30 +115,16 @@ class _SearchPage extends State<SearchPage> {
   String lastError = "";
   String lastStatus = "";
   String _currentLocaleId = "";
+  bool isVoice = false;
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
+  bool isloading = false;
 
   @override
   void initState() {
     super.initState();
 //    initSpeechState();
   }
-
-//  Future<void> initSpeechState() async {
-//    bool hasSpeech = await speech.initialize(
-//        onError: errorListener, onStatus: statusListener);
-//    if (hasSpeech) {
-//      _localeNames = await speech.locales();
-//      var systemLocale = await speech.systemLocale();
-//      _currentLocaleId = systemLocale.localeId;
-//    }
-//
-//    if (!mounted) return;
-//
-//    setState(() {
-//      _hasSpeech = hasSpeech;
-//    });
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -312,7 +299,7 @@ class _SearchPage extends State<SearchPage> {
     } on PlatformException catch (e) {}
   }
 
-  bool isloading = false;
+
   void NavigatorPage(Product product) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ProductDetailsScreen(
@@ -490,13 +477,11 @@ class _SearchPage extends State<SearchPage> {
                   color: sharedData.mainColor,
                   onPressed: () {
                     if (token != null && token.length > 10) {
-                      getCartNames(CartToAdd(
-                          id: "",
-                          image: "",
+                      getCartNames(
+                          Cart(
                           price: product.price,
-                          size: "",
-                          title: "",
-                          quantity: count.toString(),
+                          cartTitle  : "",
+                          quantity: count ,
                           productId: product.id.toString()));
                     } else {
                       addProductToCart(product.name, product.id, product.price,
@@ -521,11 +506,11 @@ class _SearchPage extends State<SearchPage> {
     });
   }
 
-  showAlert(List<CartName> cartNames, CartToAdd cart) {
-    List<CartToAdd> carts = [];
+  showAlert(List<CartName> cartNames, Cart cart) {
+    List<Cart> carts = [];
     carts.add(cart);
-    CartGroup groups =
-        CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
+    //CartGroup groups = CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
+    UserCarts  userCarts = UserCarts(groupId: "1", userCart: carts, name: "السلة الرئيسية");
     List<bool> inputs = new List<bool>();
     CartName mainCart = CartName(CartNum: "1", cartTitle: "السلة الرئيسية");
     if (cartNames[0].CartNum != "1") {
@@ -569,7 +554,7 @@ class _SearchPage extends State<SearchPage> {
                                       inputs =
                                           List.filled(inputs.length, false);
                                       inputs[index] = val;
-                                      groups.groupId = cartNames[index].CartNum;
+                                      userCarts.groupId = cartNames[index].CartNum;
                                     });
                                   })
                             ],
@@ -578,7 +563,7 @@ class _SearchPage extends State<SearchPage> {
                       )
                     : buildButton(
                         context,
-                        groups,
+                        userCarts,
                         (int.parse(cartNames[cartNames.length - 1].CartNum) + 1)
                             .toString());
               }),
@@ -587,7 +572,7 @@ class _SearchPage extends State<SearchPage> {
     );
   }
 
-  Widget buildButton(context, CartGroup carts, String lastIndex) {
+  Widget buildButton(context, UserCarts carts, String lastIndex) {
     return Container(
       height: 40,
       margin: EdgeInsets.only(top: 20),
@@ -642,7 +627,7 @@ class _SearchPage extends State<SearchPage> {
     );
   }
 
-  Widget addCartDialog(CartGroup carts) {
+  Widget addCartDialog(UserCarts carts) {
     String name = "";
     return new AlertDialog(
       content: new Container(
@@ -721,8 +706,8 @@ class _SearchPage extends State<SearchPage> {
     );
   }
 
-  cartGroupToJson(CartGroup group) {
-    final json = jsonEncode(group.groupItems.map((i) {
+  cartGroupToJson(UserCarts group) {
+    final json = jsonEncode(group.userCart.map((i) {
       final cartData = i.toJson();
       final groupData = {'cart_num': group.groupId, 'total_price': '130'};
       cartData.addAll(groupData);
@@ -750,7 +735,7 @@ class _SearchPage extends State<SearchPage> {
     sharedData.flutterToast("تم بنجاح");
   }
 
-  getCartNames(CartToAdd cart) async {
+  getCartNames(Cart cart) async {
     setState(() {
       isloading = true;
     });
@@ -870,7 +855,6 @@ class _SearchPage extends State<SearchPage> {
     );
   }
 
-  bool isVoice = false;
   Future<SearchData> getSearchDataByVoiceFromAPI(String searchString) async {
     setState(() {
       isloading = true;
