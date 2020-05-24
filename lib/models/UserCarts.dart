@@ -140,7 +140,7 @@ class ProductDetailsFromCart {
     categoryId = json['category_id'];
     name = json['name'];
     size = json['size'];
-    price = json['price'];
+    price = json['price'].toString();
     image = json['image'];
     quantity = json['quantity'];
     detailsText = json['details_text'];

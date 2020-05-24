@@ -28,7 +28,9 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     readToken();
-    !isRegistered() ? bloc.fetchCartData() : bloc.getCartData(token);
+    !isRegistered() ?
+    bloc.fetchCartData() :
+    bloc.getCartData(token);
   }
 
   @override
