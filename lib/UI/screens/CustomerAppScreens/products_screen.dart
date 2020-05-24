@@ -174,12 +174,12 @@ class _ProductsState extends State<Products> {
                 stream: bloc.countStream,
                 builder: (context, snapshot) {
                   List<String> data = snapshot.data;
-                  int count = data == null ? 1 : int.parse(data[0]);
+                  int count = data == null ? 0 : int.parse(data[0]);
                   double totalCost = data != null
                       ? double.parse(data[1])
                       : double.parse(productss[i].price);
                   if (data == null) {
-                    count = 1;
+                    count = 0;
                     totalCost = double.parse(productss[i].price);
                   } else if (data[2] == i.toString()) {
                     count = int.parse(data[0]);
@@ -187,9 +187,12 @@ class _ProductsState extends State<Products> {
                   } else {
                     if (counts[i] != null) {
                       count = int.parse(counts[i]);
+                      if(count!=0 )
                       totalCost = double.parse(productss[i].price) * count;
+                      else
+                        totalCost = double.parse(productss[i].price);
                     } else {
-                      count = 1;
+                      count = 0;
                       totalCost = double.parse(productss[i].price);
                     }
                   }
@@ -335,7 +338,7 @@ class _ProductsState extends State<Products> {
                                                                    bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
                                                                    counts[i] = count.toString();
                                                                  }
-                                                                  count = 1;
+                                                               //  count = 0;
                                                                   final double totalCost = double.parse(productss[i].price) * count;
                                                                   bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
                                                                   counts[i] = count.toString();
@@ -492,6 +495,9 @@ class _ProductsState extends State<Products> {
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
+      setState(() {
+        isloading = false;
+      });
       return;
     }
     extractedData['carts'].forEach((cartname) {
@@ -499,7 +505,7 @@ class _ProductsState extends State<Products> {
           CartNum: cartname['cart_num'], cartTitle: cartname['cart_title']);
       carts.add(cartName);
     });
-    showDialog(context: context, child: showAlert(carts, cart));
+    showDialog(context: context, child: showAlert(carts, cart),barrierDismissible: false);
     setState(() {
       isloading = false;
     });
@@ -580,6 +586,10 @@ class _ProductsState extends State<Products> {
     UserCarts groups = UserCarts(groupId: "1", userCart: carts, name : "السلة الرئيسية");
     List<bool> inputs = new List<bool>();
     CartName mainCart = CartName(CartNum: "1", cartTitle: "السلة الرئيسية");
+    if(cartNames!=null && cartNames.isEmpty){
+      cartNames.add(CartName(cartTitle: "السلة الرئيسية", CartNum: "1"));
+    }
+
     if (cartNames != null )
       if (cartNames[0].CartNum != "1") {
         cartNames.add(CartName(cartTitle: "السلة الرئيسية", CartNum: "1"));
@@ -638,6 +648,7 @@ class _ProductsState extends State<Products> {
                 );
               }),
         ),
+
       ),
     );
   }
