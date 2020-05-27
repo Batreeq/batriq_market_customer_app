@@ -69,7 +69,7 @@ class CartGroupBloc implements Bloc {
       print("object${item['count']}");
       return Cart(
           cartTitle: item['name'],
-          totalPrice: item['pric+e'],
+          totalPrice: item['price'],
           id: int.parse(item['id']),
           quantity:int.parse( item['count']),);
     }).toList();

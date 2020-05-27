@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -257,6 +257,7 @@ class sharedData {
   }
 
   static String getUserCartsUrl = "https://jaraapp.com/index.php/api/getUserCart?api_token=";
+  static String addMultiToCartUrl = "https://jaraapp.com/index.php/api/addMultiToCart";
 
   static String token;
 
@@ -291,30 +292,30 @@ class sharedData {
     );
   }
 
-  static FlutterSecureStorage storage = FlutterSecureStorage();
+  //static FlutterSecureStorage storage = FlutterSecureStorage();
 
   static Future<bool> writeToStorage({String key, String value}) async {
     print(token);
-    await storage
+/*    await storage
         .write(
           key: key,
           value: value,
         )
-        .then((val) {});
+        .then((val) {});*/
     token = value;
   }
 
   static Future<String> readFromStorage({String key}) async {
     //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
 
-    return storage.read(
+  /*  return storage.read(
       key: key,
-    );
+    );*/
   }
 
   static logout() async {
-    await storage.delete(key: "token");
-    token = "";
+  /*  await storage.delete(key: "token");
+    token = "";*/
     sharedData.token = "";
     flutterToast("تم تسجيل الخروج ");
   }
