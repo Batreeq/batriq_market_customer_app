@@ -641,7 +641,7 @@ class _SearchPage extends State<SearchPage> {
               ),
             ),
           ),
-          Expanded(
+       /*   Expanded(
             flex: 3,
             child: Container(
               decoration: BoxDecoration(
@@ -664,7 +664,7 @@ class _SearchPage extends State<SearchPage> {
                 },
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );
