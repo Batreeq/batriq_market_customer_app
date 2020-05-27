@@ -306,9 +306,7 @@ class sharedData {
 
   static Future<String> readFromStorage({String key}) async {
     //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
-    String s = await storage.read(
-      key: key,
-    );
+
     return storage.read(
       key: key,
     );
