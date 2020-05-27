@@ -771,6 +771,8 @@ class _ProfileScreen extends State {
                 id: int.parse(item['id']),
                 quantity: int.parse(item['count']),);
             }).toList();
+
+          //   addMultiToAPI(info.apiToken , items );
           }
           else
             print('list of carts are null ');
