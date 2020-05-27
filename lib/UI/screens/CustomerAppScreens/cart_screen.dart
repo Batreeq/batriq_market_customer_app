@@ -581,7 +581,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Row(
               children: <Widget>[
                 Text('السعر الكلي : '),
-                Text(data.totalPrice.toString()),
+                data.totalPrice.toString()!=null?Text(data.totalPrice.toString()):"",
               ],
             ),
           ),

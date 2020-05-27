@@ -492,6 +492,7 @@ class _ProductsState extends State<Products> {
     });
     List<CartName> carts = [];
     final url = "https://jaraapp.com/index.php/api/getCarts?api_token=$token";
+    debugPrint(url);
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
@@ -568,11 +569,11 @@ class _ProductsState extends State<Products> {
 
   void addProductToCart(name, id, price, size, count, image) {
     DBHelper.insert('user_cart', {
-      'id': id,
+      'id': int.parse(id),
       'name': name,
-      'price': price,
-      'count': count,
-      'size': size,
+      'price': price.toString(),
+      'count': int.parse(count),
+      'size': size.toString(),
       'image': image,
     }).then((v){
       widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
@@ -660,6 +661,9 @@ class _ProductsState extends State<Products> {
     setState(() {
       isloading = true;
     });
+
+
+
     final Uri url = Uri.parse(
         'https://jaraapp.com/index.php/api/addMultiToCart?api_token=$token');
     final response = await http.post(url, body: formData);
@@ -696,7 +700,7 @@ class _ProductsState extends State<Products> {
               ),
             ),
           ),
-          Expanded(
+         /* Expanded(
             flex: 3,
             child: Container(
               decoration: BoxDecoration(
@@ -719,7 +723,7 @@ class _ProductsState extends State<Products> {
                 },
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

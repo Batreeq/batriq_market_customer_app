@@ -39,8 +39,9 @@ class _ProductsInCartScreen extends State {
   @override
   void initState() {
     super.initState();
-    product = cart.productDetails.elementAt(0);
     c = this.cart;
+    product = cart.productDetails.elementAt(0);
+
   }
 
   @override
