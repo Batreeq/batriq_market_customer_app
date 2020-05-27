@@ -319,15 +319,24 @@ class _ProductsState extends State<Products> {
                                                               BoxConstraints
                                                                   .expand(),
                                                           child: FlatButton(
-                                                              onPressed: () {
+                                                              onPressed: () async {
 
+                                                  /*            List<Map> map= await DBHelper.addedBefore("user_cart",productss[i].id.toString());
+                                                              if(map!=null &&map.isNotEmpty){*//*i have to edit count of product *//*
+
+                                                              int count=0;
+                                                              map.forEach((row){
+                                                              if(row.containsKey("count"))
+                                                              count= int.parse(row["count"]);
+                                                              });
+                                                              debugPrint("hassan count $count");}*/
                                                                 count++;
                                                                 Future.delayed(Duration(seconds: 3)).then((v) async {
                                                                   await m.acquire();
                                                                  try{
                                                                    if (firstTime){
                                                                      firstTime = false ;
-                                                                      getCartsDialog(count , i  );
+                                                                      getCartsDialog(count , i);
                                                                    }
                                                                    print ('is first time = ' + firstTime.toString());
                                                                  }
@@ -492,6 +501,7 @@ class _ProductsState extends State<Products> {
     });
     List<CartName> carts = [];
     final url = "https://jaraapp.com/index.php/api/getCarts?api_token=$token";
+    debugPrint(url);
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
@@ -566,13 +576,29 @@ class _ProductsState extends State<Products> {
    // firstTime = true ;
   }
 
-  void addProductToCart(name, id, price, size, count, image) {
+  Future<void> addProductToCart(name, id, price, size, count, image) async {
+
+    /* check if i have to  add product or edit counter inside  product */
+    List<Map> map= await DBHelper.addedBefore("user_cart",id.toString());
+    if(map!=null &&map.isNotEmpty){
+      /*i have to edit count inside product */
+
+      int countInDataBase=0;
+     map.forEach((row){
+        if(row.containsKey("count"))
+          countInDataBase= int.parse(row["count"]);
+      });
+      countInDataBase+=int.parse(count);
+     DBHelper.update("user_cart", id.toString(),countInDataBase.toString());
+      widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
+    }
+    else/*i have to add this on database because i don't have this id in database */
     DBHelper.insert('user_cart', {
-      'id': id,
+      'id': int.parse(id),
       'name': name,
-      'price': price,
-      'count': count,
-      'size': size,
+      'price': price.toString(),
+      'count': int.parse(count),
+      'size': size.toString(),
       'image': image,
     }).then((v){
       widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
@@ -660,6 +686,9 @@ class _ProductsState extends State<Products> {
     setState(() {
       isloading = true;
     });
+
+
+
     final Uri url = Uri.parse(
         'https://jaraapp.com/index.php/api/addMultiToCart?api_token=$token');
     final response = await http.post(url, body: formData);
@@ -696,7 +725,7 @@ class _ProductsState extends State<Products> {
               ),
             ),
           ),
-          Expanded(
+         /* Expanded(
             flex: 3,
             child: Container(
               decoration: BoxDecoration(
@@ -719,7 +748,7 @@ class _ProductsState extends State<Products> {
                 },
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

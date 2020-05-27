@@ -16,6 +16,7 @@ class CartGroupBloc implements Bloc {
   static UserCarts userCarts = new UserCarts();
   Future<void> getCartData(token) async {
     print("token_cart$token");
+    print(sharedData.getUserCartsUrl + token);
     final response = await Requests.get(sharedData.getUserCartsUrl + token);
 
     if (response != null) {
@@ -69,8 +70,8 @@ class CartGroupBloc implements Bloc {
       return Cart(
           cartTitle: item['name'],
           totalPrice: item['pric+e'],
-          id: item['id'],
-          quantity: item['count'],);
+          id: int.parse(item['id']),
+          quantity:int.parse( item['count']),);
     }).toList();
 
     //CartGroup cartGroup = CartGroup(groupName: "السلة الرئيسية", groupItems: items, groupId: "1");
