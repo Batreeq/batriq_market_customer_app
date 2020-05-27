@@ -319,15 +319,24 @@ class _ProductsState extends State<Products> {
                                                               BoxConstraints
                                                                   .expand(),
                                                           child: FlatButton(
-                                                              onPressed: () {
+                                                              onPressed: () async {
 
+                                                  /*            List<Map> map= await DBHelper.addedBefore("user_cart",productss[i].id.toString());
+                                                              if(map!=null &&map.isNotEmpty){*//*i have to edit count of product *//*
+
+                                                              int count=0;
+                                                              map.forEach((row){
+                                                              if(row.containsKey("count"))
+                                                              count= int.parse(row["count"]);
+                                                              });
+                                                              debugPrint("hassan count $count");}*/
                                                                 count++;
                                                                 Future.delayed(Duration(seconds: 3)).then((v) async {
                                                                   await m.acquire();
                                                                  try{
                                                                    if (firstTime){
                                                                      firstTime = false ;
-                                                                      getCartsDialog(count , i  );
+                                                                      getCartsDialog(count , i);
                                                                    }
                                                                    print ('is first time = ' + firstTime.toString());
                                                                  }
@@ -567,7 +576,23 @@ class _ProductsState extends State<Products> {
    // firstTime = true ;
   }
 
-  void addProductToCart(name, id, price, size, count, image) {
+  Future<void> addProductToCart(name, id, price, size, count, image) async {
+
+    /* check if i have to  add product or edit counter inside  product */
+    List<Map> map= await DBHelper.addedBefore("user_cart",id.toString());
+    if(map!=null &&map.isNotEmpty){
+      /*i have to edit count inside product */
+
+      int countInDataBase=0;
+     map.forEach((row){
+        if(row.containsKey("count"))
+          countInDataBase= int.parse(row["count"]);
+      });
+      countInDataBase+=int.parse(count);
+     DBHelper.update("user_cart", id.toString(),countInDataBase.toString());
+      widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
+    }
+    else/*i have to add this on database because i don't have this id in database */
     DBHelper.insert('user_cart', {
       'id': int.parse(id),
       'name': name,
