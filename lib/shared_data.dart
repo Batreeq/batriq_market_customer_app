@@ -193,8 +193,8 @@ class sharedData {
   static const String modelHintTextField = 'موديل المركبة';
   static const String typeHintTextField = ' نوع المركبة';
   static const String lastNameTextField = 'اسم العائلة';
-  static const String signinToContinue= 'للمتابعة قم بتسجيل الدخول ';
-  static const String Continue= 'متابعة';
+  static const String signinToContinue= 'يرجى انشاء حساب لاتمام عملية الشراء ';
+  static const String Continue= 'موافق';
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
