@@ -16,6 +16,7 @@ class MyProductModel{
     name = json['name'];
     size = json['size'];
     price = json['price'];
+    count = json['count'];
     image = json['image'];
   }
 

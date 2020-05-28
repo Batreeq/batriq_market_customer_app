@@ -4,6 +4,7 @@ import 'package:customerapp/Bloc/bloc_provider.dart';
 import 'package:customerapp/DataLayer/Cart.dart';
 import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/ProductsInCartScreen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/profile_screen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/models/MyProductsModel.dart';
 import 'package:customerapp/models/UserCarts.dart';
@@ -46,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
   Future<void> getAllDatabase() async{
     List<Map> map= await DBHelper.getData("user_cart");
 
-    initMyProductData(map);
+    initMyProductData();
     if(map!=null &&map.isNotEmpty)
     map.forEach((row){
 
@@ -72,7 +73,7 @@ class _CartScreenState extends State<CartScreen> {
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: InkWell(
           onTap: (){
-          //  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen(data[index])));
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen()));
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -102,6 +103,11 @@ class _CartScreenState extends State<CartScreen> {
                                 fontWeight: FontWeight.bold),
                           ),
                           onPressed: () {
+                            showDialog(
+                                context: context,
+                                child: showSendToLogin(
+                                    1.toString(), context));
+
                             //confirmOrder(data[index].id, data[index].productDetails);
                           },
                         ),
@@ -260,6 +266,73 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  Widget showSendToLogin(String cartNum, ctx) {
+    String name = "";
+    return new AlertDialog(
+      content: new Container(
+        width: 260.0,
+        height: 200.0,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            // dialog top
+            new Expanded(
+              child: new Row(
+                children: <Widget>[
+                  new Container(
+                    // padding: new EdgeInsets.all(10.0),
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: new Text(
+                      sharedData.signinToContinue,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // dialog centre
+
+
+            // dialog bottom
+             Container(
+                padding: new EdgeInsets.all(4.0),
+                decoration: new BoxDecoration(
+                  color: sharedData.mainColor,
+                ),
+                child: FlatButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => ProfileScreen()));
+                  },
+                  child: new Text(
+                    sharedData.Continue,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+
+          ],
+        ),
+      ),
+    );
+  }
+
   shareCart(String phone, String cartNum, ctx) async {
     Map<String, dynamic> params = new Map();
     params['api_token'] = token;
@@ -289,7 +362,7 @@ class _CartScreenState extends State<CartScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen(data[index])));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen(cart: data[index])));
                 },
                 child: Column(
                   children: <Widget>[

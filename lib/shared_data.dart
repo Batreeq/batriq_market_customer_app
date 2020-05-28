@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Bloc/appBarTitleBloc.dart';
 import 'DataLayer/Catigory.dart';
 import 'DataLayer/tab.dart';
+import 'helpers/DBHelper.dart';
 import 'models/Employee.dart';
 import 'models/MyProductsModel.dart';
 import 'models/UserInfo.dart';
@@ -38,7 +39,8 @@ readToken() async {
   token = await sharedData.readFromStorage(key: 'token');
 }
 
-void initMyProductData(List<Map> map){
+Future<void> initMyProductData() async {
+  List<Map> map= await DBHelper.getData("user_cart");
   myProductList.clear();
   myProductList = map.map((item) {
 
@@ -191,6 +193,8 @@ class sharedData {
   static const String modelHintTextField = 'موديل المركبة';
   static const String typeHintTextField = ' نوع المركبة';
   static const String lastNameTextField = 'اسم العائلة';
+  static const String signinToContinue= 'للمتابعة قم بتسجيل الدخول ';
+  static const String Continue= 'متابعة';
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
