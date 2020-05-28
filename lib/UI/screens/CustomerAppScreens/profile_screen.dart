@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/AddMemberScreen.dart';
+import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/UserCarts.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:customerapp/shared_data.dart';
@@ -738,6 +740,7 @@ class _ProfileScreen extends State {
 
       sharedData.showLoadingDialog(context); //invoking login
       await Future.delayed(Duration(seconds: 3));
+      List<ProductDetailsFromCart> items ;
 
       if (response.statusCode == 200) {
         response.raiseForStatus();
@@ -752,12 +755,53 @@ class _ProfileScreen extends State {
           sharedData.userInfo.location = info.location;
           sharedData.userInfo.email = info.email;
           sharedData.userInfo.image = info.image;
+          sharedData.token = info.apiToken;
+          sharedData.writeToStorage(key: 'token', value: info.apiToken);
+
+          print('User Carts are :');
+          final dataList = await DBHelper.getData('user_cart');
+          if (dataList != null) {
+             items = dataList.map((item) {
+              print("object${item['count']}");
+              return ProductDetailsFromCart(
+                detailsTitle: item['name'],
+                price :  item['price'],
+                image :  item['image'],
+                size :  item['size'],
+                id: int.parse(item['id']),
+                quantity: int.parse(item['count']),);
+            }).toList();
+
+          //   addMultiToAPI(info.apiToken , items );
+          }
+          else
+            print('list of carts are null ');
         } else
           print('user object which get from json = null');
-        sharedData.flutterToast('You registered Sucsessfully 😍 ');
+
+        if (items != null )
+          print ('in cart product number 0 the name is ' + items.elementAt(0).name );
+      //  sharedData.flutterToast('You registered Successfully 😍 ');
       }
       Navigator.of(context).pop(); //close the dialog
     }
+  }
+
+
+  addMultiToAPI(String token , List<ProductDetailsFromCart> items ) async{
+    var response  = await Requests.post(
+      sharedData.addMultiToCartUrl ,
+      body: {
+        'api_token': "$token",
+        'data' : "$items"
+      },
+    );
+    if (response != null) {
+      print(response.json());
+      print(response.statusCode);
+      print ('add to multi done ') ;
+    } else
+      print('response is null');
   }
 
   addMember() {
