@@ -10,6 +10,7 @@ import 'Bloc/appBarTitleBloc.dart';
 import 'DataLayer/Catigory.dart';
 import 'DataLayer/tab.dart';
 import 'models/Employee.dart';
+import 'models/MyProductsModel.dart';
 import 'models/UserInfo.dart';
 import 'models/orderInfo.dart';
 import 'package:customerapp/models/UserBalance.dart';
@@ -21,6 +22,7 @@ import 'models/orderInfo.dart';
 ///
 ///
 List<ProductTab> tabs = [];
+List<MyProductModel> myProductList = [];
 LocationData locationData;
 String token = "";
 appBarBloc appbarBloc;
@@ -34,6 +36,16 @@ bool isRegistered() {
 
 readToken() async {
   token = await sharedData.readFromStorage(key: 'token');
+}
+
+void initMyProductData(List<Map> map){
+  myProductList.clear();
+  myProductList = map.map((item) {
+
+    return MyProductModel.formJson(item);
+  }).toList();
+
+  debugPrint("size "+myProductList.length.toString());
 }
 
 Future<void> getUserLocation() async {
