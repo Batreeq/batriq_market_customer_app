@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
+import 'package:customerapp/models/ConfrimOrderModel.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,11 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   String selectedCity = 'Amman';
   String selectedRegion;
   LatLng cameraLocation;
+
+  TextEditingController nameController=TextEditingController();
+  TextEditingController phoneController=TextEditingController();
+  TextEditingController noticeController=TextEditingController();
+  TextEditingController locationController=TextEditingController();
   bool isFullScreen = false;
 
   Widget buildCityWidget() {
@@ -475,21 +482,22 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     });
   }
 
-  final Map<String, dynamic> formData = {'user_name': null, 'phone': null};
+ // final Map<String, dynamic> formData = {};
   final _formKey = GlobalKey<FormState>();
 
   Widget _buildNameField() {
     return TextFormField(
+      controller: nameController,
       decoration: InputDecoration(
           labelText: ' الاسم بالكامل', labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
         if (value.isEmpty) {
           return 'الرجاء كتابة إسمك';
         }
+        else return null;
       },
-      onSaved: (String value) {
-        formData['user_name'] = value;
-      },
+
+
     );
   }
 
@@ -529,30 +537,33 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 
   Widget _buildAddress() {
     return TextFormField(
+      controller: locationController,
       decoration: InputDecoration(
           labelText: 'العنوان بالتفصيل', labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
         if (value.isEmpty) {
           return 'اكتب تفاصيل العنوان';
-        }
+        } else return null;
       },
       onSaved: (String value) {
-        formData['location'] = value;
+      //  formData['location'] = value;
       },
     );
   }
 
   Widget _buildNotesField() {
     return TextFormField(
+      controller: noticeController,
       decoration: InputDecoration(
           labelText: 'ملاحظات', labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
         if (value.isEmpty) {
           return 'اكتب ملاحظاتك';
         }
+        else return null;
       },
       onSaved: (String value) {
-        formData['notice'] = value;
+
       },
     );
   }
@@ -560,44 +571,85 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   Widget _buildPhonField() {
     return TextFormField(
       keyboardType: TextInputType.number,
+      controller: phoneController,
       decoration: InputDecoration(
           labelText: ' رقم الموبايل', labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
         if (value.isEmpty) {
           return 'الرجاء كتابة رقم الموبايل';
-        }
+        }else return null;
       },
       onSaved: (String value) {
-        formData['phone'] = value;
+
       },
     );
   }
 
   void _submitForm() {
-    confirmOrder(formData);
+    confirmOrder();
   }
 
   bool isloading = false;
 
-  Future<void> confirmOrder(Map<String, dynamic> params) async {
-    params['delivery_type'] = "???";
-    params['payment_type'] = widget.isCash ? "كاش" : "فيزا";
-//    params['delivery_type'] = "???";
-    params['api_token'] = isRegistered() ? token : "";
-    params['cart_num'] = widget.cartNum;
-    params['city'] = selectedCity;
-    params['region'] = selectedRegion;
-//    params['total_price'] = "120";
-    params['delivery_time'] = widget.selectedTime;
-    print("time : ${widget.selectedTime}");
+  Future<void> confirmOrder() async {
+    if(nameController.text.toString().isEmpty){
+      showSnackBar("الرجاء ادخال الاسم");
+      return;
+    }
+    if(phoneController.text.toString().isEmpty){
+      showSnackBar("الرجاء ادخال رقم الموبايل");
+      return;
+    }
+    if(locationController.text.toString().isEmpty){
+      showSnackBar("الرجاء ادخال العنوان بالتفصيل");
+      return;
+    }
+    if(noticeController.text.toString().isEmpty){
+      showSnackBar("الرجاء ادخال الملاحظة");
+      return;
+    }
+
     setState(() {
       isloading = true;
     });
+    Map<String, String> params1=new Map();
+
+    ConfrimOrderModel model=ConfrimOrderModel(
+      nameController.text.toString()
+      ,"???"
+      ,phoneController.text.toString()
+      ,locationController.text.toString()
+      ,noticeController.text.toString()
+      ,widget.isCash ? "كاش" : "فيزا"
+     ,token
+      ,widget.cartNum.toString(),selectedCity.toString(),selectedRegion.toString(),widget.selectedTime.toString());
+   // params['user_name'] = nameController.text.toString();
+    params1['user_name'] = 'ffffffff';
+    params1['delivery_type'] = " ";
+    params1['phone'] = phoneController.text.toString().trim();
+    params1['notice'] = noticeController.text.toString().trim();
+    params1['payment_type'] = widget.isCash ? "كاش" : "فيزا";
+//    params['delivery_type'] = "???";
+    params1['api_token'] = isRegistered() ? token : "";
+    params1['cart_num'] = widget.cartNum.toString();
+    params1['city'] = selectedCity.toString();
+    params1['region'] = selectedRegion.toString();
+//    params1['total_price'] = "120";
+    params1['delivery_time'] = widget.selectedTime.toString();
+    print("time : ${widget.selectedTime}");
+    debugPrint("param"+model.toJson().toString());
+
+
     final url = Uri.parse('https://jaraapp.com/index.php/api/confirmOrder');
-    final response = await http.post(url, body: params);
+    debugPrint(url.toString());
+    final response = await http.post(url, body: model.toJson());
+    debugPrint("res "+response.body.toString());
     setState(() {
       isloading = false;
     });
+
+    showSnackBar("تمت العملية بنجاح");
+
 //    Navigator.of(context).pop();
     print("resss :  ${response.statusCode}");
   }

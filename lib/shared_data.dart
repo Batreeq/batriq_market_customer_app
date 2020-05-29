@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -106,7 +106,7 @@ LatLng mapLocation;
 const primary_color = Color(0xFFFBBF00);
 const socondary_color = Color(0xFFFBBF00);
 const bottomNavigationBartextStyle =
-    TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black38);
+TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black38);
 
 class sharedData {
   static const TextStyle appBarTextStyle = TextStyle(
@@ -152,11 +152,11 @@ class sharedData {
   );
 
   static const TextStyle navBarTextStyle =
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
+  TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
   static const TextStyle textInProfileTextStyle =
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
+  TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
+  TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
   static const TextStyle pointsStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey);
   static const TextStyle pointsTextStyle = TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black);
   static Color grayColor12 = new Color(0x1F000000);
@@ -171,6 +171,8 @@ class sharedData {
       color: Colors.black,
       fontWeight: FontWeight.bold,
       fontFamily: 'Cairo-Black');
+
+  static String addMultiToCartUrl = "https://jaraapp.com/index.php/api/addMultiToCart";
 
   static const String searchHintText = 'البحث';
   static const String phoneHintTextField = 'رقم الهاتف';
@@ -220,12 +222,12 @@ class sharedData {
       actions: <Widget>[
         icon != null
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  child: icon,
-                  onTap: fun,
-                ),
-              )
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            child: icon,
+            onTap: fun,
+          ),
+        )
             : Container()
       ],
     );
@@ -273,7 +275,6 @@ class sharedData {
   }
 
   static String getUserCartsUrl = "https://jaraapp.com/index.php/api/getUserCart?api_token=";
-  static String addMultiToCartUrl = "https://jaraapp.com/index.php/api/addMultiToCart";
 
   static String token;
 
@@ -308,30 +309,32 @@ class sharedData {
     );
   }
 
-  //static FlutterSecureStorage storage = FlutterSecureStorage();
+  static FlutterSecureStorage storage = FlutterSecureStorage();
 
   static Future<bool> writeToStorage({String key, String value}) async {
     print(token);
-/*    await storage
+    await storage
         .write(
-          key: key,
-          value: value,
-        )
-        .then((val) {});*/
+      key: key,
+      value: value,
+    )
+        .then((val) {});
     token = value;
   }
 
   static Future<String> readFromStorage({String key}) async {
     //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
-
-  /*  return storage.read(
+    String s = await storage.read(
       key: key,
-    );*/
+    );
+    return storage.read(
+      key: key,
+    );
   }
 
   static logout() async {
-  /*  await storage.delete(key: "token");
-    token = "";*/
+    await storage.delete(key: "token");
+    token = "";
     sharedData.token = "";
     flutterToast("تم تسجيل الخروج ");
   }

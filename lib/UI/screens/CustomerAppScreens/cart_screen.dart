@@ -284,18 +284,20 @@ class _CartScreenState extends State<CartScreen> {
             new Expanded(
               child: new Row(
                 children: <Widget>[
-                  new Container(
-                    // padding: new EdgeInsets.all(10.0),
-                    decoration: new BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: new Text(
-                      sharedData.signinToContinue,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
+                  Expanded(
+                    child: new Container(
+                      // padding: new EdgeInsets.all(10.0),
+                      decoration: new BoxDecoration(
+                        color: Colors.white,
                       ),
-                      textAlign: TextAlign.center,
+                      child: new Text(
+                        sharedData.signinToContinue,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ],
@@ -313,8 +315,10 @@ class _CartScreenState extends State<CartScreen> {
                 child: FlatButton(
                   padding: EdgeInsets.all(0),
                   onPressed: () {
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => ProfileScreen()));
+
                   },
                   child: new Text(
                     sharedData.Continue,
@@ -350,6 +354,7 @@ class _CartScreenState extends State<CartScreen> {
 //    Navigator.of(ctx).pop();
   }
 
+  /*Online*/
   Widget buildCartList(UserCarts carts, bloc, ctx) {
     List <Cart> data = carts.userCart;
     return ListView.builder(
@@ -390,7 +395,7 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () {
-                                  //confirmOrder(data[index].id, data[index].productDetails);
+                                  confirmOrder(data[index].id, data[index].productDetails.elementAt(0));
                                 },
                               ),
                             ),
@@ -438,7 +443,7 @@ class _CartScreenState extends State<CartScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => ConfiremOrderScreen(
-            cartNum: cartNum,
+            cartNum: cartNum.toString(),
           ),
         ),
       );

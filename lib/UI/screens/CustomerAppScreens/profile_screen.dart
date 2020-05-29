@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/AddMemberScreen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/MyMultiCardModel.dart';
 import 'package:customerapp/models/UserCarts.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
@@ -760,45 +761,60 @@ class _ProfileScreen extends State {
 
           print('User Carts are :');
           final dataList = await DBHelper.getData('user_cart');
-          if (dataList != null) {
-             items = dataList.map((item) {
+          if (dataList != null &&dataList.isNotEmpty) {
+            var Myitems = dataList.map((item) {
               print("object${item['count']}");
-              return ProductDetailsFromCart(
-                detailsTitle: item['name'],
-                price :  item['price'],
-                image :  item['image'],
-                size :  item['size'],
-                id: int.parse(item['id']),
-                quantity: int.parse(item['count']),);
+              return MyMultiCardModel(
+                  item['id'].toString(),
+                  item['count'],
+                   item['price'],
+                  "0");
             }).toList();
 
-          //   addMultiToAPI(info.apiToken , items );
+
+            addMultiToAPI(info.apiToken , Myitems );
           }
           else
+            sharedData.flutterToast('You registered Successfully 😍 ');
             print('list of carts are null ');
         } else
           print('user object which get from json = null');
 
-        if (items != null )
-          print ('in cart product number 0 the name is ' + items.elementAt(0).name );
-      //  sharedData.flutterToast('You registered Successfully 😍 ');
+        if (items != null && items.isNotEmpty ){}
+       //   print ('in cart product number 0 the name is ' + items.elementAt(0).name );
+
       }
       Navigator.of(context).pop(); //close the dialog
     }
   }
 
 
-  addMultiToAPI(String token , List<ProductDetailsFromCart> items ) async{
+  addMultiToAPI(String token , List<MyMultiCardModel> items ) async{
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data2= new Map<String, dynamic>();
+
+    List jsonList = List();
+    items.map((item) => jsonList.add(item.toJson())).toList();
+    data["data"]=jsonList;
+
+    data2["api_token"]="$token";
+    data2["data"]=jsonEncode(data);
+    print("json::::"+jsonEncode(data2));
     var response  = await Requests.post(
       sharedData.addMultiToCartUrl ,
-      body: {
-        'api_token': "$token",
-        'data' : "$items"
-      },
+      body: data2
     );
-    if (response != null) {
-      print(response.json());
-      print(response.statusCode);
+    if (response!= null) {
+
+      print(response.content().toString());
+      if(response.statusCode==200 ||response.statusCode==201){
+       await  DBHelper.clearCart();
+       sharedData.flutterToast('You registered Successfully 😍 ');
+       readToken();
+       setState(() {
+
+       });
+      }
       print ('add to multi done ') ;
     } else
       print('response is null');
