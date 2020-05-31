@@ -169,6 +169,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return new Scaffold(
       key: keyy,
       backgroundColor: Colors.white,
@@ -661,5 +663,9 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   @override
   void initState() {
     showMap();
+    if(sharedData.userInfo.name!=null)
+    nameController.text=sharedData.userInfo.name.toString();
+    if(sharedData.userInfo.phone!=null)
+    phoneController.text=sharedData.userInfo.phone.toString();
   }
 }
