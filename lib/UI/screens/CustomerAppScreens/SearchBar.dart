@@ -331,9 +331,12 @@ class _SearchPage extends State<SearchPage> {
     });
     print(searchString);
     if (searchString != '') {
-      final response = await Requests.get(
-          sharedData.searchUrl + 'name=' + searchString,
+      var url=sharedData.searchUrl + 'name=' + searchString;
+      if(isRegistered())
+        url+="&api_token=$token";
+      final response = await Requests.get(url,
           bodyEncoding: RequestBodyEncoding.FormURLEncoded);
+      print(url);
       print(response.json());
       print(response.statusCode);
 
@@ -397,45 +400,44 @@ class _SearchPage extends State<SearchPage> {
               }
             }
             return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+              MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      ///plus
-                      Container(
-                          height: 40,
-                          width: 30,
-                          child: ConstrainedBox(
-                            /* plus*/
-                              constraints: BoxConstraints.expand(),
-                              child: FlatButton(
-                                  onPressed: () {
-                                    count++;
 
-                                    Future.delayed(Duration(seconds: 3)).then((v) async {
-                                      await m.acquire();
-                                      try{
-                                        if (firstTime){
-                                          firstTime = false ;
-                                          getCartsDialog(count , i,product);
-                                        }
-                                        print ('is first time = ' + firstTime.toString());
-                                      }
-                                      finally{
-                                        m.release();
-                                        //firstTime= true;
-                                        final double totalCost = double.parse(product.price) * count;
-                                        bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
-                                        counts[i] = count.toString();
-                                      }
-                                      //  count = 0;
-                                      final double totalCost = double.parse(product.price) * count;
-                                      bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
-                                      counts[i] = count.toString();
-                                    });
-                                /*    final double totalCost =
+                Container(
+                    height: 40,
+                    width: 30,
+                    child: ConstrainedBox(
+                      /* plus*/
+                        constraints: BoxConstraints.expand(),
+                        child: FlatButton(
+                            onPressed: () {
+                              count++;
+
+                              Future.delayed(Duration(milliseconds : 1500)).then((v) async {
+                                await m.acquire();
+                                try{
+                                  if (firstTime){
+                                    firstTime = false ;
+                                    getCartsDialog(count , i,product);
+                                  }
+                                  print ('is first time = ' + firstTime.toString());
+                                }
+                                finally{
+                                  m.release();
+                                  //firstTime= true;
+                                  final double totalCost = double.parse(product.price) * count;
+                                  bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                  counts[i] = count.toString();
+                                }
+                                //  count = 0;
+                                final double totalCost = double.parse(product.price) * count;
+                                bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                counts[i] = count.toString();
+                              });
+                              /*    final double totalCost =
                                         double.parse(product.price) * count;
                                     bloc.setCount(<String>[
                                       count.toString(),
@@ -444,57 +446,68 @@ class _SearchPage extends State<SearchPage> {
                                     ]);
 
                                     counts[i] = count.toString();*/
-                                  },
-                                  padding: EdgeInsets.all(0.0),
-                                  child: Image.asset('assets/images/plus.png',
-                                      fit: BoxFit.fill)))),
-                      Container(
+                            },
+                            padding: EdgeInsets.all(0.0),
+                            child: Image.asset('assets/images/plus.png',
+                                fit: BoxFit.fill)))),
+                SizedBox(width: 4,),
+                Container(
+                    height: 30,
+                    width: 40,
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          child: Image.asset(
+                            'assets/images/count.png',
+                            fit: BoxFit.fill,
+                          ),
                           height: 30,
                           width: 40,
-                          child: Stack(
-                            children: <Widget>[
-                              Container(
-                                child: Image.asset(
-                                  'assets/images/count.png',
-                                  fit: BoxFit.fill,
-                                ),
-                                height: 30,
-                                width: 40,
-                              ),
-                              Center(child: Text(count.toString()))
-                            ],
-                          )),
+                        ),
+                        Center(child: Text(count.toString()))
+                      ],
+                    )),
+                SizedBox(width: 4,),
+                ///minus
+                Container(
+                    height: 40,
+                    width: 30,
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints.expand(),
+                        child: FlatButton(
+                            onPressed: () {
+                              if (count > 1) {
+                                count--;
+                                final double totalCost =
+                                    double.parse(product.price) * count;
+                                bloc.setCount(<String>[
+                                  count.toString(),
+                                  totalCost.toString(),
+                                  i.toString()
+                                ]);
+                                counts[i] = count.toString();
+                              }
+                            },
+                            padding: EdgeInsets.all(0.0),
+                            child: Image.asset(
+                              'assets/images/minus.png',
+                              fit: BoxFit.fill,
+                            )))),
+                SizedBox(width: 10,),
+                product.is_offer!=null?product.is_offer?
+                Expanded(child:
+                Card(color: Colors.red,
+                  child: Text("عرض",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white,fontSize: 14),),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10))
+                  ),)):Container():Container(),
+                SizedBox(width: 10,),
 
-                      ///minus
-                      Container(
-                          height: 40,
-                          width: 30,
-                          child: ConstrainedBox(
-                              constraints: BoxConstraints.expand(),
-                              child: FlatButton(
-                                  onPressed: () {
-                                    if (count > 1) {
-                                      count--;
-                                      final double totalCost =
-                                          double.parse(product.price) * count;
-                                      bloc.setCount(<String>[
-                                        count.toString(),
-                                        totalCost.toString(),
-                                        i.toString()
-                                      ]);
-                                      counts[i] = count.toString();
-                                    }
-                                  },
-                                  padding: EdgeInsets.all(0.0),
-                                  child: Image.asset(
-                                    'assets/images/minus.png',
-                                    fit: BoxFit.fill,
-                                  )))),
-                    ],
-                  ),
-                  width: 120,
-                  height: 50,
-                ),
 
                 ///add to cart
                /* IconButton(
@@ -837,7 +850,8 @@ class _SearchPage extends State<SearchPage> {
             size: post.size,
             price: post.price,
             id: post.id.toString(),
-            catigory: ProductTab(id: post.categoryId)));
+            catigory: ProductTab(id: post.categoryId),
+        is_offer: post.is_offer));
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
@@ -891,6 +905,7 @@ class _SearchPage extends State<SearchPage> {
                             ),
                           ],
                         ),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -913,7 +928,10 @@ class _SearchPage extends State<SearchPage> {
                             ),
                           ],
                         ),
-                        buildBottomView(i, post)
+                        Padding(
+                          padding: EdgeInsets.all(2),
+                        ),
+                        Expanded(child: buildBottomView(i, post))
                       ],
                     ),
                   ),

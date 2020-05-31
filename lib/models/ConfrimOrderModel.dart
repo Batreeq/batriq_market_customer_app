@@ -10,6 +10,7 @@ class ConfrimOrderModel {
   String city;
   String region;
   String delivery_time;
+  String total_price;
 
   ConfrimOrderModel(
       this.user_name,
@@ -22,7 +23,7 @@ class ConfrimOrderModel {
       this.cart_num,
       this.city,
       this.region,
-      this.delivery_time);
+      this.delivery_time,this.total_price);
 
 
 
@@ -40,6 +41,7 @@ class ConfrimOrderModel {
     data['city'] = this.city;
     data['region'] = this.region;
     data['delivery_time'] = this.delivery_time;
+    data['total_price'] = this.total_price;
     return data;
   }
 }

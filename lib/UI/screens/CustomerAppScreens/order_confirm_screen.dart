@@ -250,7 +250,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                                           bottomLeft: Radius.circular(10))),
                                   child: Center(
                                     child: Text(
-                                      'فيزا',
+                                      sharedData.visa,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -282,7 +282,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                                           bottomLeft: Radius.circular(10))),
                                   child: Center(
                                     child: Text(
-                                      'كاش',
+                                      sharedData.cash,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -616,13 +616,17 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 
     ConfrimOrderModel model=ConfrimOrderModel(
       nameController.text.toString()
-      ,"???"
+      ,"free"
       ,phoneController.text.toString()
       ,locationController.text.toString()
       ,noticeController.text.toString()
-      ,widget.isCash ? "كاش" : "فيزا"
+      ,widget.isCash ? "cash" : "visa"
      ,token
-      ,widget.cartNum.toString(),selectedCity.toString(),selectedRegion.toString(),widget.selectedTime.toString());
+      ,widget.cartNum.toString(),
+        selectedCity.toString(),
+        selectedRegion.toString(),
+        widget.selectedTime.toString(),
+    "111");
    // params['user_name'] = nameController.text.toString();
     params1['user_name'] = 'ffffffff';
     params1['delivery_type'] = " ";

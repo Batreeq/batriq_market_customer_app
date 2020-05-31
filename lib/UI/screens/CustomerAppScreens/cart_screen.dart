@@ -395,7 +395,8 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () {
-                                  confirmOrder(data[index].id, data[index].productDetails.elementAt(0));
+                                 // confirmOrder(data[index].cartNum, data[index].productDetails.elementAt(0));
+                                  confirmOrder(data[index].cartNum);
                                 },
                               ),
                             ),
@@ -437,7 +438,7 @@ class _CartScreenState extends State<CartScreen> {
         });
   }
 
-  confirmOrder(cartNum, ProductDetailsFromCart carts) {
+  confirmOrder(cartNum) {
     if (isRegistered()) {
       Navigator.push(
         context,

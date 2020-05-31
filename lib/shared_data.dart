@@ -197,6 +197,8 @@ class sharedData {
   static const String lastNameTextField = 'اسم العائلة';
   static const String signinToContinue= 'يرجى انشاء حساب لاتمام عملية الشراء ';
   static const String Continue= 'موافق';
+  static const String cash= 'الدفع عند الاستلام';
+  static const String visa= 'الدفع الأن';
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
