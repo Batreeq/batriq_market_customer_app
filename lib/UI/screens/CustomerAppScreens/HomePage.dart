@@ -2,6 +2,7 @@ import 'package:customerapp/Bloc/side_menu_bloc.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/EarnWithUs.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/HelpScareen.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/Home.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/LoginScreen.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/balance_screen.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/cart_screen.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/my_orders_screen.dart';
@@ -13,8 +14,14 @@ import 'package:customerapp/UI/screens/language_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../shared_data.dart';
+import '../../../shared_data.dart';
+import '../../../shared_data.dart';
+import '../../../shared_data.dart';
+import '../../../shared_data.dart';
+import '../../../shared_data.dart';
 import '../messageing_screen.dart';
 import 'SearchBar.dart';
+import 'profile_screen.dart';
 
 class HomePagee extends StatefulWidget {
   HomePagee({Key key}) : super(key: key);
@@ -222,9 +229,7 @@ class _HomePageState extends State<HomePagee> {
               rowSide(6, context, bloc, titles[5]),
               rowSide(7, context, bloc, titles[5]),
               rowSide(8, context, bloc, titles[5]),
-              token != null && token.length > 10
-                  ? rowSide(9, context, bloc, titles[5])
-                  : Container(),
+              rowSide(9, context, bloc, titles[5])
             ],
           ),
         ),
@@ -249,6 +254,10 @@ class _HomePageState extends State<HomePagee> {
   }
 
   Widget rowSide(int index, context, SideMenuBloc bloc, String title) {
+    titles[8] = token != null && token.length > 10
+        ?   'تسجيل الخروج'
+        : 'تسجيل الدخول' ;
+
     return InkWell(
       onTap: () {
         Navigator.of(context).pop();
@@ -256,12 +265,20 @@ class _HomePageState extends State<HomePagee> {
           navigateTo(index);
         } else {
           if (index == 8) {
-            sharedData.flutterToast("language api not integrated yet");
-          } else if (index == 9) {
-            sharedData.logout();
+            sharedData.flutterToast("Languages not integrated yet, Soon");
+          } else if (index == 9)
+          if (titles[8] == "تسجيل الخروج"){
+                       sharedData.logout();
+
+                    setState(() {
+                      titles[8] = 'تسجيل دخول';
+                    });
             setState(() {
               token = "";
             });
+          }
+          else {
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> SignUpUser()));
           }
         }
       },

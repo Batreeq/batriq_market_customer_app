@@ -11,6 +11,7 @@ import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:requests/requests.dart';
+import '../../../shared_data.dart';
 import 'HomePage.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' as Io;
@@ -752,6 +753,10 @@ class _ProfileScreen extends State {
           sharedData.userInfo.location = info.location;
           sharedData.userInfo.email = info.email;
           sharedData.userInfo.image = info.image;
+          setState(() {
+            titles[0]  = 'تسجيل خروج ' ;
+          });
+
         } else
           print('user object which get from json = null');
         sharedData.flutterToast('You registered Sucsessfully 😍 ');
