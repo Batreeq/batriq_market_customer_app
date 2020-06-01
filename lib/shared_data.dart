@@ -9,7 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Bloc/appBarTitleBloc.dart';
 import 'DataLayer/Catigory.dart';
 import 'DataLayer/tab.dart';
+import 'helpers/DBHelper.dart';
 import 'models/Employee.dart';
+import 'models/MyProductsModel.dart';
 import 'models/UserInfo.dart';
 import 'models/orderInfo.dart';
 import 'package:customerapp/models/UserBalance.dart';
@@ -19,6 +21,7 @@ import 'models/UserBalance.dart';
 ///
 ///
 List<ProductTab> tabs = [];
+List<MyProductModel> myProductList = [];
 LocationData locationData;
 String token = "";
 appBarBloc appbarBloc;
@@ -32,6 +35,17 @@ bool isRegistered() {
 
 readToken() async {
   token = await sharedData.readFromStorage(key: 'token');
+}
+
+Future<void> initMyProductData() async {
+  List<Map> map= await DBHelper.getData("user_cart");
+  myProductList.clear();
+  myProductList = map.map((item) {
+
+    return MyProductModel.formJson(item);
+  }).toList();
+
+  debugPrint("size "+myProductList.length.toString());
 }
 
 Future<void> getUserLocation() async {
@@ -90,7 +104,7 @@ LatLng mapLocation;
 const primary_color = Color(0xFFFBBF00);
 const socondary_color = Color(0xFFFBBF00);
 const bottomNavigationBartextStyle =
-    TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black38);
+TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black38);
 
 class sharedData {
   static const TextStyle appBarTextStyle = TextStyle(
@@ -136,11 +150,11 @@ class sharedData {
   );
 
   static const TextStyle navBarTextStyle =
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
+  TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
   static const TextStyle textInProfileTextStyle =
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
+  TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
+  TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
   static const TextStyle pointsStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey);
   static const TextStyle pointsTextStyle = TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black);
   static Color grayColor12 = new Color(0x1F000000);
@@ -158,6 +172,8 @@ class sharedData {
       fontSize: 16,
       color: Colors.black,
       fontWeight: FontWeight.bold, );
+
+  static String addMultiToCartUrl = "https://jaraapp.com/index.php/api/addMultiToCart";
 
   static const String searchHintText = 'البحث';
   static const String phoneHintTextField = 'رقم الهاتف';
@@ -180,6 +196,10 @@ class sharedData {
   static const String modelHintTextField = 'موديل المركبة';
   static const String typeHintTextField = ' نوع المركبة';
   static const String lastNameTextField = 'اسم العائلة';
+  static const String signinToContinue= 'يرجى انشاء حساب لاتمام عملية الشراء ';
+  static const String Continue= 'موافق';
+  static const String cash= 'الدفع عند الاستلام';
+  static const String visa= 'الدفع الأن';
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
@@ -205,12 +225,12 @@ class sharedData {
       actions: <Widget>[
         icon != null
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  child: icon,
-                  onTap: fun,
-                ),
-              )
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            child: icon,
+            onTap: fun,
+          ),
+        )
             : Container()
       ],
     );
@@ -299,16 +319,18 @@ class sharedData {
     token = value ;
     await storage
         .write(
-          key: key,
-          value: value,
-        )
+      key: key,
+      value: value,
+    )
         .then((val) {});
     token = value;
   }
 
   static Future<String> readFromStorage({String key}) async {
     //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
-
+    String s = await storage.read(
+      key: key,
+    );
     return storage.read(
       key: key,
     );

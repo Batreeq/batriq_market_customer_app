@@ -260,7 +260,7 @@ class _ProductsState extends State<Products> {
 
                                           ///size
                                           Text(
-                                            productss[i].size + "  جم",
+                                            productss[i].size + "",
                                             style: TextStyle(
                                                 color: sharedData.mainColor,
                                                 fontSize: 15,
@@ -302,117 +302,132 @@ class _ProductsState extends State<Products> {
                                       Expanded(
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.start,
                                           children: <Widget>[
                                             Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: <Widget>[
-                                                  ///plus
-                                                  Container(
-                                                      height: 40,
-                                                      width: 30,
-                                                      child: ConstrainedBox(
-                                                          constraints:
-                                                              BoxConstraints
-                                                                  .expand(),
-                                                          child: FlatButton(
-                                                              onPressed: () {
+                                                height: 40,
+                                                width: 30,
+                                                child: ConstrainedBox(
+                                                    constraints:
+                                                    BoxConstraints
+                                                        .expand(),
+                                                    child: FlatButton(
+                                                        onPressed: () async {
 
-                                                                count++;
-                                                                Future.delayed(Duration(seconds: 3)).then((v) async {
-                                                                  await m.acquire();
-                                                                 try{
-                                                                   if (firstTime){
-                                                                     firstTime = false ;
-                                                                      getCartsDialog(count , i  );
-                                                                   }
-                                                                   print ('is first time = ' + firstTime.toString());
-                                                                 }
-                                                                 finally{
-                                                                   m.release();
-                                                                   //firstTime= true;
-                                                                   final double totalCost = double.parse(productss[i].price) * count;
-                                                                   bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
-                                                                   counts[i] = count.toString();
-                                                                 }
-                                                               //  count = 0;
-                                                                  final double totalCost = double.parse(productss[i].price) * count;
-                                                                  bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
-                                                                  counts[i] = count.toString();
-                                                                });
-                                                              },
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(0.0),
-                                                              child: Image.asset(
-                                                                  'assets/images/plus.png',
-                                                                  fit: BoxFit
-                                                                      .fill)))),
-                                                  Container(
+                                                          /*            List<Map> map= await DBHelper.addedBefore("user_cart",productss[i].id.toString());
+                                                              if(map!=null &&map.isNotEmpty){*//*i have to edit count of product *//*
+
+                                                              int count=0;
+                                                              map.forEach((row){
+                                                              if(row.containsKey("count"))
+                                                              count= int.parse(row["count"]);
+                                                              });
+                                                              debugPrint("hassan count $count");}*/
+                                                          count++;
+                                                          Future.delayed(Duration(milliseconds : 1500)).then((v) async {
+                                                            await m.acquire();
+                                                            try{
+                                                              if (firstTime){
+                                                                firstTime = false ;
+                                                                getCartsDialog(count , i);
+                                                              }
+                                                              print ('is first time = ' + firstTime.toString());
+                                                            }
+                                                            finally{
+                                                              m.release();
+                                                              //firstTime= true;
+                                                              final double totalCost = double.parse(productss[i].price) * count;
+                                                              bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                                              counts[i] = count.toString();
+                                                            }
+                                                            //  count = 0;
+                                                            final double totalCost = double.parse(productss[i].price) * count;
+                                                            bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                                            counts[i] = count.toString();
+                                                          });
+                                                        },
+                                                        padding:
+                                                        EdgeInsets
+                                                            .all(0.0),
+                                                        child: Image.asset(
+                                                            'assets/images/plus.png',
+                                                            fit: BoxFit
+                                                                .fill)))),
+                                            SizedBox(width: 4,),
+                                            Container(
+                                                height: 30,
+                                                width: 40,
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Container(
+                                                      child: Image.asset(
+                                                        'assets/images/count.png',
+                                                        fit: BoxFit.fill,
+                                                      ),
                                                       height: 30,
                                                       width: 40,
-                                                      child: Stack(
-                                                        children: <Widget>[
-                                                          Container(
-                                                            child: Image.asset(
-                                                              'assets/images/count.png',
-                                                              fit: BoxFit.fill,
-                                                            ),
-                                                            height: 30,
-                                                            width: 40,
-                                                          ),
-                                                          Center(
-                                                              child: Text(count
-                                                                  .toString()))
-                                                        ],
-                                                      )),
+                                                    ),
+                                                    Center(
+                                                        child: Text(count
+                                                            .toString()))
+                                                  ],
+                                                )),
 
-                                                  ///minus
-                                                  Container(
-                                                      height: 40,
-                                                      width: 30,
-                                                      child: ConstrainedBox(
-                                                          constraints:
-                                                              BoxConstraints
-                                                                  .expand(),
-                                                          child: FlatButton(
-                                                              onPressed: () {
-                                                                if (count > 1) {
-                                                                  count--;
-                                                                  final double
-                                                                      totalCost =
-                                                                      double.parse(
-                                                                              productss[i].price) *
-                                                                          count;
-                                                                  bloc.setCount(<
-                                                                      String>[
-                                                                    count
-                                                                        .toString(),
-                                                                    totalCost
-                                                                        .toString(),
-                                                                    i.toString()
-                                                                  ]);
-                                                                  counts[i] = count
-                                                                      .toString();
-                                                                }
-                                                              },
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(0.0),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/minus.png',
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                              )))),
-                                                ],
-                                              ),
-                                              width: 120,
-                                              height: 50,
-                                            ),
+                                            ///minus
+                                              SizedBox(width: 4,),
+                                            Container(
+                                                height: 40,
+                                                width: 30,
+                                                child: ConstrainedBox(
+                                                    constraints:
+                                                    BoxConstraints
+                                                        .expand(),
+                                                    child: FlatButton(
+                                                        onPressed: () {
+                                                          if (count > 1) {
+                                                            count--;
+                                                            final double
+                                                            totalCost =
+                                                                double.parse(
+                                                                    productss[i].price) *
+                                                                    count;
+                                                            bloc.setCount(<
+                                                                String>[
+                                                              count
+                                                                  .toString(),
+                                                              totalCost
+                                                                  .toString(),
+                                                              i.toString()
+                                                            ]);
+                                                            counts[i] = count
+                                                                .toString();
+                                                          }
+                                                        },
+                                                        padding:
+                                                        EdgeInsets
+                                                            .all(0.0),
+                                                        child:
+                                                        Image.asset(
+                                                          'assets/images/minus.png',
+                                                          fit:
+                                                          BoxFit.fill,
+                                                        )))),
+                                            SizedBox(width: 10,),
+
+                                            productss[i].is_offer!=null?productss[i].is_offer?
+                                            Expanded(child:
+                                            Card(color: Colors.red,
+                                            child: Text("عرض",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: Colors.white,fontSize: 14),),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(10),
+                                                bottomRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10))
+                                            ),)):Container():Container(),
+
+                                            SizedBox(width: 10,),
 
                                             ///add to cart
                                            /* IconButton(
@@ -492,6 +507,7 @@ class _ProductsState extends State<Products> {
     });
     List<CartName> carts = [];
     final url = "https://jaraapp.com/index.php/api/getCarts?api_token=$token";
+    debugPrint(url);
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
@@ -526,10 +542,12 @@ class _ProductsState extends State<Products> {
   List<Product> productss = [];
   getProducts() async {
     List<Product> products = [];
-    final url =
+    var url =
         "https://jaraapp.com/index.php/api/productCategory?category_id=${widget.categoryId}&offer_id=${widget.offerId}";
+    if(isRegistered())
+      url+="&api_token=$token";
     print(
-        "https://jaraapp.com/index.php/api/productCategory?category_id=${widget.categoryId}&offer_id=${widget.offerId}");
+        "$url");
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
@@ -547,7 +565,8 @@ class _ProductsState extends State<Products> {
           image: p['image'],
           title: p['name'],
           id: p['id'].toString(),
-          size: p['size']);
+          size: p['size'],
+      is_offer: p['is_offer']);
       products.add(product);
     });
     if (mounted)
@@ -566,13 +585,29 @@ class _ProductsState extends State<Products> {
    // firstTime = true ;
   }
 
-  void addProductToCart(name, id, price, size, count, image) {
+  Future<void> addProductToCart(name, id, price, size, count, image) async {
+
+    /* check if i have to  add product or edit counter inside  product */
+    List<Map> map= await DBHelper.addedBefore("user_cart",id.toString());
+    if(map!=null &&map.isNotEmpty){
+      /*i have to edit count inside product */
+
+      int countInDataBase=0;
+     map.forEach((row){
+        if(row.containsKey("count"))
+          countInDataBase= int.parse(row["count"]);
+      });
+      countInDataBase+=int.parse(count);
+     DBHelper.update("user_cart", id.toString(),countInDataBase.toString());
+      widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
+    }
+    else/*i have to add this on database because i don't have this id in database */
     DBHelper.insert('user_cart', {
-      'id': id,
+      'id': int.parse(id),
       'name': name,
-      'price': price,
-      'count': count,
-      'size': size,
+      'price': price.toString(),
+      'count': int.parse(count),
+      'size': size.toString(),
       'image': image,
     }).then((v){
       widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
@@ -660,6 +695,9 @@ class _ProductsState extends State<Products> {
     setState(() {
       isloading = true;
     });
+
+
+
     final Uri url = Uri.parse(
         'https://jaraapp.com/index.php/api/addMultiToCart?api_token=$token');
     final response = await http.post(url, body: formData);
@@ -696,7 +734,7 @@ class _ProductsState extends State<Products> {
               ),
             ),
           ),
-          Expanded(
+         /* Expanded(
             flex: 3,
             child: Container(
               decoration: BoxDecoration(
@@ -719,7 +757,7 @@ class _ProductsState extends State<Products> {
                 },
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

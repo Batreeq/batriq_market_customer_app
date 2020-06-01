@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqlite_api.dart';
@@ -30,6 +31,15 @@ class DBHelper {
   static Future<int> delete(String table, String id) async {
     final db = await DBHelper.database();
     return await db.delete(table, where: 'id = ?', whereArgs: [id]);
+  }
+
+  static Future<List<Map<String, dynamic>>> addedBefore(String table,String idProduct) async {
+    final db = await DBHelper.database();
+    List<Map> result=await db.rawQuery('SELECT * FROM user_cart WHERE id=?',[idProduct]);
+    debugPrint("HASSAN___________________________________");
+    result.forEach((row) => print(row));
+
+    return result;
   }
 
   static Future<void> update(String table, key, quantity) async {

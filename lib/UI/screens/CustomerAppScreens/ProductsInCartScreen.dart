@@ -1,5 +1,6 @@
 import 'package:customerapp/Bloc/CartGroupBloc.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/MyProductsModel.dart';
 import 'package:customerapp/models/UserCarts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import '../../../shared_data.dart';
 
 class ProductsInCartScreen extends StatefulWidget {
 Cart cart ;
-  ProductsInCartScreen(this.cart);
+  ProductsInCartScreen({this.cart});
   @override
   State<StatefulWidget> createState() {
     return _ProductsInCartScreen(this.cart);
@@ -39,8 +40,11 @@ class _ProductsInCartScreen extends State {
   @override
   void initState() {
     super.initState();
-    product = cart.productDetails.elementAt(0);
-    c = this.cart;
+
+    if(isRegistered()) {
+      product = cart.productDetails.elementAt(0);
+      c = this.cart;
+    }
   }
 
   @override
@@ -52,8 +56,13 @@ class _ProductsInCartScreen extends State {
   }
 
   getBody() {
+    if(isRegistered())
     return buildGroupItem(context, c.productDetails, bloc);
+    else return buildGroupItemLocal(context,myProductList);
   }
+
+
+
 
   Widget buildGroupItem(context, List<ProductDetailsFromCart> cartGroup, bloc) {
     return SingleChildScrollView(
@@ -66,6 +75,24 @@ class _ProductsInCartScreen extends State {
           Column(
               children: mapIndexed(cartGroup, (index, item) =>
                   buildItem(context, item, bloc, index)).toList()
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*To show data in form database */
+  Widget buildGroupItemLocal(context, List<MyProductModel> cartGroup) {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(child: Text("السلة الرئيسية")),
+          ),
+          Column(
+              children: mapIndexed(cartGroup, (index, item) =>
+                  buildItemLocal(context, item, index)).toList()
           ),
         ],
       ),
@@ -335,6 +362,244 @@ class _ProductsInCartScreen extends State {
     );
   }
 
+  /*To show data in form database */
+  Widget buildItemLocal(context, MyProductModel product,
+      int index) {
+
+
+    return Container(
+      margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+      height: 140,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      child: Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape: RoundedRectangleBorder(
+          side: new BorderSide(color: Colors.blue.withOpacity(0.3), width: 0.5),
+        ),
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              //product image
+              Container(
+                height: double.infinity,
+                width: 120,
+                padding: EdgeInsets.all(10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    product.image,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              // image divider
+              Container(
+                color: Colors.blue.withOpacity(0.3),
+                height: double.infinity,
+                width: 1,
+              ),
+              // product info
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          // name
+                          Text(
+                            product.name ?? "",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          //close button
+                          Container(
+                            height: 30,
+                            width: 30,
+                            child: FlatButton(
+                              child: Icon(
+                                Icons.close,
+                                size: 25,
+                                color: Colors.red,
+                              ),
+                              materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                              onPressed: () async {
+                               {
+                                  DBHelper.delete('user_cart', product.id.toString());
+                                 await initMyProductData();
+                                 setState(() {});
+                                //  bloc.fetchCartData();
+                                }
+                              },
+                              padding: EdgeInsets.all(0),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          ///total price
+                          Text(
+                            "عروض اصنافي" + "  JD",
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          ///price
+                          Text(
+                            product.price.toString() + "  JD",
+                            style: TextStyle(
+                                color: sharedData.mainColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+
+                                ///plus
+                                Container(
+                                    height: 40,
+                                    width: 30,
+                                    child: ConstrainedBox(
+                                        constraints: BoxConstraints.expand(),
+                                        child: FlatButton(
+                                            onPressed: () async {
+
+
+
+                                               int  newCount=int.parse(product.count);
+                                                 newCount++;
+                                                DBHelper.update(
+                                                    'user_cart',
+                                                    product.id,newCount.toString());
+                                                await initMyProductData();
+                                                setState(() {});
+
+
+
+
+                                            },
+                                            padding: EdgeInsets.all(0.0),
+                                            child: Image.asset(
+                                                'assets/images/plus.png',
+                                                fit: BoxFit.fill)))),
+
+                                /// Counter
+                                Container(
+                                    height: 30,
+                                    width: 40,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          child: Image.asset(
+                                            'assets/images/count.png',
+                                            fit: BoxFit.fill,
+                                          ),
+                                          height: 30,
+                                          width: 40,
+                                        ),
+                                        Center(
+                                            child:
+                                            Text(product.count))
+                                      ],
+                                    )
+                                ),
+
+                                ///minus
+                                Container(
+                                    height: 40,
+                                    width: 30,
+                                    child: ConstrainedBox(
+                                        constraints: BoxConstraints.expand(),
+                                        child: FlatButton(
+                                            onPressed: () async {
+
+                                              setState(() {
+                                                minus = true ;
+                                              });
+
+                                              int myCount=int.parse(product.count);
+                                              if (myCount > 1) {
+
+
+
+                                                myCount--;
+                                                  DBHelper.update(
+                                                      'user_cart',
+                                                      product.id,
+                                                      myCount.toString()
+                                                  );
+                                                await initMyProductData();
+                                                setState(() {
+
+                                                });
+
+
+                                              }  else if (myCount== 1)  {
+                                                // delete product here
+
+                                                  DBHelper.delete(
+                                                      'user_cart',
+                                                      product.id.toString());
+                                                  await initMyProductData();
+                                                  setState(() {
+
+                                                  });
+
+
+
+                                              }/*
+
+                                              setState(() {
+                                                int q = product.quantity;
+                                                product.quantity = (q --);
+                                                quantity -- ;
+                                              });*/
+                                            },
+                                            padding: EdgeInsets.all(0.0),
+                                            child: Image.asset(
+                                              'assets/images/minus.png',
+                                              fit: BoxFit.fill,
+                                            )))),
+                              ],
+                            ),
+                            width: 120,
+                            height: 40,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Iterable<E> mapIndexed<E, T>(Iterable<T> items,
       E Function(int index, T item) f) sync* {
     var index = 0;
@@ -364,8 +629,10 @@ class _ProductsInCartScreen extends State {
     print('quantity ' + quantity.toString());
 
     final response = await Requests.post(url, body: params);
-    if (response.statusCode == 200)
+    if (response.statusCode == 200){
       print('success');
+    print(response.json().toString());
+    }
     else
       print('not success' + response.statusCode.toString());
 

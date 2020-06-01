@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mutex/mutex.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -119,7 +120,8 @@ class _SearchPage extends State<SearchPage> {
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
   bool isloading = false;
-
+  Mutex m = Mutex();
+  bool firstTime = true ;
   @override
   void initState() {
     super.initState();
@@ -329,9 +331,12 @@ class _SearchPage extends State<SearchPage> {
     });
     print(searchString);
     if (searchString != '') {
-      final response = await Requests.get(
-          sharedData.searchUrl + 'name=' + searchString,
+      var url=sharedData.searchUrl + 'name=' + searchString;
+      if(isRegistered())
+        url+="&api_token=$token";
+      final response = await Requests.get(url,
           bodyEncoding: RequestBodyEncoding.FormURLEncoded);
+      print(url);
       print(response.json());
       print(response.statusCode);
 
@@ -371,13 +376,13 @@ class _SearchPage extends State<SearchPage> {
           stream: bloc.countStream,
           builder: (context, snapshot) {
             List<String> data = snapshot.data;
-            int count = data == null ? 1 : int.parse(data[0]);
+            int count = data == null ? 0 : int.parse(data[0]);
             double totalCost = data != null
                 ? double.parse(data[1])
                 : double.parse(product.price);
 
             if (data == null) {
-              count = 1;
+              count = 0;
               totalCost = double.parse(product.price);
             } else if (data[2] == i.toString()) {
               count = int.parse(data[0]);
@@ -385,29 +390,54 @@ class _SearchPage extends State<SearchPage> {
             } else {
               if (counts[i] != null) {
                 count = int.parse(counts[i]);
-                totalCost = double.parse(product.price) * count;
+                if(count!=0 )
+                  totalCost = double.parse(product.price) * count;
+                else
+                  totalCost = double.parse(product.price);
               } else {
-                count = 1;
+                count = 0;
                 totalCost = double.parse(product.price);
               }
             }
             return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+              MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
+
                 Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      ///plus
-                      Container(
-                          height: 40,
-                          width: 30,
-                          child: ConstrainedBox(
-                              constraints: BoxConstraints.expand(),
-                              child: FlatButton(
-                                  onPressed: () {
-                                    count++;
-                                    final double totalCost =
+                    height: 40,
+                    width: 30,
+                    child: ConstrainedBox(
+                      /* plus*/
+                        constraints: BoxConstraints.expand(),
+                        child: FlatButton(
+                            onPressed: () {
+                              count++;
+
+                              Future.delayed(Duration(milliseconds : 1500)).then((v) async {
+                                await m.acquire();
+                                try{
+                                  if (firstTime){
+                                    firstTime = false ;
+                                    getCartsDialog(count , i,product);
+                                  }
+                                  print ('is first time = ' + firstTime.toString());
+                                }
+                                finally{
+                                  m.release();
+                                  //firstTime= true;
+                                  final double totalCost = double.parse(product.price) * count;
+                                  bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                  counts[i] = count.toString();
+                                }
+                                //  count = 0;
+                                final double totalCost = double.parse(product.price) * count;
+                                bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                counts[i] = count.toString();
+                              });
+                              /*    final double totalCost =
                                         double.parse(product.price) * count;
                                     bloc.setCount(<String>[
                                       count.toString(),
@@ -415,61 +445,72 @@ class _SearchPage extends State<SearchPage> {
                                       i.toString()
                                     ]);
 
-                                    counts[i] = count.toString();
-                                  },
-                                  padding: EdgeInsets.all(0.0),
-                                  child: Image.asset('assets/images/plus.png',
-                                      fit: BoxFit.fill)))),
-                      Container(
+                                    counts[i] = count.toString();*/
+                            },
+                            padding: EdgeInsets.all(0.0),
+                            child: Image.asset('assets/images/plus.png',
+                                fit: BoxFit.fill)))),
+                SizedBox(width: 4,),
+                Container(
+                    height: 30,
+                    width: 40,
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          child: Image.asset(
+                            'assets/images/count.png',
+                            fit: BoxFit.fill,
+                          ),
                           height: 30,
                           width: 40,
-                          child: Stack(
-                            children: <Widget>[
-                              Container(
-                                child: Image.asset(
-                                  'assets/images/count.png',
-                                  fit: BoxFit.fill,
-                                ),
-                                height: 30,
-                                width: 40,
-                              ),
-                              Center(child: Text(count.toString()))
-                            ],
-                          )),
+                        ),
+                        Center(child: Text(count.toString()))
+                      ],
+                    )),
+                SizedBox(width: 4,),
+                ///minus
+                Container(
+                    height: 40,
+                    width: 30,
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints.expand(),
+                        child: FlatButton(
+                            onPressed: () {
+                              if (count > 1) {
+                                count--;
+                                final double totalCost =
+                                    double.parse(product.price) * count;
+                                bloc.setCount(<String>[
+                                  count.toString(),
+                                  totalCost.toString(),
+                                  i.toString()
+                                ]);
+                                counts[i] = count.toString();
+                              }
+                            },
+                            padding: EdgeInsets.all(0.0),
+                            child: Image.asset(
+                              'assets/images/minus.png',
+                              fit: BoxFit.fill,
+                            )))),
+                SizedBox(width: 10,),
+                product.is_offer!=null?product.is_offer?
+                Expanded(child:
+                Card(color: Colors.red,
+                  child: Text("عرض",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white,fontSize: 14),),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10))
+                  ),)):Container():Container(),
+                SizedBox(width: 10,),
 
-                      ///minus
-                      Container(
-                          height: 40,
-                          width: 30,
-                          child: ConstrainedBox(
-                              constraints: BoxConstraints.expand(),
-                              child: FlatButton(
-                                  onPressed: () {
-                                    if (count > 1) {
-                                      count--;
-                                      final double totalCost =
-                                          double.parse(product.price) * count;
-                                      bloc.setCount(<String>[
-                                        count.toString(),
-                                        totalCost.toString(),
-                                        i.toString()
-                                      ]);
-                                      counts[i] = count.toString();
-                                    }
-                                  },
-                                  padding: EdgeInsets.all(0.0),
-                                  child: Image.asset(
-                                    'assets/images/minus.png',
-                                    fit: BoxFit.fill,
-                                  )))),
-                    ],
-                  ),
-                  width: 120,
-                  height: 50,
-                ),
 
                 ///add to cart
-                IconButton(
+               /* IconButton(
                   icon: Icon(
                     Icons.add_shopping_cart,
                     size: 30,
@@ -488,14 +529,29 @@ class _SearchPage extends State<SearchPage> {
                           product.size, count.toString(), product.image);
                     }
                   },
-                )
+                )*/
               ],
             );
           }),
     );
   }
 
-  void addProductToCart(name, id, price, size, count, image) {
+  Future<void> addProductToCart(name, id, price, size, count, image) async {
+
+    /* check if i have to  add product or edit counter inside  product */
+    List<Map> map= await DBHelper.addedBefore("user_cart",id.toString());
+    if(map!=null &&map.isNotEmpty){
+      /*i have to edit count inside product */
+      int countInDataBase=0;
+      map.forEach((row){
+        if(row.containsKey("count"))
+          countInDataBase= int.parse(row["count"]);
+      });
+      countInDataBase+=int.parse(count);
+      DBHelper.update("user_cart", id.toString(),countInDataBase.toString());
+     // widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
+    }
+    else/*i have to add this on database because i don't have this id in database */
     DBHelper.insert('user_cart', {
       'id': id,
       'name': name,
@@ -598,7 +654,7 @@ class _SearchPage extends State<SearchPage> {
               ),
             ),
           ),
-          Expanded(
+       /*   Expanded(
             flex: 3,
             child: Container(
               decoration: BoxDecoration(
@@ -621,7 +677,7 @@ class _SearchPage extends State<SearchPage> {
                 },
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );
@@ -735,6 +791,34 @@ class _SearchPage extends State<SearchPage> {
     sharedData.flutterToast("تم بنجاح");
   }
 
+  getCartsDialog (int count , int i ,Products product) {
+    if (token != null && token.length > 10) {
+      getCartNames(Cart(
+          price: product.price,
+          cartTitle: "",
+          quantity: count,
+          productId: product.id.toString()));
+    } else {
+      addProductToCart(
+         product.name.toString(),
+         product.id.toString(),
+         product.price,
+         product.size,
+          count.toString(),
+         product.image);
+      firstTime = false;
+    }
+    print(firstTime.toString());
+
+    /*  m.acquire();
+    try{
+      firstTime = true ;
+    }
+    finally{
+      m.release() ;
+    }*/
+  }
+
   getCartNames(Cart cart) async {
     setState(() {
       isloading = true;
@@ -766,7 +850,8 @@ class _SearchPage extends State<SearchPage> {
             size: post.size,
             price: post.price,
             id: post.id.toString(),
-            catigory: ProductTab(id: post.categoryId)));
+            catigory: ProductTab(id: post.categoryId),
+        is_offer: post.is_offer));
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
@@ -820,6 +905,7 @@ class _SearchPage extends State<SearchPage> {
                             ),
                           ],
                         ),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -842,7 +928,10 @@ class _SearchPage extends State<SearchPage> {
                             ),
                           ],
                         ),
-                        buildBottomView(i, post)
+                        Padding(
+                          padding: EdgeInsets.all(2),
+                        ),
+                        Expanded(child: buildBottomView(i, post))
                       ],
                     ),
                   ),
