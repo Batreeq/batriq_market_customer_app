@@ -11,6 +11,7 @@ import 'DataLayer/Catigory.dart';
 import 'DataLayer/tab.dart';
 import 'helpers/DBHelper.dart';
 import 'models/Employee.dart';
+import 'models/IncreasePointsListClass.dart';
 import 'models/MyProductsModel.dart';
 import 'models/UserInfo.dart';
 import 'models/orderInfo.dart';
@@ -196,7 +197,7 @@ class sharedData {
   static const String modelHintTextField = 'موديل المركبة';
   static const String typeHintTextField = ' نوع المركبة';
   static const String lastNameTextField = 'اسم العائلة';
-  static const String signinToContinue= 'يرجى انشاء حساب لاتمام عملية الشراء ';
+  static const String signInToContinue= 'يرجى انشاء حساب لاتمام عملية الشراء ';
   static const String Continue= 'موافق';
   static const String cash= 'الدفع عند الاستلام';
   static const String visa= 'الدفع الأن';
@@ -204,7 +205,7 @@ class sharedData {
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
       color: Colors.black,
-      fontSize: 11,
+      fontSize: 12,
       fontFamily: 'default');
 
   // this list of orders which the user will order , filled from the api in myOrders Screen
@@ -436,4 +437,18 @@ class sharedData {
   static String whatsAppURL =
       'https://api.whatsapp.com/send?phone=+962786892862';
   static int selectedIndex = 0;
+
+  static IncreasePointsListClass increasePointsList = new IncreasePointsListClass();
+
+  // this flag to know if the cart has products or not, will this use to add red point to cart icon in app bar
+  static Future<bool> readCartIfHasProduct() async {
+    String isCartNotEmpty = await sharedData.readFromStorage(key: 'isCartNotEmpty');
+    if (isCartNotEmpty == 'true')
+     return true;
+    else
+      return false ;
+  }
+
+static bool isCartNotEmpty = false ;
+
 }

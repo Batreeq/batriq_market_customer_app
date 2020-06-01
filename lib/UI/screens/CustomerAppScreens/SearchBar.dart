@@ -34,9 +34,12 @@ import 'HomePage.dart';
 class CustomAppBar extends StatelessWidget {
   int currentPage = 1;
   final scaffoldKey;
+
   CustomAppBar({this.currentPage, this.scaffoldKey});
+
   @override
   Widget build(BuildContext context) {
+
     appbarBloc = new appBarBloc();
     return Container(
       height: 75,
@@ -65,17 +68,32 @@ class CustomAppBar extends StatelessWidget {
           Positioned(
             left: 20,
             bottom: 0,
-            child: Center(
-              child: IconButton(
-                icon: Icon(
-                  Icons.add_shopping_cart,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  sharedData.selectedIndex = 2 ;
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext c)=> HomePagee())) ;
-                },
-              ),
+            child: Stack(
+              children: <Widget>[
+                sharedData.isCartNotEmpty == true
+                    ? Container(
+                        width: 12.0,
+                        height: 12.0,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 2.0),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.red),
+                      )
+                    : Container(),
+                Center(
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.add_shopping_cart,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      sharedData.selectedIndex = 2;
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext c) => HomePagee()));
+                    },
+                  ),
+                )
+              ],
             ),
           ),
           BlocProvider<appBarBloc>(
@@ -121,7 +139,7 @@ class _SearchPage extends State<SearchPage> {
   final SpeechToText speech = SpeechToText();
   bool isloading = false;
   Mutex m = Mutex();
-  bool firstTime = true ;
+  bool firstTime = true;
   @override
   void initState() {
     super.initState();
@@ -301,7 +319,6 @@ class _SearchPage extends State<SearchPage> {
     } on PlatformException catch (e) {}
   }
 
-
   void NavigatorPage(Product product) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => ProductDetailsScreen(
@@ -331,9 +348,8 @@ class _SearchPage extends State<SearchPage> {
     });
     print(searchString);
     if (searchString != '') {
-      var url=sharedData.searchUrl + 'name=' + searchString;
-      if(isRegistered())
-        url+="&api_token=$token";
+      var url = sharedData.searchUrl + 'name=' + searchString;
+      if (isRegistered()) url += "&api_token=$token";
       final response = await Requests.get(url,
           bodyEncoding: RequestBodyEncoding.FormURLEncoded);
       print(url);
@@ -390,7 +406,7 @@ class _SearchPage extends State<SearchPage> {
             } else {
               if (counts[i] != null) {
                 count = int.parse(counts[i]);
-                if(count!=0 )
+                if (count != 0)
                   totalCost = double.parse(product.price) * count;
                 else
                   totalCost = double.parse(product.price);
@@ -400,41 +416,50 @@ class _SearchPage extends State<SearchPage> {
               }
             }
             return Row(
-              mainAxisAlignment:
-              MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-
                 Container(
                     height: 40,
                     width: 30,
                     child: ConstrainedBox(
-                      /* plus*/
+                        /* plus*/
                         constraints: BoxConstraints.expand(),
                         child: FlatButton(
                             onPressed: () {
                               count++;
 
-                              Future.delayed(Duration(milliseconds : 1500)).then((v) async {
+                              Future.delayed(Duration(milliseconds: 1500))
+                                  .then((v) async {
                                 await m.acquire();
-                                try{
-                                  if (firstTime){
-                                    firstTime = false ;
-                                    getCartsDialog(count , i,product);
+                                try {
+                                  if (firstTime) {
+                                    firstTime = false;
+                                    getCartsDialog(count, i, product);
                                   }
-                                  print ('is first time = ' + firstTime.toString());
-                                }
-                                finally{
+                                  print('is first time = ' +
+                                      firstTime.toString());
+                                } finally {
                                   m.release();
                                   //firstTime= true;
-                                  final double totalCost = double.parse(product.price) * count;
-                                  bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                  final double totalCost =
+                                      double.parse(product.price) * count;
+                                  bloc.setCount(<String>[
+                                    count.toString(),
+                                    totalCost.toString(),
+                                    i.toString()
+                                  ]);
                                   counts[i] = count.toString();
                                 }
                                 //  count = 0;
-                                final double totalCost = double.parse(product.price) * count;
-                                bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
+                                final double totalCost =
+                                    double.parse(product.price) * count;
+                                bloc.setCount(<String>[
+                                  count.toString(),
+                                  totalCost.toString(),
+                                  i.toString()
+                                ]);
                                 counts[i] = count.toString();
                               });
                               /*    final double totalCost =
@@ -450,7 +475,9 @@ class _SearchPage extends State<SearchPage> {
                             padding: EdgeInsets.all(0.0),
                             child: Image.asset('assets/images/plus.png',
                                 fit: BoxFit.fill)))),
-                SizedBox(width: 4,),
+                SizedBox(
+                  width: 4,
+                ),
                 Container(
                     height: 30,
                     width: 40,
@@ -467,7 +494,10 @@ class _SearchPage extends State<SearchPage> {
                         Center(child: Text(count.toString()))
                       ],
                     )),
-                SizedBox(width: 4,),
+                SizedBox(
+                  width: 4,
+                ),
+
                 ///minus
                 Container(
                     height: 40,
@@ -493,24 +523,34 @@ class _SearchPage extends State<SearchPage> {
                               'assets/images/minus.png',
                               fit: BoxFit.fill,
                             )))),
-                SizedBox(width: 10,),
-                product.is_offer!=null?product.is_offer?
-                Expanded(child:
-                Card(color: Colors.red,
-                  child: Text("عرض",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white,fontSize: 14),),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10))
-                  ),)):Container():Container(),
-                SizedBox(width: 10,),
-
+                SizedBox(
+                  width: 10,
+                ),
+                product.is_offer != null
+                    ? product.is_offer
+                        ? Expanded(
+                            child: Card(
+                            color: Colors.red,
+                            child: Text(
+                              "عرض",
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10))),
+                          ))
+                        : Container()
+                    : Container(),
+                SizedBox(
+                  width: 10,
+                ),
 
                 ///add to cart
-               /* IconButton(
+                /* IconButton(
                   icon: Icon(
                     Icons.add_shopping_cart,
                     size: 30,
@@ -537,36 +577,34 @@ class _SearchPage extends State<SearchPage> {
   }
 
   Future<void> addProductToCart(name, id, price, size, count, image) async {
-
     /* check if i have to  add product or edit counter inside  product */
-    List<Map> map= await DBHelper.addedBefore("user_cart",id.toString());
-    if(map!=null &&map.isNotEmpty){
+    List<Map> map = await DBHelper.addedBefore("user_cart", id.toString());
+    if (map != null && map.isNotEmpty) {
       /*i have to edit count inside product */
-      int countInDataBase=0;
-      map.forEach((row){
-        if(row.containsKey("count"))
-          countInDataBase= int.parse(row["count"]);
+      int countInDataBase = 0;
+      map.forEach((row) {
+        if (row.containsKey("count")) countInDataBase = int.parse(row["count"]);
       });
-      countInDataBase+=int.parse(count);
-      DBHelper.update("user_cart", id.toString(),countInDataBase.toString());
-     // widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
-    }
-    else/*i have to add this on database because i don't have this id in database */
-    DBHelper.insert('user_cart', {
-      'id': id,
-      'name': name,
-      'price': price,
-      'count': count,
-      'size': size,
-      'image': image,
-    });
+      countInDataBase += int.parse(count);
+      DBHelper.update("user_cart", id.toString(), countInDataBase.toString());
+      // widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
+    } else /*i have to add this on database because i don't have this id in database */
+      DBHelper.insert('user_cart', {
+        'id': id,
+        'name': name,
+        'price': price,
+        'count': count,
+        'size': size,
+        'image': image,
+      });
   }
 
   showAlert(List<CartName> cartNames, Cart cart) {
     List<Cart> carts = [];
     carts.add(cart);
     //CartGroup groups = CartGroup(groupId: "1", groupItems: carts, groupName: "السلة الرئيسية");
-    UserCarts  userCarts = UserCarts(groupId: "1", userCart: carts, name: "السلة الرئيسية");
+    UserCarts userCarts =
+        UserCarts(groupId: "1", userCart: carts, name: "السلة الرئيسية");
     List<bool> inputs = new List<bool>();
     CartName mainCart = CartName(CartNum: "1", cartTitle: "السلة الرئيسية");
     if (cartNames[0].CartNum != "1") {
@@ -610,7 +648,8 @@ class _SearchPage extends State<SearchPage> {
                                       inputs =
                                           List.filled(inputs.length, false);
                                       inputs[index] = val;
-                                      userCarts.groupId = cartNames[index].CartNum;
+                                      userCarts.groupId =
+                                          cartNames[index].CartNum;
                                     });
                                   })
                             ],
@@ -654,7 +693,7 @@ class _SearchPage extends State<SearchPage> {
               ),
             ),
           ),
-       /*   Expanded(
+          /*   Expanded(
             flex: 3,
             child: Container(
               decoration: BoxDecoration(
@@ -791,7 +830,12 @@ class _SearchPage extends State<SearchPage> {
     sharedData.flutterToast("تم بنجاح");
   }
 
-  getCartsDialog (int count , int i ,Products product) {
+  getCartsDialog(int count, int i, Products product) {
+    setState(() {
+      sharedData.isCartNotEmpty = true ;
+      sharedData.writeToStorage(key: 'isCartNotEmpty', value: 'true');
+    });
+
     if (token != null && token.length > 10) {
       getCartNames(Cart(
           price: product.price,
@@ -799,13 +843,8 @@ class _SearchPage extends State<SearchPage> {
           quantity: count,
           productId: product.id.toString()));
     } else {
-      addProductToCart(
-         product.name.toString(),
-         product.id.toString(),
-         product.price,
-         product.size,
-          count.toString(),
-         product.image);
+      addProductToCart(product.name.toString(), product.id.toString(),
+          product.price, product.size, count.toString(), product.image);
       firstTime = false;
     }
     print(firstTime.toString());
@@ -851,7 +890,7 @@ class _SearchPage extends State<SearchPage> {
             price: post.price,
             id: post.id.toString(),
             catigory: ProductTab(id: post.categoryId),
-        is_offer: post.is_offer));
+            is_offer: post.is_offer));
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
@@ -905,7 +944,6 @@ class _SearchPage extends State<SearchPage> {
                             ),
                           ],
                         ),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[

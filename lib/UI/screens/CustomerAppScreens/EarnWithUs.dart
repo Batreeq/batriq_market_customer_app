@@ -1,4 +1,6 @@
 import 'package:customerapp/UI/screens/CustomerAppScreens/ReplacePointsUI.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/profile_screen.dart';
+import 'package:customerapp/models/IncreasePointsListClass.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,21 +14,37 @@ class EarnWithUsScreen extends StatefulWidget{
 
 }
 class _EarnWithUsScreen extends State {
-  String profileButton ='أكمل الملف الشخصي';
-  String sharedAppButton ='شارك التطبيق';
-  String profilePoints ='200';
-  String sharedAppPoints ='50';
+
   bool checkBoxValue1 = false,
       checkBoxValue2 = false;
+  IncreasePointsListClass increasePointsList = sharedData.increasePointsList;
+  String profileButton = '';
+  String sharedAppButton = 'شارك التطبيق';
+  String profilePoints = '200';
+  String sharedAppPoints = '50';
   BuildContext context;
 
   @override
   void initState() {
     super.initState();
+
+
   }
 
   @override
   Widget build(BuildContext context) {
+    profileButton = increasePointsList.increasePoints
+        .elementAt(0)
+        .type;
+    sharedAppButton = increasePointsList.increasePoints
+        .elementAt(1)
+        .type;
+    profilePoints = increasePointsList.increasePoints
+        .elementAt(0)
+        .points;
+    sharedAppPoints = increasePointsList.increasePoints
+        .elementAt(1)
+        .points;
     this.context = context;
     return Scaffold(
       appBar: sharedData.appBar(context, 'اكسب معنا', null, () {}),
@@ -143,7 +161,7 @@ class _EarnWithUsScreen extends State {
                   child: Text('اكسب نقاطك',
                     style: sharedData.textInProfileTextStyle,),
                   onPressed: () {
-                     replacementDialogUI();
+                    replacementDialogUI();
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(4.0),
@@ -166,83 +184,97 @@ class _EarnWithUsScreen extends State {
         builder: (BuildContext c) {
           return StatefulBuilder(builder: (context, setState) {
             return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: SingleChildScrollView(
-                  child: Container(
-                    // height: size.height -20 ,
-                    //   width: size.width,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              textDirection: TextDirection.rtl,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      title,
-                                      textAlign: TextAlign.right,
-                                      style: sharedData.textInProfileTextStyle,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 9.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: RaisedButton(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                            profileButton,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Container(
+                  // height: size.height -20 ,
+                  //   width: size.width,
+                    child: SingleChildScrollView(
+                        child: Column(
+                            children: <Widget>[
+                              Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    textDirection: TextDirection.rtl,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text(
+                                            title,
+                                            textAlign: TextAlign.right,
                                             style: sharedData
-                                                .size16Style,
+                                                .textInProfileTextStyle,
                                           ),
-                                          Text('  ' + profilePoints +  ' نقطة',
-                                            style: sharedData
-                                                .pointsStyle,
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                      onPressed: () {
-                                      },
-                                      color: sharedData.yellow,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 9.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: RaisedButton(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                           sharedAppButton ,
-                                            style: sharedData
-                                                .size16Style,
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 9.0),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          child: RaisedButton(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  profileButton,
+                                                  style: sharedData
+                                                      .size16Style,
+                                                ),
+                                                Text('  ' + profilePoints +
+                                                    ' نقطة',
+                                                  style: sharedData
+                                                      .pointsStyle,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(builder: (
+                                                      BuildContext c) =>
+                                                      ProfileScreen()));
+                                            },
+                                            color: sharedData.yellow,
                                           ),
-                                          Text(  '  '  + sharedAppPoints +  ' نقطة',
-                                            style: sharedData
-                                                .pointsStyle,
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                      onPressed: () {
-                                      },
-                                      color: sharedData.yellow,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ))),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 9.0),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          child: RaisedButton(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  sharedAppButton,
+                                                  style: sharedData
+                                                      .size16Style,
+                                                ),
+                                                Text('  ' + sharedAppPoints +
+                                                    ' نقطة',
+                                                  style: sharedData
+                                                      .pointsStyle,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: () {},
+                                            color: sharedData.yellow,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              ),
+                            ]
+                        )
+                    )
+                )
             );
           });
         });
