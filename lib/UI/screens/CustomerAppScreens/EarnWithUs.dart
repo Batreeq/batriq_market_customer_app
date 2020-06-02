@@ -4,6 +4,7 @@ import 'package:customerapp/models/IncreasePointsListClass.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:requests/requests.dart';
 
 class EarnWithUsScreen extends StatefulWidget{
@@ -263,7 +264,9 @@ class _EarnWithUsScreen extends State {
                                                 ),
                                               ],
                                             ),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              sharedApp();
+                                            },
                                             color: sharedData.yellow,
                                           ),
                                         ),
@@ -278,5 +281,16 @@ class _EarnWithUsScreen extends State {
             );
           });
         });
+  }
+
+  sharedApp() async {
+    await FlutterShare.share(
+        title: 'Share link app',
+        text:
+        'You have a document shipped to you. Click on link to download TrussT Community app and start tracking your document',
+        linkUrl:
+        'bmt.lh/2IzBaG0',
+        chooserTitle:
+        'Share the link of Trust app');
   }
 }

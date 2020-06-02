@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'dart:collection';
-import 'dart:convert';
 import 'package:customerapp/models/ConfrimOrderModel.dart';
+import 'package:customerapp/models/TimesPricesDeliveryListClass.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:requests/requests.dart';
 import '../cites.dart';
 
 enum SingingCharacter { lafayette, jefferson }
@@ -34,18 +33,21 @@ class ConfiremOrderScreen extends StatefulWidget {
 }
 
 class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
-  List deliveryTimes = [];
-  List filteredregions =
-      regions.where((region) => region['city'].toString() == 'Amman').toList();
+
+  TimesPricesListClass deliveryTimes;
   String selectedCity = 'Amman';
   String selectedRegion;
   LatLng cameraLocation;
-
-  TextEditingController nameController=TextEditingController();
-  TextEditingController phoneController=TextEditingController();
-  TextEditingController noticeController=TextEditingController();
-  TextEditingController locationController=TextEditingController();
+  bool isLoading = false;
   bool isFullScreen = false;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController noticeController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  List filteredRegions = regions.where((region) => region['city'].toString() == 'Amman').toList();
+  Completer<GoogleMapController> _controller = Completer();
+  final keyy = new GlobalKey<ScaffoldState>();
 
   Widget buildCityWidget() {
     return Container(
@@ -73,35 +75,39 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   }
 
   getDeliveryTimes(String regionName) async {
-    deliveryTimes = [];
     final region = (regions.firstWhere(
-        (regionData) => regionData['location'].toString() == regionName));
+            (regionData) => regionData['location'].toString() == regionName));
     int cityId = region['id'];
-    final url = "https://jaraapp.com/api/getDeliveryPrice?location_id=221";
-    print("url  :  $url");
-    final response = await http.get(url);
-    print("response : ${response.body} ");
-    final extractedData = json.decode(response.body) as Map<String, dynamic>;
-    if (extractedData == null) {
-      return;
+    print('city id ' + cityId.toString());
+   var response = await Requests.get(sharedData.getDeliveryPriceUrl + '228');
+    print( response.json());
+   print(response.statusCode.toString());
+      if (response.statusCode == 200) {
+      response.raiseForStatus();
+      dynamic json = response.json();
+         deliveryTimes = TimesPricesListClass.fromJson(json);
+
+      print ('@@');
+      print(deliveryTimes.timesPrices
+          .elementAt(0)
+          .category
+          .elementAt(0)
+          .categoryName);
     }
-    extractedData['times_prices'].forEach((time) {
-      deliveryTimes.add({
-        'id': time['id'],
-        'time': time['time'],
-        'price': time['price'],
-      });
-    });
   }
 
-  buildDeliveryTimes(deliveryTimes) {
+  buildDeliveryTimes(TimesPrices obj) {
     List<bool> inputs = new List<bool>();
-    for (int i = 0; i < deliveryTimes.length; i++) {
+    for (int i = 0; i < obj.category.length; i++) {
       inputs.add(false);
     }
     return StatefulBuilder(
-      builder: (context, setState) => new Container(
-        width: MediaQuery.of(context).size.width - 30,
+      builder: (context, setState) =>
+      new Container(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width - 30,
         child: new ListView.builder(
             itemCount: inputs.length,
             itemBuilder: (BuildContext context, int index) {
@@ -113,9 +119,9 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                       new CheckboxListTile(
                           value: inputs[index],
                           title: new Text(
-                            deliveryTimes[index]['time'] +
+                            obj.category.elementAt(index).time +
                                 "         " +
-                                deliveryTimes[index]['price'] +
+                                obj.category.elementAt(index).price +
                                 "  JD  ",
                             style: TextStyle(fontSize: 13),
                           ),
@@ -125,7 +131,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                               inputs = List.filled(inputs.length, false);
                               inputs[index] = val;
                               widget.selectedTime =
-                                  deliveryTimes[index]['time'];
+                                  obj.category.elementAt(index).time;
                             });
                           })
                     ],
@@ -147,11 +153,11 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
         onSaved: (value) {},
         onChanged: (value) {
           setState(() {
-            selectedRegion = value;
-            getDeliveryTimes(selectedRegion);
+            selectedRegion = value.toString();
+            getDeliveryTimes(selectedRegion.toString());
           });
         },
-        dataSource: filteredregions,
+        dataSource: filteredRegions,
         textField: 'location',
         valueField: 'location',
       ),
@@ -159,18 +165,13 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   }
 
   getRegionsByCityName(String city) {
-    filteredregions =
+    filteredRegions =
         regions.where((region) => region['city'].toString() == city).toList();
     selectedRegion = null;
   }
 
-  Completer<GoogleMapController> _controller = Completer();
-  final keyy = new GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
-
-
     return new Scaffold(
       key: keyy,
       backgroundColor: Colors.white,
@@ -187,7 +188,10 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
         children: <Widget>[
           Positioned(
             left: 0,
-            top: isFullScreen ? MediaQuery.of(context).size.height : 200,
+            top: isFullScreen ? MediaQuery
+                .of(context)
+                .size
+                .height : 200,
             right: 0,
             bottom: 0,
             child: Container(
@@ -197,14 +201,20 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                 child: ListView(
                   children: <Widget>[
                     _buildNameField(),
-                    _buildPhonField(),
+                    _buildPhoneField(),
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: buildCityWidget(),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: buildRegionWidget(),
                     ),
@@ -223,7 +233,10 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -385,21 +398,24 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
             top: 0,
             right: 0,
             height:
-                isFullScreen ? MediaQuery.of(context).size.height - 100 : 200,
+            isFullScreen ? MediaQuery
+                .of(context)
+                .size
+                .height - 100 : 200,
           ),
-          isloading
+          isLoading
               ? Center(
-                  child: Container(
-                    child: SpinKitPulse(
-                        duration: Duration(milliseconds: 1000),
-                        color: sharedData.mainColor,
-                        size: 70
+            child: Container(
+              child: SpinKitPulse(
+                  duration: Duration(milliseconds: 1000),
+                  color: sharedData.mainColor,
+                  size: 70
 //                    lineWidth: 2,
-                        ),
-                    width: 100,
-                    height: 100,
-                  ),
-                )
+              ),
+              width: 100,
+              height: 100,
+            ),
+          )
               : Container(),
         ],
       ),
@@ -412,7 +428,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
         CameraUpdate.newCameraPosition(ConfiremOrderScreen._kLake));
   }
 
-  void _modalBottomSheetMenu() {
+  void _modalBottomSheetMenu(TimesPrices object) {
     showModalBottomSheet(
         context: context,
         builder: (builder) {
@@ -426,8 +442,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                 ),
               ),
               Flexible(
-                child: deliveryTimes != null
-                    ? buildDeliveryTimes(deliveryTimes)
+                child: object != null
+                    ? buildDeliveryTimes(object)
                     : Container(),
               ),
               Container(
@@ -446,7 +462,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                     ),
                     onPressed: () {
                       if (widget.selectedTime != null) {
-                        _submitForm();
+                        confirmOrder();
                         Navigator.of(context).pop();
                       } else {
                         sharedData.flutterToast('اختر فترة  التوصيل');
@@ -462,7 +478,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 
   bool _showGoogleMaps = false;
 
-  Widget googleMap() => GoogleMap(
+  Widget googleMap() =>
+      GoogleMap(
         onCameraMove: (pos) {
           cameraLocation = pos.target;
         },
@@ -484,9 +501,6 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     });
   }
 
- // final Map<String, dynamic> formData = {};
-  final _formKey = GlobalKey<FormState>();
-
   Widget _buildNameField() {
     return TextFormField(
       controller: nameController,
@@ -496,37 +510,40 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
         if (value.isEmpty) {
           return 'الرجاء كتابة إسمك';
         }
-        else return null;
+        else
+          return null;
       },
 
 
     );
   }
 
-  void showSnackBar(message) {
-    keyy?.currentState?.showSnackBar(SnackBar(
-      duration: Duration(seconds: 2),
-      content: Text(
-        message,
-        style: TextStyle(color: Colors.black, fontFamily: 'default'),
-        textAlign: TextAlign.center,
-      ),
-      backgroundColor: sharedData.mainColor,
-    ));
-  }
-
   Widget _buildSubmitButton(context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       height: 40,
       margin: EdgeInsets.only(top: 50),
       child: RaisedButton(
         color: sharedData.mainColor,
         onPressed: () {
-          deliveryTimes.length > 0
-              ? _modalBottomSheetMenu()
-              : showSnackBar('اختر المدينة ثم المنطقة');
-//          _submitForm();
+          TimesPrices timesPrices ;
+          if (deliveryTimes != null) {
+            if (deliveryTimes.timesPrices != null) {
+              if ( deliveryTimes.timesPrices.length > 0)
+                 for( timesPrices in deliveryTimes.timesPrices){
+                   _modalBottomSheetMenu(timesPrices);
+                 }
+            }
+            else
+            print('times list is empty');
+          }
+          else {
+            showSnackBar('اختر المدينة ثم المنطقة');
+            print('delivery class list is empty');
+          }
         },
         child: Text(
           'اطلب الان',
@@ -545,10 +562,11 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       validator: (String value) {
         if (value.isEmpty) {
           return 'اكتب تفاصيل العنوان';
-        } else return null;
+        } else
+          return null;
       },
       onSaved: (String value) {
-      //  formData['location'] = value;
+        //  formData['location'] = value;
       },
     );
   }
@@ -562,7 +580,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
         if (value.isEmpty) {
           return 'اكتب ملاحظاتك';
         }
-        else return null;
+        else
+          return null;
       },
       onSaved: (String value) {
 
@@ -570,7 +589,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     );
   }
 
-  Widget _buildPhonField() {
+  Widget _buildPhoneField() {
     return TextFormField(
       keyboardType: TextInputType.number,
       controller: phoneController,
@@ -579,7 +598,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       validator: (String value) {
         if (value.isEmpty) {
           return 'الرجاء كتابة رقم الموبايل';
-        }else return null;
+        } else
+          return null;
       },
       onSaved: (String value) {
 
@@ -587,49 +607,59 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     );
   }
 
-  void _submitForm() {
-    confirmOrder();
-  }
-
-  bool isloading = false;
-
   Future<void> confirmOrder() async {
-    if(nameController.text.toString().isEmpty){
+    print ('in confirm order ');
+    if (nameController.text
+        .toString()
+        .isEmpty) {
       showSnackBar("الرجاء ادخال الاسم");
       return;
     }
-    if(phoneController.text.toString().isEmpty){
+    if (phoneController.text
+        .toString()
+        .isEmpty) {
       showSnackBar("الرجاء ادخال رقم الموبايل");
       return;
     }
-    if(locationController.text.toString().isEmpty){
+    if (locationController.text
+        .toString()
+        .isEmpty) {
       showSnackBar("الرجاء ادخال العنوان بالتفصيل");
       return;
     }
-    if(noticeController.text.toString().isEmpty){
+    if (noticeController.text
+        .toString()
+        .isEmpty) {
       showSnackBar("الرجاء ادخال الملاحظة");
       return;
     }
 
     setState(() {
-      isloading = true;
+      isLoading = true;
     });
-    Map<String, String> params1=new Map();
+    Map<String, String> params1 = new Map();
 
-    ConfrimOrderModel model=ConfrimOrderModel(
-      nameController.text.toString()
-      ,"free"
-      ,phoneController.text.toString()
-      ,locationController.text.toString()
-      ,noticeController.text.toString()
-      ,widget.isCash ? "cash" : "visa"
-     ,token
-      ,widget.cartNum.toString(),
+    ConfrimOrderModel model = ConfrimOrderModel(
+        nameController.text.toString()
+        ,
+        "free"
+        ,
+        phoneController.text.toString()
+        ,
+        locationController.text.toString()
+        ,
+        noticeController.text.toString()
+        ,
+        widget.isCash ? "cash" : "visa"
+        ,
+        token
+        ,
+        widget.cartNum.toString(),
         selectedCity.toString(),
         selectedRegion.toString(),
         widget.selectedTime.toString(),
-    "111");
-   // params['user_name'] = nameController.text.toString();
+        "111");
+    // params['user_name'] = nameController.text.toString();
     params1['user_name'] = 'ffffffff';
     params1['delivery_type'] = " ";
     params1['phone'] = phoneController.text.toString().trim();
@@ -643,15 +673,15 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 //    params1['total_price'] = "120";
     params1['delivery_time'] = widget.selectedTime.toString();
     print("time : ${widget.selectedTime}");
-    debugPrint("param"+model.toJson().toString());
+    debugPrint("param" + model.toJson().toString());
 
 
     final url = Uri.parse('https://jaraapp.com/index.php/api/confirmOrder');
     debugPrint(url.toString());
     final response = await http.post(url, body: model.toJson());
-    debugPrint("res "+response.body.toString());
+    debugPrint("res " + response.body.toString());
     setState(() {
-      isloading = false;
+      isLoading = false;
     });
 
     showSnackBar("تمت العملية بنجاح");
@@ -663,9 +693,21 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   @override
   void initState() {
     showMap();
-    if(sharedData.userInfo.name!=null)
-    nameController.text=sharedData.userInfo.name.toString();
-    if(sharedData.userInfo.phone!=null)
-    phoneController.text=sharedData.userInfo.phone.toString();
+    if (sharedData.userInfo.name != null)
+      nameController.text = sharedData.userInfo.name.toString();
+    if (sharedData.userInfo.phone != null)
+      phoneController.text = sharedData.userInfo.phone.toString();
+  }
+
+  void showSnackBar(message) {
+    keyy?.currentState?.showSnackBar(SnackBar(
+      duration: Duration(seconds: 2),
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.black, fontFamily: 'default'),
+        textAlign: TextAlign.center,
+      ),
+      backgroundColor: sharedData.mainColor,
+    ));
   }
 }
