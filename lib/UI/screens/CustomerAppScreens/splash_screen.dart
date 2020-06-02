@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/tab.dart';
+import 'package:customerapp/models/IncreasePointsListClass.dart';
 import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:customerapp/shared_data.dart';
@@ -16,10 +17,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  IncreasePointsListClass increasePointsList = new IncreasePointsListClass ();
   @override
   void initState() {
     super.initState();
     readToken();
+    isCartHasProducts();
   }
 
   readToken() async {
@@ -108,6 +111,8 @@ class _SplashScreenState extends State<SplashScreen> {
             userId: family['user_id']));
       });
       final userInfo = extractedData['user_info'];
+      sharedData.increasePointsList = IncreasePointsListClass.fromJson(extractedData) ;
+
       sharedData.userInfo = UserInfo(
         updatedAt: userInfo['updated_at'],
         id: userInfo['id'],
@@ -142,5 +147,11 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       new MaterialPageRoute(builder: (context) => new HomePagee()),
     );
+  }
+
+  void isCartHasProducts() {
+    sharedData.readCartIfHasProduct().then((isFilled){
+      sharedData.isCartNotEmpty = isFilled ;
+    });
   }
 }

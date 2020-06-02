@@ -1,4 +1,6 @@
 import 'package:customerapp/UI/screens/CustomerAppScreens/ReplacePointsUI.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/profile_screen.dart';
+import 'package:customerapp/models/IncreasePointsListClass.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +14,37 @@ class EarnWithUsScreen extends StatefulWidget{
 
 }
 class _EarnWithUsScreen extends State {
+
   bool checkBoxValue1 = false,
       checkBoxValue2 = false;
+  IncreasePointsListClass increasePointsList = sharedData.increasePointsList;
+  String profileButton = '';
+  String sharedAppButton = 'شارك التطبيق';
+  String profilePoints = '200';
+  String sharedAppPoints = '50';
   BuildContext context;
 
   @override
   void initState() {
     super.initState();
+
+
   }
+
   @override
   Widget build(BuildContext context) {
+    profileButton = increasePointsList.increasePoints
+        .elementAt(0)
+        .type;
+    sharedAppButton = increasePointsList.increasePoints
+        .elementAt(1)
+        .type;
+    profilePoints = increasePointsList.increasePoints
+        .elementAt(0)
+        .points;
+    sharedAppPoints = increasePointsList.increasePoints
+        .elementAt(1)
+        .points;
     this.context = context;
     return Scaffold(
       appBar: sharedData.appBar(context, 'اكسب معنا', null, () {}),
@@ -39,7 +62,7 @@ class _EarnWithUsScreen extends State {
         height: MediaQuery
             .of(context)
             .size
-            .height - 300,
+            .height - 250,
 
         decoration: BoxDecoration(
           boxShadow: [
@@ -77,26 +100,27 @@ class _EarnWithUsScreen extends State {
                         decoration: BoxDecoration(
                             border: Border.all(color: sharedData.yellow),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
+                            BorderRadius.all(Radius.circular(15))),
                         child: Center(
                             child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              child: Center(
-                                child: Image.asset("assets/images/reward.png"),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                sharedData.userInfo.points != null
-                                    ? sharedData.userInfo.points
-                                    : ' 0 ' + 'نقطة ',
-                                style: sharedData.navBarTextStyle,
-                              ),
-                            ),
-                          ],
-                        )),
+                              children: <Widget>[
+                                SizedBox(
+                                  child: Center(
+                                    child: Image.asset(
+                                        "assets/images/reward.png"),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    sharedData.userInfo.points != null
+                                        ? sharedData.userInfo.points
+                                        : ' 0 ' + 'نقطة ',
+                                    style: sharedData.navBarTextStyle,
+                                  ),
+                                ),
+                              ],
+                            )),
                       ),
                     )
                   ],
@@ -112,11 +136,13 @@ class _EarnWithUsScreen extends State {
                   child: Text('أستبدل نقاطك',
                     style: sharedData.textInProfileTextStyle,),
                   onPressed: () {
-                    if (sharedData.userInfo.points == null ||sharedData.userInfo.points == ''  )
-                   sharedData.flutterToast('Sorry, You don\'t have points' );
-                 // else
-                   // replacementDialogUI();
-                   Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ReplacePoints()));
+                    if (sharedData.userInfo.points == null ||
+                        sharedData.userInfo.points == '')
+                      sharedData.flutterToast('Sorry, You don\'t have points');
+                    // else
+                    // replacementDialogUI();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext c) => ReplacePoints()));
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(4.0),
@@ -125,7 +151,26 @@ class _EarnWithUsScreen extends State {
                   color: sharedData.yellow,
                 ),
               ),
-            )
+            ),
+            SizedBox(height: 20,),
+            Padding(
+              padding: const EdgeInsets.only(top: 22.0, right: 12, left: 12),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: RaisedButton(
+                  child: Text('اكسب نقاطك',
+                    style: sharedData.textInProfileTextStyle,),
+                  onPressed: () {
+                    replacementDialogUI();
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(4.0),
+                    // side: BorderSide(color: Colors.red)
+                  ),
+                  color: sharedData.yellow,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -133,103 +178,103 @@ class _EarnWithUsScreen extends State {
   }
 
   Future<void> replacementDialogUI() {
-    String title = 'استبدل نقاطك ب';
+    String title = 'اكسب نقاطك ب';
     return showDialog<void>(
         context: context,
         builder: (BuildContext c) {
           return StatefulBuilder(builder: (context, setState) {
-            return Dialog( //elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              //   backgroundColor: Colors.red,
-              child: SingleChildScrollView(
-                  child: Container(
-                    // height: size.height -20 ,
-                    //   width: size.width,
-                      child: SingleChildScrollView(
-                child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      textDirection: TextDirection.rtl,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              title,
-                              textAlign: TextAlign.right,
-                              style: sharedData.textInProfileTextStyle,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          textDirection: TextDirection.rtl,
-                          children: <Widget>[
-                            Checkbox(
-                                autofocus: true,
-                                value: checkBoxValue1,
-                                //   activeColor: Colors.green,
-                                onChanged: (bool newValue) {
-                                  print(checkBoxValue1.toString());
-                                  if (newValue)
-                                    setState(() {
-                                      checkBoxValue1 = true;
-                                    });
-                                  else
-                                    checkBoxValue1 = false;
-                                  print(checkBoxValue1.toString() +
-                                      " " +
-                                      checkBoxValue2.toString() +
-                                      ' ' +
-                                      newValue.toString());
-                                }),
-                            Text(
-                              'رصيد نقود',
-                              textAlign: TextAlign.right,
-                              style: sharedData.optionStyle,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          textDirection: TextDirection.rtl,
-                          children: <Widget>[
-                            Checkbox(
-                                value: checkBoxValue2,
-                                onChanged: (bool newValue) {
-                                  setState(() {
-                                    checkBoxValue2 = newValue;
-                                  });
-                                }),
-                            Text(
-                              'جوائز أخرى',
-                              textAlign: TextAlign.right,
-                              style: sharedData.optionStyle,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 9.0),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: RaisedButton(
-                              child: Text(
-                                'استبدال',
-                                style: sharedData.textInProfileTextStyle,
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Container(
+                  // height: size.height -20 ,
+                  //   width: size.width,
+                    child: SingleChildScrollView(
+                        child: Column(
+                            children: <Widget>[
+                              Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    textDirection: TextDirection.rtl,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text(
+                                            title,
+                                            textAlign: TextAlign.right,
+                                            style: sharedData
+                                                .textInProfileTextStyle,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 9.0),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          child: RaisedButton(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  profileButton,
+                                                  style: sharedData
+                                                      .size16Style,
+                                                ),
+                                                Text('  ' + profilePoints +
+                                                    ' نقطة',
+                                                  style: sharedData
+                                                      .pointsStyle,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(builder: (
+                                                      BuildContext c) =>
+                                                      ProfileScreen()));
+                                            },
+                                            color: sharedData.yellow,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 9.0),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          child: RaisedButton(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  sharedAppButton,
+                                                  style: sharedData
+                                                      .size16Style,
+                                                ),
+                                                Text('  ' + sharedAppPoints +
+                                                    ' نقطة',
+                                                  style: sharedData
+                                                      .pointsStyle,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: () {},
+                                            color: sharedData.yellow,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
                               ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              color: sharedData.yellow,
-                            ),
-                          ),
+                            ]
                         )
-                      ],
-                    )),
-              ))),
+                    )
+                )
             );
           });
         });

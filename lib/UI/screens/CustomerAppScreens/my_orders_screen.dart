@@ -220,7 +220,6 @@ class _MyOrdersScreen extends State {
                     DataColumn(
                       label: Row(
                         children: <Widget>[
-                          Icon(Icons.keyboard_arrow_down),
                           Text(
                             'السعر',
                             style: sharedData.tableFieldsTextStyle,
@@ -231,8 +230,8 @@ class _MyOrdersScreen extends State {
                     DataColumn(
                       label: Row(
                         children: <Widget>[
-                          Icon(Icons.keyboard_arrow_down),
-                          Text(
+
+                           Text(
                             'الصنف',
                             style: sharedData.tableFieldsTextStyle,
                           ),
@@ -242,7 +241,6 @@ class _MyOrdersScreen extends State {
                     DataColumn(
                       label: Row(
                         children: <Widget>[
-                          Icon(Icons.keyboard_arrow_down),
                           Text(
                             'وقت الطلبية',
                             style: sharedData.tableFieldsTextStyle,

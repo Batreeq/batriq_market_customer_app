@@ -44,6 +44,7 @@ class Home extends StatelessWidget {
         color: Colors.white,
         child: buildGrideList(context),
       );
+
   Widget getList(context) {
     return Container(
         height: (sharedData.catigoriesData.length *

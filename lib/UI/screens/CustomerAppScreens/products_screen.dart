@@ -423,9 +423,8 @@ class _ProductsState extends State<Products> {
                                                         )))),
                                             SizedBox(width: 10,),
 
-                                            productss[i].is_offer!=null?productss[i].is_offer?
-                                            Expanded(child:
-                                            Card(color: Colors.red,
+                                            productss[i].is_offer!=null?productss[i].is_offer
+                                                ? Expanded(child: Card(color: Colors.red,
                                             child: Text("عرض",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(color: Colors.white,fontSize: 14),),
@@ -434,7 +433,8 @@ class _ProductsState extends State<Products> {
                                             topRight: Radius.circular(10),
                                                 bottomRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10))
-                                            ),)):Container():Container(),
+                                            ),))
+                                                :Container():Container(),
 
                                             SizedBox(width: 10,),
 
@@ -483,6 +483,10 @@ class _ProductsState extends State<Products> {
   }
 
   getCartsDialog (int count , int i ) {
+    setState(() {
+      sharedData.writeToStorage(key: 'isCartNotEmpty' , value: 'true');
+    });
+
     if (token != null && token.length > 10) {
       getCartNames(Cart(
           price: productss[i].price,

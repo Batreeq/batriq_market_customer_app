@@ -291,7 +291,7 @@ class _CartScreenState extends State<CartScreen> {
                         color: Colors.white,
                       ),
                       child: new Text(
-                        sharedData.signinToContinue,
+                        sharedData.signInToContinue,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
