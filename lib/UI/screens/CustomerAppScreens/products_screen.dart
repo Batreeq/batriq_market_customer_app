@@ -11,6 +11,7 @@ import 'package:customerapp/UI/wigets/custom_tab.dart';
 import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/models/UserCarts.dart';
+import 'package:customerapp/models/mainCategoriesModel/Category.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ import 'package:mutex/mutex.dart';
 
 class ProductsScreen extends StatefulWidget {
   String offerId;
-  ProductsScreen({this.offerId});
+  Category category;
+  ProductsScreen({this.offerId,this.category});
   @override
   _ProductsScreenState createState() => _ProductsScreenState();
 }
@@ -31,14 +33,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     return TabsController(
       offerId: widget.offerId,
+      category: widget.category,
     );
   }
 }
 
 class TabsController extends StatelessWidget {
   String offerId;
+  Category category;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  TabsController({this.offerId});
+  TabsController({this.offerId,this.category});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -49,6 +53,7 @@ class TabsController extends StatelessWidget {
           elevation: 0,
           centerTitle: true,
           bottom: ColoredTabBar(
+
             tabBar: TabBar(
               indicatorColor: Colors.orange,
               tabs: buildtabs(),
@@ -71,9 +76,9 @@ class TabsController extends StatelessWidget {
     List<Tab> tabsList = [];
     for (int i = 0; i < tabs.length; i++) {
       tabsList.add(Tab(
+
         child: Container(
           color: Colors.white,
-          width: 50,
           child: Text(
             tabs[i].name,
             style: TextStyle(
@@ -94,7 +99,9 @@ class TabsController extends StatelessWidget {
       tabsList.add(Products(
           offerId: offerId,
           categoryId: tabs[i].id.toString(),
-          keyy: scaffoldKey));
+          keyy: scaffoldKey,
+        category:category,
+        indexTab: i));
     }
     return tabsList;
   }
@@ -102,8 +109,10 @@ class TabsController extends StatelessWidget {
 
 class Products extends StatefulWidget {
   String offerId, categoryId;
+  Category category;
+  int indexTab;
   GlobalKey<ScaffoldState> keyy;
-  Products({this.offerId, this.categoryId, this.keyy});
+  Products({this.offerId, this.categoryId, this.keyy,this.category,this.indexTab});
   void showSnackBar(message) {
     keyy?.currentState?.showSnackBar(SnackBar(
       duration: Duration(seconds: 2),
@@ -127,7 +136,7 @@ class _ProductsState extends State<Products> {
 
   Mutex m = Mutex();
 
-  @override
+
   @override
   Widget build(BuildContext context) {
    // firstTime = true ;
@@ -546,8 +555,13 @@ class _ProductsState extends State<Products> {
   List<Product> productss = [];
   getProducts() async {
     List<Product> products = [];
-    var url =
-        "https://jaraapp.com/index.php/api/productCategory?category_id=${widget.categoryId}&offer_id=${widget.offerId}";
+    var url="";
+
+
+    if(widget.indexTab==0)
+      url="https://jaraapp.com/api/allMainCategories?cat_id=${widget.category.id}&offer_id=${widget.offerId}";
+      else
+    url ="https://jaraapp.com/index.php/api/productCategory?category_id=${widget.categoryId}&offer_id=${widget.offerId}";
     if(isRegistered())
       url+="&api_token=$token";
     print(
@@ -558,6 +572,23 @@ class _ProductsState extends State<Products> {
       return;
     }
 
+    if(widget.indexTab==0){
+      extractedData['allProducts'].forEach((p) {
+        print("ssd${p}");
+        ProductTab category = tabs.firstWhere(
+                (cat) => cat.id.toString() == p['category_id'].toString());
+
+        Product product = Product(
+            catigory: category,
+            price: p['price'],
+            image: p['image'],
+            title: p['name'],
+            id: p['id'].toString(),
+            size: p['size'],
+            is_offer: p['is_offer']);
+        products.add(product);
+      });
+    }else
     extractedData['products'].forEach((p) {
       print("ssd${p}");
       ProductTab category = tabs.firstWhere(
