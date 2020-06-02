@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/DataLayer/Catigory.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/SubCategoriesPage.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/products_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class CategoryItemValue extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductsScreen(
+              builder: (context) => SubCategoriesPage(
                 offerId: catigory.id,
               ),
             ),
@@ -53,3 +54,6 @@ class CategoryItemValue extends StatelessWidget {
     );
   }
 }
+
+
+/*ProductsScreen*/

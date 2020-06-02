@@ -199,6 +199,8 @@ class sharedData {
   static const String Continue= 'موافق';
   static const String cash= 'الدفع عند الاستلام';
   static const String visa= 'الدفع الأن';
+  static const String offerBatriq= 'عروض بطريق';
+  static const String all= 'الكل';
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
@@ -387,6 +389,8 @@ class sharedData {
   static const String replacePointsUrl =
       'https://jaraapp.com/api/replacePoints';
 
+  static const String mainCategoriesURL =
+      'https://jaraapp.com/index.php/api/mainCategories?';
   static String userPoints = '0';
 
   //static List <UserPayments>  listOfUserPayment ;
