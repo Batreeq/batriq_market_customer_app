@@ -4,7 +4,9 @@ import 'package:customerapp/Bloc/bloc_provider.dart';
 import 'package:customerapp/DataLayer/Cart.dart';
 import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/ProductsInCartScreen.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/profile_screen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/MyProductsModel.dart';
 import 'package:customerapp/models/UserCarts.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
@@ -24,19 +26,129 @@ class _CartScreenState extends State<CartScreen> {
   bool isloading = false;
 
 
+   double allPrices=0.0;
+   int allCount=0;
+
   @override
   void initState() {
     super.initState();
     readToken();
+    getAllDatabase();
     !isRegistered() ?
     bloc.fetchCartData() :
     bloc.getCartData(token);
+
+
+
+  }
+
+
+
+  Future<void> getAllDatabase() async{
+    List<Map> map= await DBHelper.getData("user_cart");
+
+    initMyProductData();
+    if(map!=null &&map.isNotEmpty)
+    map.forEach((row){
+
+      debugPrint("-----"+row.toString());
+      if(row.containsKey("count"))
+        allCount+= int.parse(row["count"]);
+       allPrices+=double.parse(row["count"])*double.parse(row["price"]);
+    });
+    setState(() {
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     appbarBloc.setTitle("سلة المشتريات");
-    return Stack(
+
+
+
+    if(!isRegistered()) return Card(
+        elevation: 10,
+        margin: EdgeInsets.all(10),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: InkWell(
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen()));
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+
+            children: <Widget>[
+              buildGroupDevider("السلة الرئيسية"),
+              //buildGroupItem(context, data , bloc),
+              builtCartInfoV2(context,),
+              Container(
+                height: 40,
+                margin: EdgeInsets.all(10),
+                width: double.infinity,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        color: sharedData.mainColor,
+                        child: MaterialButton(
+                          child: Text(
+                            'تأكيد الطلب',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                child: showSendToLogin(
+                                    1.toString(), context));
+
+                            //confirmOrder(data[index].id, data[index].productDetails);
+                          },
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: sharedData.mainColor,
+                                style: BorderStyle.solid,
+                                width: 1)),
+                        child: MaterialButton(
+                          child: Text(
+                            'مشاركة السلة',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                child: shareCartDialog(
+                                   1.toString(), context));
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ],
+          ),)
+    );
+    else
+    return     Stack(
       children: <Widget>[
         BlocProvider<CartGroupBloc>(
           bloc: bloc,
@@ -154,6 +266,77 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  Widget showSendToLogin(String cartNum, ctx) {
+    String name = "";
+    return new AlertDialog(
+      content: new Container(
+        width: 260.0,
+        height: 200.0,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            // dialog top
+            new Expanded(
+              child: new Row(
+                children: <Widget>[
+                  Expanded(
+                    child: new Container(
+                      // padding: new EdgeInsets.all(10.0),
+                      decoration: new BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: new Text(
+                        sharedData.signInToContinue,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // dialog centre
+
+
+            // dialog bottom
+             Container(
+                padding: new EdgeInsets.all(4.0),
+                decoration: new BoxDecoration(
+                  color: sharedData.mainColor,
+                ),
+                child: FlatButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => ProfileScreen()));
+
+                  },
+                  child: new Text(
+                    sharedData.Continue,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+
+          ],
+        ),
+      ),
+    );
+  }
+
   shareCart(String phone, String cartNum, ctx) async {
     Map<String, dynamic> params = new Map();
     params['api_token'] = token;
@@ -171,6 +354,7 @@ class _CartScreenState extends State<CartScreen> {
 //    Navigator.of(ctx).pop();
   }
 
+  /*Online*/
   Widget buildCartList(UserCarts carts, bloc, ctx) {
     List <Cart> data = carts.userCart;
     return ListView.builder(
@@ -183,7 +367,7 @@ class _CartScreenState extends State<CartScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen(data[index])));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen(cart: data[index])));
                 },
                 child: Column(
                   children: <Widget>[
@@ -211,7 +395,8 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () {
-                                  //confirmOrder(data[index].id, data[index].productDetails);
+                                 // confirmOrder(data[index].cartNum, data[index].productDetails.elementAt(0));
+                                  confirmOrder(data[index].cartNum);
                                 },
                               ),
                             ),
@@ -253,13 +438,13 @@ class _CartScreenState extends State<CartScreen> {
         });
   }
 
-  confirmOrder(cartNum, ProductDetailsFromCart carts) {
+  confirmOrder(cartNum) {
     if (isRegistered()) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ConfiremOrderScreen(
-            cartNum: cartNum,
+            cartNum: cartNum.toString(),
           ),
         ),
       );
@@ -571,6 +756,34 @@ class _CartScreenState extends State<CartScreen> {
     print(token);
   }
 
+  Widget builtCartInfoV2(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: <Widget>[
+                Text('السعر الكلي : '),
+               Text('$allPrices'),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: <Widget>[
+                Text(' الكمية :'),
+                Text('$allCount'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   Widget builtCartInfo(BuildContext context, Cart data) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -581,7 +794,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Row(
               children: <Widget>[
                 Text('السعر الكلي : '),
-                Text(data.totalPrice.toString()),
+                data.totalPrice.toString()!=null?Text(data.totalPrice.toString()):"",
               ],
             ),
           ),

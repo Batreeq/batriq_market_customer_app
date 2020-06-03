@@ -8,6 +8,7 @@ class Product {
   String price;
   String size;
   ProductTab catigory;
+  bool is_offer;
   Product(
-      {this.title, this.image, this.price, this.size, this.catigory, this.id});
+      {this.title, this.image, this.price, this.size, this.catigory, this.id,this.is_offer});
 }

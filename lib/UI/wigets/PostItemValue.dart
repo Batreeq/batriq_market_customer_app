@@ -1,27 +1,38 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/DataLayer/Catigory.dart';
+import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/SubCategoriesPage.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/products_screen.dart';
+import 'package:customerapp/models/ProductDetailsModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:customerapp/models/PostsModel.dart';
 
-class CategoryItemValue extends StatelessWidget {
-  Catigory catigory;
-  CategoryItemValue({this.catigory});
+class PostItemValue extends StatelessWidget {
+   PostsModel item;
+   PostItemValue({this.item});
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SubCategoriesPage(
-                offerId: catigory.id,
-              ),
-            ),
-          );
+
+          ProductDetailsModel productDetails=item.product_details;
+          Product product=Product(
+              title:productDetails.name ,
+              image: productDetails.image,
+              price: productDetails.price,
+              size: productDetails.size,
+              catigory: null,
+              id:productDetails.id.toString() ,
+              is_offer: false);
+
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => ProductDetailsScreen(
+                product: product,
+              )));
         },
         child: Container(
           height: 105.0,
@@ -29,7 +40,7 @@ class CategoryItemValue extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(3.0)),
             image: DecorationImage(
-                image: CachedNetworkImageProvider(catigory.image),
+                image: CachedNetworkImageProvider(item.image),
                 fit: BoxFit.cover),
           ),
           child: Container(
@@ -39,7 +50,7 @@ class CategoryItemValue extends StatelessWidget {
             ),
             child: Center(
                 child: Text(
-                  catigory.name,
+                  item.product_name.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

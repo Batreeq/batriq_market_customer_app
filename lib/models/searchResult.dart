@@ -35,6 +35,7 @@ class Products {
   String notice;
   var createdAt;
   var updatedAt;
+  bool is_offer;
 
   Products(
       {this.id,
@@ -49,7 +50,7 @@ class Products {
       this.detailsImage,
       this.notice,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,this.is_offer});
 
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,6 +66,7 @@ class Products {
     notice = json['notice'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    is_offer = json['is_offer'];
   }
 
   Map<String, dynamic> toJson() {
@@ -82,6 +84,7 @@ class Products {
     data['notice'] = this.notice;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['is_offer'] = this.is_offer;
     return data;
   }
 }

@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/AddMemberScreen.dart';
+import 'package:customerapp/helpers/DBHelper.dart';
+import 'package:customerapp/models/MyMultiCardModel.dart';
+import 'package:customerapp/models/UserCarts.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:customerapp/shared_data.dart';
@@ -11,6 +14,7 @@ import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:requests/requests.dart';
+import '../../../shared_data.dart';
 import 'HomePage.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' as Io;
@@ -498,6 +502,7 @@ class _ProfileScreen extends State {
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                       child: sharedData.phoneIcon,
                     ),
+                    //getDrop()
                   ],
                 ),
               ), // phone
@@ -691,27 +696,26 @@ class _ProfileScreen extends State {
       info.email =
       emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
       info.image = info.image == null || info.image == '' ? '' : image;
-      info.image = base64Image == '' ? info.image  : base64Image;
+      info.image = base64Image == '' ? info.image : base64Image;
 
       info.phone =
       phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
-      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+      info.salary =
+      salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
 
-      info.name = nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
-      info.location = locationCon.text == null || locationCon.text == '' ? '' : locationCon.text;
-      info.email = emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
-      info.phone = phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
-      info.salary = salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
+      info.name =
+      nameCon.text == null || nameCon.text == '' ? '' : nameCon.text;
+      info.location =
+      locationCon.text == null || locationCon.text == '' ? '' : locationCon
+          .text;
+      info.email =
+      emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
+      info.phone =
+      phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
+      info.salary =
+      salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
 
-
-      print('will add name =' + nameCon.text);
-      print('will add phone =' + phoneCon.text);
-      print('will add email =' + emailCon.text);
-      print('will add loc =' + locationCon.text);
-      print('will add salary =' + salaryCon.text);
-      print('will add image ' + image.toString());
-
-     // print('will add to =' + info.apiToken);
+      // print('will add to =' + info.apiToken);
       print('will add phone =' + info.name);
       print('will add email =' + info.email);
       print('will add loc =' + info.location);
@@ -738,6 +742,7 @@ class _ProfileScreen extends State {
 
       sharedData.showLoadingDialog(context); //invoking login
       await Future.delayed(Duration(seconds: 3));
+      List<ProductDetailsFromCart> items;
 
       if (response.statusCode == 200) {
         response.raiseForStatus();
@@ -752,12 +757,70 @@ class _ProfileScreen extends State {
           sharedData.userInfo.location = info.location;
           sharedData.userInfo.email = info.email;
           sharedData.userInfo.image = info.image;
+          sharedData.api_token = info.apiToken;
+          sharedData.writeToStorage(key: 'token', value: info.apiToken);
+
+          setState(() {
+            titles[0] = 'تسجيل خروج ';
+          });
+          print('User Carts are :');
+          final dataList = await DBHelper.getData('user_cart');
+          if (dataList != null && dataList.isNotEmpty) {
+            var Myitems = dataList.map((item) {
+              print("object${item['count']}");
+              return MyMultiCardModel(
+                  item['id'].toString(),
+                  item['count'],
+                  item['price'],
+                  "0");
+            }).toList();
+
+
+            addMultiToAPI(info.apiToken, Myitems);
+          }
+          else
+            sharedData.flutterToast('You registered Successfully 😍 ');
+          print('list of carts are null ');
         } else
           print('user object which get from json = null');
-        sharedData.flutterToast('You registered Sucsessfully 😍 ');
+
+        if (items != null && items.isNotEmpty) {}
+        //   print ('in cart product number 0 the name is ' + items.elementAt(0).name );
+
       }
       Navigator.of(context).pop(); //close the dialog
     }
+  }
+
+
+  addMultiToAPI(String token, List<MyMultiCardModel> items) async {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data2 = new Map<String, dynamic>();
+
+    List jsonList = List();
+    items.map((item) => jsonList.add(item.toJson())).toList();
+    data["data"] = jsonList;
+
+    data2["api_token"] = "$token";
+    data2["data"] = jsonEncode(data);
+    print("json::::" + jsonEncode(data2));
+    var response = await Requests.post(
+        sharedData.addMultiToCartUrl,
+        body: data2
+    );
+    if (response != null) {
+      print(response.content().toString());
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await DBHelper.clearCart();
+        sharedData.flutterToast('You registered Successfully 😍 ');
+        readToken();
+        setState(() {
+
+        });
+      }
+      print('add to multi done ');
+    } else
+      print('response is null');
   }
 
   addMember() {
@@ -870,7 +933,7 @@ class _ProfileScreen extends State {
   // to check if the phone valid like Jordan phone pattern (10 characters start with 079, 078 or 077)
   bool isValidPhone() {
     phoneCon.text.trim();
-    RegExp regExp = new RegExp('((079)|(078)|(077)){1}[0-9]{7}');
+    RegExp regExp = new RegExp('((79)|(78)|(77)){1}[0-8]{7}');
     if (phoneCon.text.length == 0) {
       return false;
     } else if (!regExp.hasMatch(phoneCon.text)) {
@@ -904,5 +967,36 @@ class _ProfileScreen extends State {
       submitUserData(token);
     } else
       sharedData.flutterToast('Invalid Input');
+  }
+
+  String _dropDownValue;
+
+  Widget getDrop() {
+   return  DropdownButton(
+      hint: _dropDownValue == null
+          ? Text('Dropdown')
+          : Text(
+        _dropDownValue,
+        style: TextStyle(color: Colors.blue),
+      ),
+      isExpanded: true,
+      iconSize: 30.0,
+      style: TextStyle(color: Colors.blue),
+      items: ['One', 'Two', 'Three'].map(
+            (val) {
+          return DropdownMenuItem<String>(
+            value: val,
+            child: Text(val),
+          );
+        },
+      ).toList(),
+      onChanged: (val) {
+        setState(
+              () {
+            _dropDownValue = val;
+          },
+        );
+      },
+    );
   }
 }

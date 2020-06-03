@@ -69,7 +69,7 @@ class _MessagingScreenState extends State<MessagingScreen>
               IconButton(onPressed: (){
                 launch(sharedData.whatsAppURL);
               },
-                icon: Image.asset("assets/images/icons/whatsapp.png",height: 26,width: 26,)),
+                icon: Image.asset("assets/images/icons/whatsapp.png",height: 32,width: 32,)),
               new Container(
                   margin: new EdgeInsets.symmetric(horizontal: 3.0),
                   child: Theme.of(context).platform == TargetPlatform.iOS

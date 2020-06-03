@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/DataLayer/tab.dart';
+import 'package:customerapp/models/IncreasePointsListClass.dart';
 import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/models/UserInfo.dart';
 import 'package:customerapp/shared_data.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'HomePage.dart';
+import 'package:customerapp/models/PostsModel.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -16,10 +18,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  IncreasePointsListClass increasePointsList = new IncreasePointsListClass ();
   @override
   void initState() {
     super.initState();
     readToken();
+    isCartHasProducts();
   }
 
   readToken() async {
@@ -38,11 +42,11 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Center(
           child: Image.asset(
-        "assets/images/logo.png",
-        width: 150,
-        height: 150,
-        fit: BoxFit.fill,
-      )),
+            "assets/images/logo.png",
+            width: 150,
+            height: 150,
+            fit: BoxFit.fill,
+          )),
     );
   }
 
@@ -66,9 +70,16 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     extractedData['categories'].forEach((tabdata) {
       ProductTab tab =
-          ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
+      ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
       tabs.add(tab);
     });
+
+    extractedData['posts'].forEach((item){
+      PostsModel data= PostsModel.fromJson(item);
+      postsList.add(data);
+    });
+
+  //  debugPrint("post size"+postsList.length.toString());
     extractedData['homeSliders'].forEach((image) {
       sharedData.sliderHomeImages.add(image['image']);
     });
@@ -78,9 +89,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (isRegistered()) {
       balance != "0"
           ? sharedData.userBalance = UserBalance(
-              activeBalance: balance['active_balance'].toString(),
-              inactiveBalance: balance['inactive_balance'].toString(),
-              totalBalance: balance['total_balance'].toString())
+          activeBalance: balance['active_balance'].toString(),
+          inactiveBalance: balance['inactive_balance'].toString(),
+          totalBalance: balance['total_balance'].toString())
           : null;
       extractedData['user_payments'].forEach((payment) {
         sharedData.listOfUserPayment.add(UserPayments(
@@ -108,6 +119,8 @@ class _SplashScreenState extends State<SplashScreen> {
             userId: family['user_id']));
       });
       final userInfo = extractedData['user_info'];
+      sharedData.increasePointsList = IncreasePointsListClass.fromJson(extractedData) ;
+
       sharedData.userInfo = UserInfo(
         updatedAt: userInfo['updated_at'],
         id: userInfo['id'],
@@ -142,5 +155,11 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       new MaterialPageRoute(builder: (context) => new HomePagee()),
     );
+  }
+
+  void isCartHasProducts() {
+    sharedData.readCartIfHasProduct().then((isFilled){
+      sharedData.isCartNotEmpty = isFilled ;
+    });
   }
 }
