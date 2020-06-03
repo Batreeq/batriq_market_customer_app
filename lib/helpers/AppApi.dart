@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 
 
-final baseUrl = 'https://trusstcommunity.com/admin';
+
 
 
 class Response {
@@ -67,6 +67,47 @@ Future<Response> getAllMainCategories(String offerID,String token) async {
     return new Response(-1, "error");
   }
 
+}
+
+
+
+Future<Response> transferMoney(String amount, String toUser, String token) async {
+  Map<String, dynamic> data = {"to_user": toUser,"amount": amount,"api_token":token};
+
+  print(sharedData.transferMoneyURL);
+  print("body"+ json.encode(data).toString());
+
+  try {
+    var response = await http.post(sharedData.transferMoneyURL, headers: {'content-type': 'application/json'},
+        body: json.encode(data));
+    var res = json.decode(response.body);
+    print('code  = ${response.statusCode}');
+    print('response  = ${response.body}');
+    if (response.statusCode == 200) {
+
+
+      var message="";
+      if(res['error']!=null) message=res['error'];
+      else if(res['success']!=null) message=res['success'];
+
+      print("message"+message);
+        return new Response(200,message);
+
+    } else if (response.statusCode == 401) {
+      return new Response(response.statusCode, sharedData.tryLater);
+    } else {
+      return new Response(response.statusCode, sharedData.tryLater);
+    }
+  }
+  on TimeoutException catch (_) {
+    sharedData.flutterToast('Please check your internet connection!');
+    return Response(-1000, '');
+  }
+
+  catch (e) {
+    print(e);
+    return new Response(-1, "error");
+  }
 }
 
 

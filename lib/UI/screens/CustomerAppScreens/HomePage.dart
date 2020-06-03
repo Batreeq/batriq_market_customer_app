@@ -20,6 +20,7 @@ import '../../../shared_data.dart';
 import '../../../shared_data.dart';
 import '../../../shared_data.dart';
 import '../messageing_screen.dart';
+import 'PostsPage.dart';
 import 'SearchBar.dart';
 import 'profile_screen.dart';
 
@@ -97,6 +98,7 @@ class _HomePageState extends State<HomePagee> {
     const String workWithusText = 'اعمل معنا';
     const String cardText = 'سلة المشتريات';
     const String chatText = 'المراسلة';
+    const String postText = sharedData.posts;
     pageController = new PageController();
     List<Widget> _widgetOptions = <Widget>[
       //ChatScreen(),
@@ -104,6 +106,7 @@ class _HomePageState extends State<HomePagee> {
       WorkWithUsScreen(),
       CartScreen(),
       MessagingScreen(),
+      PostsPage(),
       //ProfilePage(),
     ];
     return Scaffold(
@@ -179,6 +182,13 @@ class _HomePageState extends State<HomePagee> {
             icon: sharedData.chatIcon,
             title: Text(
               chatText,
+              style: sharedData.navBarTextStyle,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_to_home_screen),
+            title: Text(
+              postText,
               style: sharedData.navBarTextStyle,
             ),
           ),
