@@ -81,6 +81,8 @@ class _BalanceScreen extends State<BalanceScreen> {
                         validator: (String value) {
                           if (toUserController.text.isEmpty) {
                             return  sharedData.enterNumberUser;
+                          }else if(toUserController.text.toString()==sharedData.userInfo.phone.toString()){
+                            return sharedData.canotTranferForYourSlef;
                           }
                           else return null;
                         },

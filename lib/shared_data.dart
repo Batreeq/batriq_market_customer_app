@@ -214,6 +214,7 @@ class sharedData {
   static const String tryLater= 'حاول لاحقا';
   static const String posts= 'الاعلانات';
   static const String noData= 'لايوجد بيانات ';
+  static const String canotTranferForYourSlef= 'لا يمكنك التحويل لنفسك!! ';
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
