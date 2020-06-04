@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_picker_dialog.dart';
+import 'package:country_pickers/utils/utils.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/AddMemberScreen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/models/MyMultiCardModel.dart';
@@ -44,6 +47,7 @@ class _ProfileScreen extends State {
 
   String salary;
   String token;
+  Country _selectedDialogCountry;
 
   TextEditingController salaryCon;
 
@@ -275,9 +279,40 @@ class _ProfileScreen extends State {
     return token;
   }
 
+  void _openCountryPickerDialog() => showDialog(
+    context: context,
+    builder: (context) => Theme(
+        data: Theme.of(context).copyWith(primaryColor: Colors.black),
+        child: CountryPickerDialog(
+            titlePadding: EdgeInsets.all(8.0),
+            searchCursorColor: Colors.black,
+            searchInputDecoration: InputDecoration(hintText: 'Search...'),
+            isSearchable: true,
+            title: Text('Select your country code',),
+            onValuePicked: (Country country) {
+              setState(() => _selectedDialogCountry = country);
+              print(country.name);
+            },
+            itemBuilder: (Country country) {
+              return Container(
+                child: Row(
+                  children: <Widget>[
+                    CountryPickerUtils.getDefaultFlagImage(country),
+                    SizedBox(
+                      width: 16.0,
+                    ),
+                    Text("+${country.phoneCode}(${country.isoCode})"),
+                  ],
+                ),
+              );
+            })),
+  );
+
   @override
   void initState() {
     super.initState();
+
+
 
     familyMembers = sharedData.familyMembers;
     info = sharedData.userInfo;
@@ -308,7 +343,17 @@ class _ProfileScreen extends State {
       size: 70,
       backgroundImage: NetworkImage(image),
     );
+
+
+    _selectedDialogCountry = new Country(
+      phoneCode: CountryPickerUtils
+          .getCountryByPhoneCode('971')
+          .phoneCode,
+    );
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -466,7 +511,9 @@ class _ProfileScreen extends State {
                           textDirection: TextDirection.rtl,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
+
                           focusNode: phoneFocus,
+
                           onSaved: (value) {
                             setState(() {
                               phone = value;
@@ -487,6 +534,8 @@ class _ProfileScreen extends State {
                             border: InputBorder.none,
                             hintText: sharedData.phoneHintTextField,
                             hintStyle: TextStyle(color: Colors.grey),
+
+
                           ),
                         ),
                       ),
@@ -500,7 +549,34 @@ class _ProfileScreen extends State {
                     Padding(
                       padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                      child: sharedData.phoneIcon,
+                      child:  GestureDetector(
+                        onTap: () {
+                          _openCountryPickerDialog();
+                        },
+                        child: Container(
+
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                "+${_selectedDialogCountry.phoneCode}",
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              CountryPickerUtils.getDefaultFlagImage(
+                                  CountryPickerUtils
+                                      .getCountryByPhoneCode(
+                                      _selectedDialogCountry
+                                          .phoneCode)),
+                              SizedBox(
+                                width: 7,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     //getDrop()
                   ],
