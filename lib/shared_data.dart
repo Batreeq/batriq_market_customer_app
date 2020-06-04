@@ -397,6 +397,8 @@ class sharedData {
       'https://jaraapp.com/index.php/api/mainCategories?';
   static String getDeliveryPriceUrl = "https://jaraapp.com/api/getDeliveryPrice?location_id=";
 
+  static String confirmOrderUrl = 'https://jaraapp.com/index.php/api/confirmOrder';
+
   static String userPoints = '0';
 
   //static List <UserPayments>  listOfUserPayment ;

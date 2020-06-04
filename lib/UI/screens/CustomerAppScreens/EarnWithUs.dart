@@ -286,11 +286,9 @@ class _EarnWithUsScreen extends State {
   sharedApp() async {
     await FlutterShare.share(
         title: 'Share link app',
-        text:
-        'You have a document shipped to you. Click on link to download TrussT Community app and start tracking your document',
-        linkUrl:
-        'bmt.lh/2IzBaG0',
-        chooserTitle:
-        'Share the link of Trust app');
+        text: 'You have a document shipped to you. Click on link to download TrussT Community app and start tracking your document',
+        linkUrl: 'bmt.lh/2IzBaG0',
+        chooserTitle: 'Share the link of Trust app',
+    );
   }
 }
