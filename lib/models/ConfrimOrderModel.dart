@@ -23,7 +23,8 @@ class ConfrimOrderModel {
       this.cart_num,
       this.city,
       this.region,
-      this.delivery_time,this.total_price);
+      this.delivery_time,
+      this.total_price);
 
 
 

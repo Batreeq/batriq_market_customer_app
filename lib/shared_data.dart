@@ -456,5 +456,4 @@ class sharedData {
   }
 
 static bool isCartNotEmpty = false ;
-
 }
