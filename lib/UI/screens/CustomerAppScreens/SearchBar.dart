@@ -7,6 +7,7 @@ import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/DataLayer/CartName.dart';
 import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/DataLayer/tab.dart';
+import 'package:customerapp/Library/FlappySearch/FlappySearch.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/models/UserCarts.dart';
@@ -20,7 +21,7 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:customerapp/models/searchResult.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
+/*import 'package:flappy_search_bar/flappy_search_bar.dart';*/
 import 'package:flutter/rendering.dart';
 import 'package:requests/requests.dart';
 import 'package:http/http.dart' as http;
@@ -160,12 +161,13 @@ class _SearchPage extends State<SearchPage> {
             child: SearchBar<Products>(
               searchBarStyle: SearchBarStyle(
                   backgroundColor: Colors.white,
-                  padding: EdgeInsets.all(10),
-                  borderRadius: BorderRadius.circular(0)),
+                  padding: EdgeInsets.all(2),
+                  borderRadius: BorderRadius.circular(8)),
               onCancelled: () {
                 // on press cancel button
                 Navigator.of(context).pop();
               },
+              speak: (){speechCall();},
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               icon: sharedData.searchIcon,
@@ -185,7 +187,7 @@ class _SearchPage extends State<SearchPage> {
                   children: <Widget>[
                     index == 0
                         ? SizedBox(
-                            height: 70,
+                            height: 20,
                           )
                         : Container(),
                     buildSearchVoiceItem(post, index),
@@ -194,7 +196,8 @@ class _SearchPage extends State<SearchPage> {
               },
             ),
           ),
-          Padding(
+          /*this is icon to show voice command  */
+          /*Padding(
             padding: const EdgeInsets.only(top: 50),
             child: Align(
               alignment: Alignment.topCenter,
@@ -210,10 +213,10 @@ class _SearchPage extends State<SearchPage> {
                 ),
               ),
             ),
-          ),
+          ),*/
           isVoice
               ? Padding(
-                  padding: const EdgeInsets.only(top: 200),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Container(
                       color: Colors.white, child: buildSearchVoiceList()),
                 )
@@ -890,11 +893,12 @@ class _SearchPage extends State<SearchPage> {
             price: post.price,
             id: post.id.toString(),
             catigory: ProductTab(id: post.categoryId),
-            is_offer: post.is_offer));
+            is_offer: post.is_offer,
+            is_package:post.is_package));
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-        height: 140,
+        height: 180,
         width: MediaQuery.of(context).size.width,
         child: Card(
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -903,10 +907,12 @@ class _SearchPage extends State<SearchPage> {
                 new BorderSide(color: Colors.blue.withOpacity(0.3), width: 0.5),
           ),
           child: Container(
+
             height: double.infinity,
             width: double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Container(
                   height: double.infinity,
@@ -927,7 +933,7 @@ class _SearchPage extends State<SearchPage> {
                 ),
                 Flexible(
                   child: Container(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.all(14),
                     height: double.infinity,
                     width: double.infinity,
                     child: Column(
@@ -969,7 +975,23 @@ class _SearchPage extends State<SearchPage> {
                         Padding(
                           padding: EdgeInsets.all(2),
                         ),
-                        Expanded(child: buildBottomView(i, post))
+                        Expanded(child: buildBottomView(i, post)),
+
+                        post.is_package!=null?post.is_package?Container(
+                          width: MediaQuery.of(context).size.width,
+
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: sharedData.mainColor,
+                          ),
+                          child: Text('باكيج',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal)),
+                        ):Container():Container()
+
                       ],
                     ),
                   ),

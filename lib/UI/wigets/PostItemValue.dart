@@ -27,7 +27,7 @@ class PostItemValue extends StatelessWidget {
               size: productDetails.size,
               catigory: null,
               id:productDetails.id.toString() ,
-              is_offer: false);
+              is_offer: false,is_package:false );
 
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => ProductDetailsScreen(
