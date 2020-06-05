@@ -1,9 +1,6 @@
-import 'dart:math';
 import 'package:customerapp/DataLayer/Cart.dart';
-import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/my_orders_filter.dart';
 import 'package:customerapp/models/ListOfMyOrders.dart';
-import 'package:customerapp/models/orderInfo.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';

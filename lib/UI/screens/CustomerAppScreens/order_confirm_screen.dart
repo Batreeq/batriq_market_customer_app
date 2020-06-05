@@ -94,7 +94,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     int cityId = region['id'];
     print('city id ' + cityId.toString());
     String url = sharedData.getDeliveryPriceUrl +
-        '228' +
+        cityId.toString() +
         '&&api_token=$token' +
         '&&cart_num=$cartNum';
     print('url is' + url);
@@ -113,8 +113,11 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
             .category
             .elementAt(0)
             .categoryName);
-      else
+      else {
+        sharedData.flutterToast('عذرا لا يوجد توصيل لهذه المنطقة حاليا' + cityId.toString());
         print('list empty ');
+        //last index = 0 ;
+     }
     }
   }
 
@@ -473,13 +476,17 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
+                      double delTotal = 0;
+                      for (Category c in categoriesWhichSelected)
+                        {delTotal+= double.parse(c.price );}
+                      print ('all del price '+ delTotal.toString());
                       if (widget.selectedTime != null) {
                         //Navigator.of(context).pop();
 
                         if (lastIndex == deliveryTimes.timesPrices.length)
                           barCodeDialog(
                               deliveryTimes.barcode,
-                              /*devliveryPrice*/ '200',
+                              /*devliveryPrice*/ delTotal.toString(),
                               totalCartPrice);
 
                         categoriesWhichSelected.add(category);

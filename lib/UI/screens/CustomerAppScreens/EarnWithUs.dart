@@ -28,8 +28,6 @@ class _EarnWithUsScreen extends State {
   @override
   void initState() {
     super.initState();
-
-
   }
 
   @override
@@ -265,7 +263,7 @@ class _EarnWithUsScreen extends State {
                                               ],
                                             ),
                                             onPressed: () {
-                                              sharedApp();
+                                              doShareAPI();
                                             },
                                             color: sharedData.yellow,
                                           ),
@@ -283,12 +281,38 @@ class _EarnWithUsScreen extends State {
         });
   }
 
-  sharedApp() async {
+  Future<int> sharedApp() async {
     await FlutterShare.share(
-        title: 'Share link app',
-        text: 'You have a document shipped to you. Click on link to download TrussT Community app and start tracking your document',
-        linkUrl: 'bmt.lh/2IzBaG0',
-        chooserTitle: 'Share the link of Trust app',
+      title: 'Share link app',
+      text: 'You have a document shipped to you. Click on link to download TrussT Community app and start tracking your document',
+      linkUrl: 'bmt.lh/2IzBaG0',
+      chooserTitle: 'Share the link of Trust app',
     );
+    return 0;
+  }
+
+  void doShareAPI() {
+    sharedApp().then((val) async {
+      if (token != null || token != '') {
+        final response = await Requests.get(sharedData.increasePointsUrl +
+            'api_token=$token&&points=$sharedAppPoints');
+        if (response != null) {
+          print(response);
+          if (response.statusCode == 200) {
+            sharedData.flutterToast(
+                'تم اضافة ' + sharedAppPoints + 'نثطة الى نقاطك ');
+            if (sharedData.userInfo.points != null || sharedData.userInfo.points != '')
+           { int pointsUser = int .parse(sharedData.userInfo.points ) ;
+            int addPoints = int .parse(sharedAppPoints ) ;
+            pointsUser += addPoints ;
+            setState(() {
+              sharedData.userInfo.points = pointsUser.toString();
+            });
+           }
+          }
+        }
+      }
+      else sharedData.flutterToast('سجل دخول لتتمكن من كسب النقاط');
+    });
   }
 }
