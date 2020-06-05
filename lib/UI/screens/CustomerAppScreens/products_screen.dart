@@ -497,9 +497,9 @@ class _ProductsState extends State<Products> {
   }
 
   getCartsDialog (int count , int i ) {
-    setState(() {
+   /* setState(() {
       sharedData.writeToStorage(key: 'isCartNotEmpty' , value: 'true');
-    });
+    });*/
 
     if (token != null && token.length > 10) {
       getCartNames(Cart(

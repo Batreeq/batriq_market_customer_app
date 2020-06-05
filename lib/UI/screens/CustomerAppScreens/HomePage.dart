@@ -145,6 +145,7 @@ class _HomePageState extends State<HomePagee> {
 
           SingleChildScrollView(
             child: Container(
+              color: Colors.white,
               height: MediaQuery.of(context).size.height - 190,
               child: _widgetOptions.elementAt(_selectedIndex),
             ),

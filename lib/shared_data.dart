@@ -180,6 +180,7 @@ class sharedData {
 
   static const String searchHintText = 'البحث';
   static const String phoneHintTextField = 'رقم الهاتف';
+  static const String enterPhoneHintTextField = 'ادخل  رقم الهاتف';
   static const String ageHintTextField = 'العمر';
   static const String nameHintTextField = 'الاسم';
   static const String passwordTextField = 'كلمة المرور';
@@ -412,7 +413,6 @@ class sharedData {
 
   static const String mainCategoriesURL =
       'https://jaraapp.com/api/mainCategories?';
-      'https://jaraapp.com/index.php/api/mainCategories?';
   static String getDeliveryPriceUrl = "https://jaraapp.com/api/getDeliveryPrice?location_id=";
 
   static String confirmOrderUrl = 'https://jaraapp.com/index.php/api/confirmOrder';
