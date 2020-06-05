@@ -89,6 +89,8 @@ class _ProfileScreen extends State {
           ),
         ),
       ],
+
+
       rows: familyMembers
       // Loops through dataColumnText, each iteration assigning the value to element
           .map(
