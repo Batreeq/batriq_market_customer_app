@@ -17,11 +17,13 @@ import 'models/UserInfo.dart';
 import 'models/orderInfo.dart';
 import 'package:customerapp/models/UserBalance.dart';
 import 'models/UserBalance.dart';
+import 'models/PostsModel.dart';
 
 ///this file for shared data between pages
 ///
 ///
 List<ProductTab> tabs = [];
+List<PostsModel> postsList = [];
 List<MyProductModel> myProductList = [];
 LocationData locationData;
 String token = "";
@@ -191,6 +193,11 @@ class sharedData {
   static const String totalBalanceTextField = 'مجموع الرصيد';
   static const String rechargeBalanceTextField = 'اعادة شحن رصيد';
   static const String accountStatementTextField = 'كشف حساب';
+  static const String transferMoney = 'تحويل الرصيد';
+  static const String transferMoneyToUser = 'الى الرقم';
+  static const String transferMoneyAmmount = 'الرصيد';
+  static const String enterNumberUser = 'الرجاء ادخال رقم المستخدم';
+  static const String enterAmount = 'الرجاء ادخال الرصيد';
 
   static const String altPhoneHintTextField = 'رقم الهاتف البديل ';
   static const String addressHintTextField = 'العنوان ';
@@ -200,9 +207,14 @@ class sharedData {
   static const String signInToContinue= 'يرجى انشاء حساب لاتمام عملية الشراء ';
   static const String Continue= 'موافق';
   static const String cash= 'الدفع عند الاستلام';
+  static const String cancel= 'الغاء';
   static const String visa= 'الدفع الأن';
   static const String offerBatriq= 'عروض بطريق';
   static const String all= 'الكل';
+  static const String tryLater= 'حاول لاحقا';
+  static const String posts= 'الاعلانات';
+  static const String noData= 'لايوجد بيانات ';
+  static const String canotTranferForYourSlef= 'لا يمكنك التحويل لنفسك!! ';
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
@@ -278,6 +290,11 @@ class sharedData {
         backgroundColor: mainColor,
         textColor: Colors.black,
         fontSize: 16.0);
+  }
+
+  static bool validationForm(GlobalKey<FormState> item){
+
+    return item.currentState.validate();
   }
 
   static String getUserCartsUrl = "https://jaraapp.com/index.php/api/getUserCart?api_token=";
@@ -401,6 +418,8 @@ class sharedData {
   static String increasePointsUrl = 'https://jaraapp.com/index.php/api/increasePoints?';
 
   static String userPoints = '0';
+
+  static const String transferMoneyURL='https://jaraapp.com/api/transferMoney';
 
   //static List <UserPayments>  listOfUserPayment ;
 

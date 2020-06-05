@@ -211,7 +211,7 @@ class _ProductsState extends State<Products> {
                     },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(5, i == 0 ? 20 : 5, 5, 0),
-                      height: 170,
+                      height: 180,
                       width: MediaQuery.of(context).size.width,
                       child: Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -231,7 +231,7 @@ class _ProductsState extends State<Products> {
                               ///product image
                               Container(
                                 height: double.infinity,
-                                width: 140,
+                                width: 130,
                                 padding: EdgeInsets.all(10),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -263,7 +263,7 @@ class _ProductsState extends State<Products> {
                                             productss[i].title,
                                             style: TextStyle(
                                                 color: Colors.black,
-                                                fontSize: 15,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.normal),
                                           ),
 
@@ -466,7 +466,21 @@ class _ProductsState extends State<Products> {
                                             )*/
                                           ],
                                         ),
-                                      )
+                                      ),
+
+                                      productss[i].is_package!=null?  productss[i].is_package?Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: sharedData.mainColor,
+                                        ),
+                                        child: Text('باكيج',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.normal)),
+                                      ):Container():Container()
                                     ],
                                   ),
                                 ),
@@ -585,7 +599,8 @@ class _ProductsState extends State<Products> {
             title: p['name'],
             id: p['id'].toString(),
             size: p['size'],
-            is_offer: p['is_offer']);
+            is_offer: p['is_offer'],
+        is_package: p['is_package']);
         products.add(product);
       });
     }else
@@ -601,7 +616,8 @@ class _ProductsState extends State<Products> {
           title: p['name'],
           id: p['id'].toString(),
           size: p['size'],
-      is_offer: p['is_offer']);
+      is_offer: p['is_offer'],
+      is_package: p['is_package']);
       products.add(product);
     });
     if (mounted)

@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'HomePage.dart';
+import 'package:customerapp/models/PostsModel.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -72,6 +73,13 @@ class _SplashScreenState extends State<SplashScreen> {
       ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
       tabs.add(tab);
     });
+
+    extractedData['posts'].forEach((item){
+      PostsModel data= PostsModel.fromJson(item);
+      postsList.add(data);
+    });
+
+  //  debugPrint("post size"+postsList.length.toString());
     extractedData['homeSliders'].forEach((image) {
       sharedData.sliderHomeImages.add(image['image']);
     });
