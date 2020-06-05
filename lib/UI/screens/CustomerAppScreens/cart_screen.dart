@@ -396,7 +396,7 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                                 onPressed: () {
                                  // confirmOrder(data[index].cartNum, data[index].productDetails.elementAt(0));
-                                  confirmOrder(data[index].cartNum);
+                                  confirmOrder(data[index].cartNum , data[index].price);
                                 },
                               ),
                             ),
@@ -438,13 +438,13 @@ class _CartScreenState extends State<CartScreen> {
         });
   }
 
-  confirmOrder(cartNum) {
+  confirmOrder(cartNum , String cartTotalPrice) {
     if (isRegistered()) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ConfiremOrderScreen(
-            cartNum: cartNum.toString(),
+            cartNum: cartNum.toString(),totalCartPrice: cartTotalPrice,
           ),
         ),
       );
@@ -766,7 +766,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Row(
               children: <Widget>[
                 Text('السعر الكلي : '),
-               Text('$allPrices'),
+                Text('$allPrices'),
               ],
             ),
           ),

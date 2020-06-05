@@ -412,6 +412,12 @@ class sharedData {
 
   static const String mainCategoriesURL =
       'https://jaraapp.com/api/mainCategories?';
+      'https://jaraapp.com/index.php/api/mainCategories?';
+  static String getDeliveryPriceUrl = "https://jaraapp.com/api/getDeliveryPrice?location_id=";
+
+  static String confirmOrderUrl = 'https://jaraapp.com/index.php/api/confirmOrder';
+  static String increasePointsUrl = 'https://jaraapp.com/index.php/api/increasePoints?';
+
   static String userPoints = '0';
 
   static const String transferMoneyURL='https://jaraapp.com/api/transferMoney';
@@ -473,5 +479,4 @@ class sharedData {
   }
 
 static bool isCartNotEmpty = false ;
-
 }
