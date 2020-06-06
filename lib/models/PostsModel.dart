@@ -1,5 +1,5 @@
 
-import 'package:customerapp/models/ListOfMyOrders.dart';
+
 import 'package:customerapp/models/ProductDetailsModel.dart';
 
 class PostsModel {
@@ -10,8 +10,9 @@ class PostsModel {
     String product_id;
     String product_name;
     String updated_at;
+    String text;
 
-    PostsModel({this.created_at, this.id, this.image, this.product_details, this.product_id, this.product_name, this.updated_at});
+    PostsModel({this.created_at, this.id, this.image, this.product_details, this.product_id, this.product_name, this.updated_at,this.text});
 
     factory PostsModel.fromJson(Map<String, dynamic> json) {
         return PostsModel(
@@ -21,7 +22,8 @@ class PostsModel {
             product_details: json['product_details'] != null ? ProductDetailsModel.fromJson(json['product_details']) : null,
             product_id: json['product_id'], 
             product_name: json['product_name'], 
-            updated_at: json['updated_at'], 
+            updated_at: json['updated_at'],
+            text: json['text'],
         );
     }
 
@@ -33,6 +35,7 @@ class PostsModel {
         data['product_id'] = this.product_id;
         data['product_name'] = this.product_name;
         data['updated_at'] = this.updated_at;
+        data['text'] = this.text;
         if (this.product_details != null) {
             data['product_details'] = this.product_details.toJson();
         }

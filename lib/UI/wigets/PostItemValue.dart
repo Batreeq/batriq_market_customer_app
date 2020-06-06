@@ -50,8 +50,9 @@ class PostItemValue extends StatelessWidget {
             ),
             child: Center(
                 child: Text(
-                  item.product_name.toString(),
+                  item.text.toString(),
                   textAlign: TextAlign.center,
+
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.5,

@@ -27,15 +27,15 @@ class PostsPage extends StatelessWidget {
         ],
       );
     else if ( data!=null &&data.length > 0)
-      return GridView.builder(
+      return ListView.builder(
 
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount: data.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+       /*   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-          ),
+          ),*/
           padding: EdgeInsets.only(
               left: 16,
               right:16,bottom: 60),

@@ -39,6 +39,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 }
 
 class TabsController extends StatelessWidget {
+  int tabsSize=0;
   String offerId;
   Category category;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -57,7 +58,7 @@ class TabsController extends StatelessWidget {
             tabBar: TabBar(
               indicatorColor: Colors.orange,
               tabs: buildtabs(),
-              isScrollable: true,
+               isScrollable: tabsSize<=3?false:true,
             ),
             color: Colors.white,
           ),
@@ -78,18 +79,28 @@ class TabsController extends StatelessWidget {
       tabsList.add(Tab(
 
         child: Container(
+         width: 70,
           color: Colors.white,
-          child: Text(
-            tabs[i].name,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontFamily: "default",
-                fontWeight: FontWeight.w100),
+          child: SafeArea(
+            top: true,
+            bottom: true,
+            left: true,
+            right: true,
+            child: Text(
+              tabs[i].name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.black,
+
+                  fontSize: 14,
+                  fontFamily: "default",
+                  fontWeight: FontWeight.w100),
+            ),
           ),
         ),
       ));
     }
+    tabsSize=tabsList.length;
     return tabsList;
   }
 
