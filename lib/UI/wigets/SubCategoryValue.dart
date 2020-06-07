@@ -3,6 +3,8 @@ import 'package:customerapp/DataLayer/tab.dart';
 
 import 'package:customerapp/UI/screens/CustomerAppScreens/products_screen.dart' as cate;
 import 'package:customerapp/UI/screens/CustomerAppScreens/products_screen.dart';
+import 'package:customerapp/models/homeBlocks/CategoryHomeBlocks.dart';
+import 'package:customerapp/models/homeBlocks/HomeBlocksModel.dart';
 import 'package:customerapp/models/mainCategoriesModel/Category.dart';
 import 'package:customerapp/models/mainCategoriesModel/SubCategory.dart';
 
@@ -11,7 +13,7 @@ import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
 
 class SubCategoryItemValue extends StatelessWidget {
-  Category catigory;
+  HomeBlocksModel  catigory;
   String offerId;
 
   SubCategoryItemValue({this.catigory,this.offerId});
@@ -23,7 +25,7 @@ class SubCategoryItemValue extends StatelessWidget {
     void  openProductPage(){
       tabs.clear();
       tabs.add(ProductTab(id: "-1000", name: sharedData.all));
-      List<SubCategory> subCategoiesList=catigory.sub_categories;
+      List<CategoryHomeBlocks> subCategoiesList=catigory.categories;
       subCategoiesList.forEach((item){
         ProductTab tab =ProductTab(id: item.id.toString(), name: item.name.toString());
         tabs.add(tab);
@@ -33,8 +35,8 @@ class SubCategoryItemValue extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => ProductsScreen(
-            offerId: offerId.toString(),
-            category: catigory,
+            offerId:catigory.id.toString() ,
+
           ),
         ),
       );
@@ -61,7 +63,9 @@ class SubCategoryItemValue extends StatelessWidget {
           width: 160.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(3.0)),
-            color: sharedData.mainColor
+            image: DecorationImage(
+                image: CachedNetworkImageProvider(catigory.image),
+                fit: BoxFit.cover),
 
           ),
           child: Container(

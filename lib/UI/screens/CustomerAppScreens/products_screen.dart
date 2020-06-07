@@ -11,6 +11,7 @@ import 'package:customerapp/UI/wigets/custom_tab.dart';
 import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/models/UserCarts.dart';
+import 'package:customerapp/models/homeBlocks/CategoryHomeBlocks.dart';
 import 'package:customerapp/models/mainCategoriesModel/Category.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,8 +23,8 @@ import 'package:mutex/mutex.dart';
 
 class ProductsScreen extends StatefulWidget {
   String offerId;
-  Category category;
-  ProductsScreen({this.offerId,this.category});
+
+  ProductsScreen({this.offerId});
   @override
   _ProductsScreenState createState() => _ProductsScreenState();
 }
@@ -33,7 +34,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     return TabsController(
       offerId: widget.offerId,
-      category: widget.category,
     );
   }
 }
@@ -41,9 +41,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
 class TabsController extends StatelessWidget {
   int tabsSize=0;
   String offerId;
-  Category category;
+
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  TabsController({this.offerId,this.category});
+  TabsController({this.offerId});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -77,9 +77,8 @@ class TabsController extends StatelessWidget {
     List<Tab> tabsList = [];
     for (int i = 0; i < tabs.length; i++) {
       tabsList.add(Tab(
-
         child: Container(
-         width: 70,
+         width: 90,
           color: Colors.white,
           child: SafeArea(
             top: true,
@@ -92,7 +91,7 @@ class TabsController extends StatelessWidget {
               style: TextStyle(
                   color: Colors.black,
 
-                  fontSize: 14,
+                  fontSize: 12,
                   fontFamily: "default",
                   fontWeight: FontWeight.w100),
             ),
@@ -111,7 +110,6 @@ class TabsController extends StatelessWidget {
           offerId: offerId,
           categoryId: tabs[i].id.toString(),
           keyy: scaffoldKey,
-        category:category,
         indexTab: i));
     }
     return tabsList;
@@ -120,10 +118,10 @@ class TabsController extends StatelessWidget {
 
 class Products extends StatefulWidget {
   String offerId, categoryId;
-  Category category;
+
   int indexTab;
   GlobalKey<ScaffoldState> keyy;
-  Products({this.offerId, this.categoryId, this.keyy,this.category,this.indexTab});
+  Products({this.offerId, this.categoryId, this.keyy,this.indexTab});
   void showSnackBar(message) {
     keyy?.currentState?.showSnackBar(SnackBar(
       duration: Duration(seconds: 2),
@@ -581,10 +579,10 @@ class _ProductsState extends State<Products> {
   getProducts() async {
     List<Product> products = [];
     var url="";
-
+   // url="https://jaraapp.com/api/allMainCategories?category_id=${tabs[widget.indexTab].id}&offer_id=${widget.offerId}";
 
     if(widget.indexTab==0)
-      url="https://jaraapp.com/api/allMainCategories?cat_id=${widget.category.id}&offer_id=${widget.offerId}";
+      url="https://jaraapp.com/api/allMainCategories?offer_id=${widget.offerId}";
       else
     url ="https://jaraapp.com/index.php/api/productCategory?category_id=${widget.categoryId}&offer_id=${widget.offerId}";
     if(isRegistered())

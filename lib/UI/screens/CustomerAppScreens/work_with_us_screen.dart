@@ -47,16 +47,18 @@ class _WorkWithUsScreen extends State {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            users.elementAt(index),
-                            style: sharedData.textInProfileTextStyle,
+                          Flexible(
+                            child: Text(
+                              users.elementAt(index),
+                              style: sharedData.textInWorkWithUsTextStyle,
+                            ),
                           ),
                           index == 1
                               ?
                               //
                               Text(
                                   'ماركت',
-                                  style: sharedData.textInProfileTextStyle,
+                                  style: sharedData.textInWorkWithUsTextStyle,
                                 )
                               : Container(),
                         ],
