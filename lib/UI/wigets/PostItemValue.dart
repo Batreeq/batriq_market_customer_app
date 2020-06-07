@@ -49,11 +49,12 @@ class PostItemValue extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 14.0,
+                  fontSize: 15.0,
 
 
                 ),
               ),
+              SizedBox(height: 4,),
               Container(
 
                 height: 100,

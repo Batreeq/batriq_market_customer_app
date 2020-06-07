@@ -646,7 +646,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       keyboardType: TextInputType.number,
       controller: phoneController,
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.end,
       decoration: InputDecoration(
           labelText: ' رقم الموبايل', labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {

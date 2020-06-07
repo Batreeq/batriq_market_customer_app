@@ -74,14 +74,23 @@ class _BalanceScreen extends State<BalanceScreen> {
                       TextFormField(
                         controller: toUserController,
                         keyboardType: TextInputType.phone,
+                        textDirection: TextDirection.ltr,
+                        textAlign: TextAlign.end,
                         decoration: InputDecoration(
                             errorMaxLines: 2,
 
                             labelText: sharedData.transferMoneyToUser, labelStyle: TextStyle(fontSize: 14)),
                         validator: (String value) {
+                          String phoneWithoutPlus=sharedData.userInfo.phone.toString().replaceAll(new RegExp(r'\+'),'');
+                          String phoneWithoutCountry=sharedData.userInfo.phone.toString().replaceAll(new RegExp(r'\+962'),'');
                           if (toUserController.text.isEmpty) {
                             return  sharedData.enterNumberUser;
                           }else if(toUserController.text.toString()==sharedData.userInfo.phone.toString()){
+                            return sharedData.canotTranferForYourSlef;
+                          }else if(toUserController.text.toString()==phoneWithoutCountry){
+                            return sharedData.canotTranferForYourSlef;
+                          }
+                          else if(toUserController.text.toString()==phoneWithoutPlus){
                             return sharedData.canotTranferForYourSlef;
                           }
                           else return null;
@@ -208,9 +217,9 @@ class _BalanceScreen extends State<BalanceScreen> {
 
     return Scaffold(
       appBar: sharedData.appBar(context, 'الرصيد', null, () {}),
-      body: SingleChildScrollView(
-        child: ModalProgressHUD(
-          inAsyncCall: isLoading,
+      body: ModalProgressHUD(
+        inAsyncCall: isLoading,
+        child: SingleChildScrollView(
           child: Center(
             child: Container(
               //  to add border to the container  ,

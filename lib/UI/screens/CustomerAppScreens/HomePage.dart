@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePagee> {
       //ChatScreen(),
       Home(),
       WorkWithUsScreen(),
-      CartScreen(),
+      //CartScreen(),
       MessagingScreen(),
       PostsPage(),
       //ProfilePage(),
@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePagee> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: sharedData.cardIcon,
+            icon: sharedData.chatIcon,
             title: Text(
               chatText,
               style: sharedData.navBarTextStyle,
