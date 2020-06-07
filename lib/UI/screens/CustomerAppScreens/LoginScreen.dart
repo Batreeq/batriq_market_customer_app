@@ -21,9 +21,9 @@ class _SignUpUser extends State {
   @override
   void initState() {
     super.initState();
-    nameCon = new TextEditingController(text: name);
-    phoneCon = new TextEditingController(text: phone);
-    lastNameCon = new TextEditingController(text: phone);
+    nameCon = new TextEditingController();
+    phoneCon = new TextEditingController();
+    lastNameCon = new TextEditingController();
 
     nameFocus = new FocusNode();
     phoneFocus = new FocusNode();
@@ -278,6 +278,9 @@ class _SignUpUser extends State {
   void _validateAndSubmit() {
     final form = formKey.currentState;
     if (form.validate()) {
+      name = nameCon.text ;
+      phone = phoneCon.text ;
+      lastName = lastNameCon.text ;
       print(name + phone  + lastName);
       form.save();
     } else

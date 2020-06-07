@@ -37,9 +37,6 @@ class _CartScreenState extends State<CartScreen> {
     !isRegistered() ?
     bloc.fetchCartData() :
     bloc.getCartData(token);
-
-
-
   }
 
 
@@ -64,117 +61,119 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     appbarBloc.setTitle("سلة المشتريات");
 
+    return Scaffold(
+        appBar: sharedData.appBar(context, 'سلة المشتتريات', null, () {}),
+        body: (!isRegistered()) ? Card(
+            elevation: 10,
+            margin: EdgeInsets.all(10),
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext c) => ProductsInCartScreen()));
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
 
+                children: <Widget>[
+                  buildGroupDevider("السلة الرئيسية"),
+                  //buildGroupItem(context, data , bloc),
+                  builtCartInfoV2(context,),
+                  Container(
+                    height: 40,
+                    margin: EdgeInsets.all(10),
+                    width: double.infinity,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10),
+                            color: sharedData.mainColor,
+                            child: MaterialButton(
+                              child: Text(
+                                'تأكيد الطلب',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    child: showSendToLogin(
+                                        1.toString(), context));
 
-    if(!isRegistered()) return Card(
-        elevation: 10,
-        margin: EdgeInsets.all(10),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: InkWell(
-          onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProductsInCartScreen()));
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-
-            children: <Widget>[
-              buildGroupDevider("السلة الرئيسية"),
-              //buildGroupItem(context, data , bloc),
-              builtCartInfoV2(context,),
-              Container(
-                height: 40,
-                margin: EdgeInsets.all(10),
-                width: double.infinity,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10),
-                        color: sharedData.mainColor,
-                        child: MaterialButton(
-                          child: Text(
-                            'تأكيد الطلب',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                                //confirmOrder(data[index].id, data[index].productDetails);
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                child: showSendToLogin(
-                                    1.toString(), context));
-
-                            //confirmOrder(data[index].id, data[index].productDetails);
-                          },
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: sharedData.mainColor,
-                                style: BorderStyle.solid,
-                                width: 1)),
-                        child: MaterialButton(
-                          child: Text(
-                            'مشاركة السلة',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: sharedData.mainColor,
+                                    style: BorderStyle.solid,
+                                    width: 1)),
+                            child: MaterialButton(
+                              child: Text(
+                                'مشاركة السلة',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    child: shareCartDialog(
+                                        1.toString(), context));
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                child: shareCartDialog(
-                                   1.toString(), context));
-                          },
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
               ),
-              SizedBox(
-                height: 10,
-              )
-            ],
-          ),)
-    );
-    else
-    return     Stack(
-      children: <Widget>[
-        BlocProvider<CartGroupBloc>(
-          bloc: bloc,
-          child: StreamBuilder<UserCarts>(
-              stream: bloc.cartDataStream,
-              builder: (context, snapshot) {
-                return snapshot.data == null
-                    ? Center(child: Text(''))
-                    : buildCartList(snapshot.data, bloc, context);
-              }),
-        ),
-        isloading
-            ? Center(
-                child: Container(
-                  child: SpinKitPulse(
-                      duration: Duration(milliseconds: 1000),
-                      color: sharedData.mainColor,
-                      size: 70
+            )
+        )
+            : Stack(
+          children: <Widget>[
+            BlocProvider<CartGroupBloc>(
+              bloc: bloc,
+              child: StreamBuilder<UserCarts>(
+                  stream: bloc.cartDataStream,
+                  builder: (context, snapshot) {
+                    return snapshot.data == null
+                        ? Center(child: Text(''))
+                        : buildCartList(snapshot.data, bloc, context);
+                  }),
+            ),
+            isloading
+                ? Center(
+              child: Container(
+                child: SpinKitPulse(
+                    duration: Duration(milliseconds: 1000),
+                    color: sharedData.mainColor,
+                    size: 70
 //                    lineWidth: 2,
-                      ),
-                  width: 100,
-                  height: 100,
                 ),
-              )
-            : Container()
-      ],
+                width: 100,
+                height: 100,
+              ),
+            )
+                : Container()
+          ],
+        )
     );
   }
 
@@ -342,8 +341,7 @@ class _CartScreenState extends State<CartScreen> {
     params['api_token'] = token;
     params['to_user'] = phone;
     params['cart_num'] = cartNum;
-    print(
-        'https://jaraapp.com/index.php/api/shareCart?api_token=$token&to_user=$phone&cart_num=$cartNum');
+    print('https://jaraapp.com/index.php/api/shareCart?api_token=$token&to_user=$phone&cart_num=$cartNum');
     final Uri url = Uri.parse('https://jaraapp.com/index.php/api/shareCart');
     var response = await http.post(url, body: params);
     if (response.statusCode == 200) {
@@ -630,6 +628,10 @@ class _CartScreenState extends State<CartScreen> {
                                         constraints: BoxConstraints.expand(),
                                         child: FlatButton(
                                             onPressed: () {
+                                              setState(() {
+                                                sharedData.isCartNotEmpty = 'true' ;
+                                                sharedData.writeToStorage(key: 'isCartNotEmpty', value: 'true');
+                                              });
                                               if (!isRegistered()) {
                                                 DBHelper.update(
                                                     'user_cart',

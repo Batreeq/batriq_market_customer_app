@@ -8,6 +8,7 @@ import 'package:customerapp/DataLayer/CartName.dart';
 import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/Library/FlappySearch/FlappySearch.dart';
+import 'package:customerapp/UI/screens/CustomerAppScreens/cart_screen.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/product_detail_screen.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/models/UserCarts.dart';
@@ -71,7 +72,7 @@ class CustomAppBar extends StatelessWidget {
             bottom: 0,
             child: Stack(
               children: <Widget>[
-                sharedData.isCartNotEmpty == true
+                sharedData.isCartNotEmpty == 'true'
                     ? Container(
                         width: 12.0,
                         height: 12.0,
@@ -88,9 +89,9 @@ class CustomAppBar extends StatelessWidget {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      sharedData.selectedIndex = 2;
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext c) => HomePagee()));
+                    //  sharedData.selectedIndex = 2;
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext c) => CartScreen()));
                     },
                   ),
                 )
@@ -432,7 +433,10 @@ class _SearchPage extends State<SearchPage> {
                         child: FlatButton(
                             onPressed: () {
                               count++;
-
+                              setState(() {
+                                sharedData.isCartNotEmpty = 'true' ;
+                                sharedData.writeToStorage(key: 'isCartNotEmpty', value: 'true');
+                              });
                               Future.delayed(Duration(milliseconds: 1500))
                                   .then((v) async {
                                 await m.acquire();
@@ -834,10 +838,7 @@ class _SearchPage extends State<SearchPage> {
   }
 
   getCartsDialog(int count, int i, Products product) {
- /*   setState(() {
-      sharedData.isCartNotEmpty = true ;
-      sharedData.writeToStorage(key: 'isCartNotEmpty', value: 'true');
-    });*/
+
 
     if (token != null && token.length > 10) {
       getCartNames(Cart(

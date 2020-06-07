@@ -779,7 +779,7 @@ class _ProfileScreen extends State {
       String fullPhone=phoneCon.text.toString();
       if(fullPhone!=null&&fullPhone.isNotEmpty){
         if(fullPhone.substring(0,1)=="0")
-          fullPhone=fullPhone.substring(1,fullPhone.length-1);
+          fullPhone=fullPhone.substring(1,fullPhone.length );
 
       }
       fullPhone="+"+_selectedDialogCountry.phoneCode.toString()+fullPhone;
@@ -810,6 +810,11 @@ class _ProfileScreen extends State {
 
       var response;
       print('i\'m in submit method before post request ' + info.name);
+
+
+      print (   sharedData.registerUrl);
+      print (info.toJson(false));
+      print ('##');
       if (token == null || token == '')
         response = await Requests.post(
           sharedData.registerUrl,
