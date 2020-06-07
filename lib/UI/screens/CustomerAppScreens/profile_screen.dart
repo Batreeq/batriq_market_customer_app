@@ -329,6 +329,9 @@ class _ProfileScreen extends State {
 
     salaryCon = new TextEditingController(text: salary);
     nameCon = new TextEditingController(text: name);
+    if(phone!=null &&phone.isNotEmpty){
+      phone=phone.replaceAll(new RegExp(r'\+962'), '');
+    }
     phoneCon = new TextEditingController(text: phone);
     locationCon = new TextEditingController(text: location);
     emailCon = new TextEditingController(text: email);
