@@ -123,7 +123,6 @@ class _SplashScreenState extends State<SplashScreen> {
             userId: family['user_id']));
       });
       final userInfo = extractedData['user_info'];
-      sharedData.increasePointsList = IncreasePointsListClass.fromJson(extractedData) ;
 
       sharedData.userInfo = UserInfo(
         updatedAt: userInfo['updated_at'],
@@ -146,6 +145,7 @@ class _SplashScreenState extends State<SplashScreen> {
         salary: userInfo['salary'],
       );
     }
+    sharedData.increasePointsList = IncreasePointsListClass.fromJson(extractedData) ;
     sharedData.helpText = extractedData['HelpScreen'][0]['text'];
     sharedData.helpTitle = extractedData['HelpScreen'][0]['title'];
     sharedData.privacyText = extractedData['PrivacyPolicy'][0]['text'];
@@ -161,9 +161,21 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void isCartHasProducts() {
-    sharedData.readCartIfHasProduct().then((isFilled){
+  void isCartHasProducts() async {
+    print ('cart from splash');
+
+/*    sharedData.readCartIfHasProduct().then((isFilled){
       sharedData.isCartNotEmpty = isFilled ;
-    });
+    });*/
+    String isCartNotEmpty = await sharedData.readFromStorage(
+        key: 'isCartNotEmpty');
+    if ( isCartNotEmpty == 'true'){
+      sharedData.isCartNotEmpty = isCartNotEmpty ;
+      print ('cart has data from splash');
+    }
+    else {
+      sharedData.isCartNotEmpty = isCartNotEmpty ;
+      print ('cart does not have data from splash');
+    }
   }
 }

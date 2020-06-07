@@ -96,7 +96,6 @@ class _HomePageState extends State<HomePagee> {
     final bloc = SideMenuBloc();
     const String homeTextPage = 'الصفحة الرئيسية';
     const String workWithusText = 'اعمل معنا';
-    const String cardText = 'سلة المشتريات';
     const String chatText = 'المراسلة';
     const String postText = sharedData.posts;
     pageController = new PageController();
@@ -175,17 +174,17 @@ class _HomePageState extends State<HomePagee> {
           BottomNavigationBarItem(
             icon: sharedData.cardIcon,
             title: Text(
-              cardText,
+              chatText,
               style: sharedData.navBarTextStyle,
             ),
           ),
-          BottomNavigationBarItem(
+   /*       BottomNavigationBarItem(
             icon: sharedData.chatIcon,
             title: Text(
               chatText,
               style: sharedData.navBarTextStyle,
             ),
-          ),
+          ),*/
           BottomNavigationBarItem(
             icon: Icon(Icons.add_to_home_screen),
             title: Text(

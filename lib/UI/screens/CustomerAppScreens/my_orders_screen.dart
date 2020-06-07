@@ -315,13 +315,10 @@ class _MyOrdersScreen extends State {
   List<CartToAdd> categories = [];
   void getUserOrders(String token) async {
     print('token in before do get orders request $token');
-    sharedData.showLoadingDialog(context);
-    if (token != '') {
-      final response = await Requests.post(sharedData.myOrdersUrl,
-          body: {
-            'api_token':
-                "$token"
-          },
+    //token= 'f3577631d92e0f995e49cf7d40d2c1ed9f7e83947347c21fa8fa3e66bd54292f';
+    if (token != '' && token != null) {
+      sharedData.showLoadingDialog(context);
+    final response = await Requests.post(sharedData.myOrdersUrl + token,
           bodyEncoding: RequestBodyEncoding.FormURLEncoded);
       if (response.statusCode == 200) {
         response.raiseForStatus();
@@ -351,8 +348,7 @@ class _MyOrdersScreen extends State {
         });
         wholeList = listOfMyOrders.orders;
         if (listOfMyOrders.orders.length != 0)
-          print('delivary time index 0 = ' +
-              listOfMyOrders.orders.elementAt(0).deliveryTime);
+        {}//  print('delivary time index 0 = ' + listOfMyOrders.orders.elementAt(0).deliveryTime);
         else
           print('list of products is null ');
 
@@ -361,8 +357,10 @@ class _MyOrdersScreen extends State {
         sharedData.flutterToast(
             'Some thing went wrong in getting your orders, please try again ' +
                 response.statusCode.toString());
-    } else
+    } else {
+      sharedData.flutterToast('سجل دخول لتتمكن من رؤية طلباتك');
       print('token is null in my orders method is null ');
+     }
   }
 
   filteredOrders(

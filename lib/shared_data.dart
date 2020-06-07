@@ -221,6 +221,7 @@ class sharedData {
   static const String posts= 'الاعلانات';
   static const String noData= 'لايوجد بيانات ';
   static const String canotTranferForYourSlef= 'لا يمكنك التحويل لنفسك!! ';
+  static String isCartNotEmpty = '' ;
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
@@ -256,32 +257,6 @@ class sharedData {
       ],
     );
   }
-
-  // this list of the images which will be used in the boxes in home screen, and filled in splash screen from api
-  static const List<String> boxesImages = [
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-    'https://www.pngkit.com/png/detail/14-147273_imagenes-png-tumblr-hipster-cute-cartoon-girl-png.png',
-  ];
-
-  // this list of the texts which will be used in the boxes  in home screen,and filled in splash screen from api
-  static const List<String> boxesTexts = [
-    'سميد',
-    'رز ',
-    'رز ',
-    'رز ',
-    'رز ',
-    'رز ',
-    'رز ',
-    'رز ',
-    'رز ',
-  ];
 
   // this list of the images which will be used in the slider in home screen,and filled in splash screen from api
   static List<String> sliderHomeImages = [];
@@ -410,7 +385,7 @@ class sharedData {
   static const String addMemberUrl =
       'https://jaraapp.com/index.php/api/addFamilyMembers';
   static const String myOrdersUrl =
-      'https://jaraapp.com/index.php/api/myOrders';
+      'https://jaraapp.com/index.php/api/myOrders?api_token=';
   static const String pointsProductsUrl =
       'https://jaraapp.com/index.php/api/getPointsProducts';
   static const String replacePointsUrl =
@@ -483,5 +458,4 @@ class sharedData {
       return false ;
   }
 
-static bool isCartNotEmpty = false ;
 }

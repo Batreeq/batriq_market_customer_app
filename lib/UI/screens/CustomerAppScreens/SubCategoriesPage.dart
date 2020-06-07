@@ -111,39 +111,40 @@ class _SubCategoriesPageState extends State<SubCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          sharedData.offerBatriq,
-          style: TextStyle(fontSize: 15),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            sharedData.offerBatriq,
+            style: TextStyle(fontSize: 15),
+          ),
         ),
-      ),body: RefreshIndicator(
-      key: _refresh,
-      onRefresh: ()async{
-
-        setState(() {doneRQ=false; });
-
-
-        var sendToken="";
-        if(isRegistered()) sendToken=token;
+        body: RefreshIndicator(
+          key: _refresh,
+          onRefresh: () async {
+            setState(() {
+              doneRQ = false;
+            });
 
 
-        var response=await getAllMainCategories(widget.offerId.toString(),sendToken);
-        setState(() {doneRQ=true; });
-        if(response.statusCode==200){
-
-          setState(() {
-            mainCategoiesResponse=response.object;
-          });
-
-        }else{
-
-        }
+            var sendToken = "";
+            if (isRegistered()) sendToken = token;
 
 
-      },child:Container() ,
-    )
+            var response = await getAllMainCategories(
+                widget.offerId.toString(), sendToken);
+            setState(() {
+              doneRQ = true;
+            });
+            if (response.statusCode == 200) {
+              setState(() {
+                mainCategoiesResponse = response.object;
+              });
+            } else {
+
+            }
+          }, child: Container(),
+        )
     );
   }
 }

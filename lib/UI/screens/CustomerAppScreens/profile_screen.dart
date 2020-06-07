@@ -813,6 +813,11 @@ class _ProfileScreen extends State {
 
       var response;
       print('i\'m in submit method before post request ' + info.name);
+
+
+      print (   sharedData.registerUrl);
+      print (info.toJson(false));
+      print ('##');
       if (token == null || token == '')
         response = await Requests.post(
           sharedData.registerUrl,

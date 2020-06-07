@@ -32,7 +32,9 @@ class _EarnWithUsScreen extends State {
 
   @override
   Widget build(BuildContext context) {
-    profileButton = increasePointsList.increasePoints
+
+   if (increasePointsList.increasePoints != null ) {
+     profileButton = increasePointsList.increasePoints
         .elementAt(0)
         .type;
     sharedAppButton = increasePointsList.increasePoints
@@ -44,6 +46,12 @@ class _EarnWithUsScreen extends State {
     sharedAppPoints = increasePointsList.increasePoints
         .elementAt(1)
         .points;
+  }
+   else {
+     sharedAppPoints = '0';
+     profilePoints = '0';
+   }
+
     this.context = context;
     return Scaffold(
       appBar: sharedData.appBar(context, 'اكسب معنا', null, () {}),

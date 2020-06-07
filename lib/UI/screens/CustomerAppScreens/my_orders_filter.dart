@@ -159,7 +159,7 @@ class _MyOrdersFilterState extends State<MyOrdersFilter> {
   Widget buildFilter() {
     return Container(
       margin: EdgeInsets.all(10),
-      height: 75,
+      height: 100 ,
       child: Row(
         children: <Widget>[
           Flexible(
