@@ -2,11 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/DataLayer/Catigory.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/SubCategoriesPage.dart';
 import 'package:customerapp/UI/screens/CustomerAppScreens/products_screen.dart';
+import 'package:customerapp/models/homeBlocks/CategoryHomeBlocks.dart';
+import 'package:customerapp/models/homeBlocks/HomeBlocksModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CategoryItemValue extends StatelessWidget {
-  Catigory catigory;
+  HomeBlocksModel catigory;
   CategoryItemValue({this.catigory});
   @override
   Widget build(BuildContext context) {

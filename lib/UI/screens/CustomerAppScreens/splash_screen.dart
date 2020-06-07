@@ -5,6 +5,7 @@ import 'package:customerapp/DataLayer/tab.dart';
 import 'package:customerapp/models/IncreasePointsListClass.dart';
 import 'package:customerapp/models/UserBalance.dart';
 import 'package:customerapp/models/UserInfo.dart';
+import 'package:customerapp/models/homeBlocks/HomeBlocksModel.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,19 +61,22 @@ class _SplashScreenState extends State<SplashScreen> {
     if (extractedData == null) {
       return;
     }
-    extractedData['homeBlocks'].forEach((catigoryData) {
-      print("ssd${catigoryData['image']}");
-      Catigory catigory = Catigory(
+    extractedData['homeBlocks'].forEach((item) {
+
+/*      Catigory catigory = Catigory(
           id: catigoryData['order'],
           image: catigoryData['image'],
           name: catigoryData['name']);
-      sharedData.catigoriesData.add(catigory);
+      sharedData.catigoriesData.add(catigory);*/
+
+       HomeBlocksModel data=HomeBlocksModel.fromJson(item);
+       sharedData.homeBlockcatigoriesData.add(data);
     });
-    extractedData['categories'].forEach((tabdata) {
+  /*  extractedData['categories'].forEach((tabdata) {
       ProductTab tab =
       ProductTab(id: tabdata['id'].toString(), name: tabdata['name']);
       tabs.add(tab);
-    });
+    });*/
 
     extractedData['posts'].forEach((item){
       PostsModel data= PostsModel.fromJson(item);

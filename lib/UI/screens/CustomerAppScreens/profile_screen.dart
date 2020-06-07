@@ -89,6 +89,8 @@ class _ProfileScreen extends State {
           ),
         ),
       ],
+
+
       rows: familyMembers
       // Loops through dataColumnText, each iteration assigning the value to element
           .map(
@@ -347,7 +349,7 @@ class _ProfileScreen extends State {
 
     _selectedDialogCountry = new Country(
       phoneCode: CountryPickerUtils
-          .getCountryByPhoneCode('971')
+          .getCountryByPhoneCode('962')
           .phoneCode,
     );
   }
@@ -520,9 +522,9 @@ class _ProfileScreen extends State {
                             });
                           },
                           validator: (value) {
-                            if (value.isNotEmpty) if (!isValidPhone()) {
-                              return 'Invalid Phone Format';
-                            }
+                            if (value.isEmpty)
+                              return sharedData.enterPhoneHintTextField;
+
                             phoneChanged = true;
                             return null;
                           },
@@ -551,7 +553,7 @@ class _ProfileScreen extends State {
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                       child:  GestureDetector(
                         onTap: () {
-                          _openCountryPickerDialog();
+                        //  _openCountryPickerDialog();
                         },
                         child: Container(
 
@@ -774,8 +776,17 @@ class _ProfileScreen extends State {
       info.image = info.image == null || info.image == '' ? '' : image;
       info.image = base64Image == '' ? info.image : base64Image;
 
+      String fullPhone=phoneCon.text.toString();
+      if(fullPhone!=null&&fullPhone.isNotEmpty){
+        if(fullPhone.substring(0,1)=="0")
+          fullPhone=fullPhone.substring(1,fullPhone.length-1);
+
+      }
+      fullPhone="+"+_selectedDialogCountry.phoneCode.toString()+fullPhone;
+      print("fullPhone"+fullPhone);
+
       info.phone =
-      phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
+      fullPhone == null || fullPhone == '' ? '' : fullPhone;
       info.salary =
       salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
 
@@ -786,8 +797,8 @@ class _ProfileScreen extends State {
           .text;
       info.email =
       emailCon.text == null || emailCon.text == '' ? '' : emailCon.text;
-      info.phone =
-      phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;
+   /*   info.phone =
+      phoneCon.text == null || phoneCon.text == '' ? '' : phoneCon.text;*/
       info.salary =
       salaryCon.text == null || salaryCon.text == '' ? '' : salaryCon.text;
 

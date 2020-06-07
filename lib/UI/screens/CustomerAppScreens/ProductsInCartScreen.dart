@@ -209,147 +209,149 @@ class _ProductsInCartScreen extends State {
                           ),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
 
-                                ///plus
-                                Container(
-                                    height: 40,
-                                    width: 30,
-                                    child: ConstrainedBox(
-                                        constraints: BoxConstraints.expand(),
-                                        child: FlatButton(
-                                            onPressed: () {
-                                              setState(() {
-                                               // plus = true ;
-                                              //  int q = product.quantity;
-                                                cart.productDetails.elementAt(index).quantity += 1 ;
-                                             //   quantity ++;
-                                              });
-                                              if (!isRegistered()) {
-                                                print ('user not registered ') ;
-                                                DBHelper.update(
-                                                    'user_cart',
-                                                    c.id,
-                                                    ( product.quantity  )
-                                                        .toString());
-                                                bloc.fetchCartData();
-                                              } else {
-                                                updateCart(
-                                                    c.id,
-                                                    (
-                                                        product.quantity  )
-                                                        .toString(),
-                                                    bloc);
-                                              }
-                                            },
-                                            padding: EdgeInsets.all(0.0),
-                                            child: Image.asset(
-                                                'assets/images/plus.png',
-                                                fit: BoxFit.fill)))),
-
-                                /// Counter
-                                Container(
-                                    height: 30,
-                                    width: 40,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Container(
-                                          child: Image.asset(
-                                            'assets/images/count.png',
-                                            fit: BoxFit.fill,
-                                          ),
-                                          height: 30,
-                                          width: 40,
-                                        ),
-                                        Center(
-                                            child:
-                                            Text(product.quantity.toString()))
-                                      ],
-                                    )
-                                ),
-
-                                ///minus
-                                Container(
-                                    height: 40,
-                                    width: 30,
-                                    child: ConstrainedBox(
-                                        constraints: BoxConstraints.expand(),
-                                        child: FlatButton(
-                                            onPressed: () {
-
-                                              setState(() {
-                                                minus = true ;
-                                              });
-
-                                              print('in on press : quantity = ' /*+ quantity.toString() + ' :: ' +*/ 'product q = ' + product.quantity.toString());
-                                              if (product.quantity > 1) {
-                                                 if (!isRegistered()) {
-
-                                                  print(
-                                                      'quantity more than 0 its ' +
-                                                          product.quantity.toString());
+                                  ///plus
+                                  Container(
+                                      height: 40,
+                                      width: 30,
+                                      child: ConstrainedBox(
+                                          constraints: BoxConstraints.expand(),
+                                          child: FlatButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                 // plus = true ;
+                                                //  int q = product.quantity;
+                                                  cart.productDetails.elementAt(index).quantity += 1 ;
+                                               //   quantity ++;
+                                                });
+                                                if (!isRegistered()) {
+                                                  print ('user not registered ') ;
                                                   DBHelper.update(
                                                       'user_cart',
                                                       c.id,
-                                                          product.quantity > 1
-                                                          ? (
-                                                          product.quantity - 1)
-                                                          .toString()
-                                                          : 1.toString()
-                                                  );
+                                                      ( product.quantity  )
+                                                          .toString());
                                                   bloc.fetchCartData();
-                                                }
-                                               else  {
-                                                   setState(() {
-                                                     minus = true ;
-                                                     cart.productDetails.elementAt(index).quantity -= 1 ;
-                                                  //   quantity --;
-                                                   });
-                                                   print(' in if quantity = ' /*+ quantity.toString() + ' :: ' +*/
-                                                       'product q = ' + product.quantity.toString());
-                                                   this.product = product;
-                                                   updateCart(c.id, (product.quantity).toString(), bloc);
-                                                 }
-                                              }  else if (product.quantity == 1 || product.quantity == 1)  {
-                                                // delete product here
-                                                if (isRegistered()) {
-                                                  updateCart(product.id, product.quantity.toString(), bloc);
-                                                  deleteFromCart(product.id , index );
-                                                  bloc.getCartData(token);
                                                 } else {
-                                                  DBHelper.delete(
-                                                      'user_cart',
-                                                      product.id.toString());
-                                                  bloc.fetchCartData();
+                                                  updateCart(
+                                                      c.id,
+                                                      (
+                                                          product.quantity  )
+                                                          .toString(),
+                                                      bloc);
                                                 }
-                                                setState(() {
-                                                  cart.productDetails.removeAt(index);
-                                                });
-                                              }/*
+                                              },
+                                              padding: EdgeInsets.all(0.0),
+                                              child: Image.asset(
+                                                  'assets/images/plus.png',
+                                                  fit: BoxFit.fill)))),
 
-                                              setState(() {
-                                                int q = product.quantity;
-                                                product.quantity = (q --);
-                                                quantity -- ;
-                                              });*/
-                                            },
-                                            padding: EdgeInsets.all(0.0),
+                                  /// Counter
+                                  Container(
+                                      height: 30,
+                                      width: 40,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Container(
                                             child: Image.asset(
-                                              'assets/images/minus.png',
+                                              'assets/images/count.png',
                                               fit: BoxFit.fill,
-                                            )))),
-                              ],
+                                            ),
+                                            height: 30,
+                                            width: 40,
+                                          ),
+                                          Center(
+                                              child:
+                                              Text(product.quantity.toString()))
+                                        ],
+                                      )
+                                  ),
+
+                                  ///minus
+                                  Container(
+                                      height: 40,
+                                      width: 30,
+                                      child: ConstrainedBox(
+                                          constraints: BoxConstraints.expand(),
+                                          child: FlatButton(
+                                              onPressed: () {
+
+                                                setState(() {
+                                                  minus = true ;
+                                                });
+
+                                                print('in on press : quantity = ' /*+ quantity.toString() + ' :: ' +*/ 'product q = ' + product.quantity.toString());
+                                                if (product.quantity > 1) {
+                                                   if (!isRegistered()) {
+
+                                                    print(
+                                                        'quantity more than 0 its ' +
+                                                            product.quantity.toString());
+                                                    DBHelper.update(
+                                                        'user_cart',
+                                                        c.id,
+                                                            product.quantity > 1
+                                                            ? (
+                                                            product.quantity - 1)
+                                                            .toString()
+                                                            : 1.toString()
+                                                    );
+                                                    bloc.fetchCartData();
+                                                  }
+                                                 else  {
+                                                     setState(() {
+                                                       minus = true ;
+                                                       cart.productDetails.elementAt(index).quantity -= 1 ;
+                                                    //   quantity --;
+                                                     });
+                                                     print(' in if quantity = ' /*+ quantity.toString() + ' :: ' +*/
+                                                         'product q = ' + product.quantity.toString());
+                                                     this.product = product;
+                                                     updateCart(c.id, (product.quantity).toString(), bloc);
+                                                   }
+                                                }  else if (product.quantity == 1 || product.quantity == 1)  {
+                                                  // delete product here
+                                                  if (isRegistered()) {
+                                                    updateCart(product.id, product.quantity.toString(), bloc);
+                                                    deleteFromCart(product.id , index );
+                                                    bloc.getCartData(token);
+                                                  } else {
+                                                    DBHelper.delete(
+                                                        'user_cart',
+                                                        product.id.toString());
+                                                    bloc.fetchCartData();
+                                                  }
+                                                  setState(() {
+                                                    cart.productDetails.removeAt(index);
+                                                  });
+                                                }/*
+
+                                                setState(() {
+                                                  int q = product.quantity;
+                                                  product.quantity = (q --);
+                                                  quantity -- ;
+                                                });*/
+                                              },
+                                              padding: EdgeInsets.all(0.0),
+                                              child: Image.asset(
+                                                'assets/images/minus.png',
+                                                fit: BoxFit.fill,
+                                              )))),
+                                ],
+                              ),
+                              width: 120,
+                              height: 40,
                             ),
-                            width: 120,
-                            height: 40,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),

@@ -37,7 +37,7 @@ class _SubCategoriesPageState extends State<SubCategoriesPage> {
         .addPostFrameCallback((_) => _refresh.currentState.show());
   }
 
-  Widget _itemGridView(List<Category> data, context) {
+/*  Widget _itemGridView(List<Category> data, context) {
     if (data == null &&!doneRQ)
       return Center(child: Container(
         child: SpinKitPulse(
@@ -87,7 +87,7 @@ class _SubCategoriesPageState extends State<SubCategoriesPage> {
               ),);
             else
               return GestureDetector(
-                child:SubCategoryItemValue(catigory: data.elementAt(index),offerId: widget.offerId.toString()),
+                child:SubCategoryItemValue(catigory: data,offerId: widget.offerId.toString()),
                 onTap: () {},
               );
           });
@@ -104,7 +104,7 @@ class _SubCategoriesPageState extends State<SubCategoriesPage> {
           ),
         ],
       );
-  }
+  }*/
 
 
 
@@ -142,7 +142,7 @@ class _SubCategoriesPageState extends State<SubCategoriesPage> {
         }
 
 
-      },child:_itemGridView(mainCategoiesResponse.categories, context) ,
+      },child:Container() ,
     )
     );
   }

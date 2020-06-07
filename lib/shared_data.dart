@@ -1,3 +1,4 @@
+import 'package:customerapp/models/homeBlocks/HomeBlocksModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,8 @@ class sharedData {
       fontSize: 21,
       fontFamily: 'Cairo-Black');
   static const mainColor = Color(0xFFFBBF00);
-  static List<Catigory> catigoriesData = [];
+ //static List<HomeBlocksModel> catigoriesData = [];
+  static List<HomeBlocksModel> homeBlockcatigoriesData = [];
   static const ImageIcon homeIcon = ImageIcon(
     AssetImage("assets/images/icons/home.png"), /*color: Color(0xFF3A5A98)*/
   );
@@ -156,6 +158,9 @@ class sharedData {
   TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
   static const TextStyle textInProfileTextStyle =
   TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25);
+
+  static const TextStyle textInWorkWithUsTextStyle =
+  TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22);
   static const TextStyle optionStyle =
   TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
   static const TextStyle pointsStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey);
@@ -180,6 +185,7 @@ class sharedData {
 
   static const String searchHintText = 'البحث';
   static const String phoneHintTextField = 'رقم الهاتف';
+  static const String enterPhoneHintTextField = 'ادخل  رقم الهاتف';
   static const String ageHintTextField = 'العمر';
   static const String nameHintTextField = 'الاسم';
   static const String passwordTextField = 'كلمة المرور';
@@ -411,7 +417,7 @@ class sharedData {
       'https://jaraapp.com/api/replacePoints';
 
   static const String mainCategoriesURL =
-      'https://jaraapp.com/index.php/api/mainCategories?';
+      'https://jaraapp.com/api/mainCategories?';
   static String getDeliveryPriceUrl = "https://jaraapp.com/api/getDeliveryPrice?location_id=";
 
   static String confirmOrderUrl = 'https://jaraapp.com/index.php/api/confirmOrder';

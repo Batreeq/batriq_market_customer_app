@@ -208,10 +208,10 @@ class _BalanceScreen extends State<BalanceScreen> {
 
     return Scaffold(
       appBar: sharedData.appBar(context, 'الرصيد', null, () {}),
-      body: ModalProgressHUD(
-        inAsyncCall: isLoading,
-        child: Center(
-          child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: ModalProgressHUD(
+          inAsyncCall: isLoading,
+          child: Center(
             child: Container(
               //  to add border to the container  ,
               decoration: BoxDecoration(
@@ -227,188 +227,188 @@ class _BalanceScreen extends State<BalanceScreen> {
                 backgroundColor: Colors.white30,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        textDirection: TextDirection.rtl,
-                        //mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  sharedData.activeBalanceTextField,
-                                  style: sharedData.textInProfileTextStyle,
-                                ),
-                              ),
-                              // the size box to make each row far from the above
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  sharedData.notActiveBalanceTextField,
-                                  style: sharedData.textInProfileTextStyle,
-                                ),
-                              ),
-                              // the size box to make each row far from the above
-                              SizedBox(
-                                height: 20,
-                              ), // the size box to make each row far from the above
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(
-                                  sharedData.totalBalanceTextField,
-                                  style: sharedData.textInProfileTextStyle,
-                                ),
-                              ),
-                              // empty space between 2 fields
-                              // active balance data space
-                            ],
-                          ),
-                          SizedBox(
-                            width: 50,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          textDirection: TextDirection.rtl,
+                          //mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    userBalance.activeBalance + 'JD',
+                                    sharedData.activeBalanceTextField,
                                     style: sharedData.textInProfileTextStyle,
                                   ),
                                 ),
                                 // the size box to make each row far from the above
                                 SizedBox(
-                                  height: 25,
+                                  height: 15,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    userBalance.inactiveBalance + 'JD',
+                                    sharedData.notActiveBalanceTextField,
                                     style: sharedData.textInProfileTextStyle,
                                   ),
                                 ),
                                 // the size box to make each row far from the above
                                 SizedBox(
-                                  height: 35,
-                                ),
+                                  height: 20,
+                                ), // the size box to make each row far from the above
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(8),
                                   child: Text(
-                                    userBalance.totalBalance + 'JD',
+                                    sharedData.totalBalanceTextField,
                                     style: sharedData.textInProfileTextStyle,
                                   ),
-                                )
+                                ),
+                                // empty space between 2 fields
+                                // active balance data space
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 35,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width - 50,
-                          height: 50,
-                          child: RaisedButton(
-                            color: sharedData.yellow,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(4.0),
-                              // side: BorderSide(color: Colors.red)
+                            SizedBox(
+                              width: 50,
                             ),
-                            onPressed: () {
-                              replacementDialogUI();
-                            },
-                            child: Text(
-                              sharedData.rechargeBalanceTextField,
-                              style: sharedData.textInProfileTextStyle,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      userBalance.activeBalance + 'JD',
+                                      style: sharedData.textInProfileTextStyle,
+                                    ),
+                                  ),
+                                  // the size box to make each row far from the above
+
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      userBalance.inactiveBalance + 'JD',
+                                      style: sharedData.textInProfileTextStyle,
+                                    ),
+                                  ),
+                                  // the size box to make each row far from the above
+                                  SizedBox(
+                                    height: 35,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      userBalance.totalBalance + 'JD',
+                                      style: sharedData.textInProfileTextStyle,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 35,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width - 50,
+                            height: 50,
+                            child: RaisedButton(
+                              color: sharedData.yellow,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(4.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              onPressed: () {
+                                replacementDialogUI();
+                              },
+                              child: Text(
+                                sharedData.rechargeBalanceTextField,
+                                style: sharedData.textInProfileTextStyle,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            width: MediaQuery.of(context).size.width - 50,
-                            height: 50,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: sharedData.grayColor12)),
-                              child: RaisedButton(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(4.0),
-                                  // side: BorderSide(color: Colors.red)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width - 50,
+                              height: 50,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: sharedData.grayColor12)),
+                                child: RaisedButton(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: new BorderRadius.circular(4.0),
+                                    // side: BorderSide(color: Colors.red)
+                                  ),
+                                  onPressed: () {
+                                    sharedData.listOfUserPayment != null &&
+                                        sharedData.listOfUserPayment.length > 0
+                                        ? Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (BuildContext c) =>
+                                            BalanceDetails()))
+                                        : sharedData
+                                        .flutterToast("لاتوجد لديك تحويلات سابقة");
+                                  },
+                                  child: Text(
+                                    sharedData.accountStatementTextField,
+                                    style: sharedData.textInProfileTextStyle,
+                                  ),
                                 ),
-                                onPressed: () {
-                                  sharedData.listOfUserPayment != null &&
-                                      sharedData.listOfUserPayment.length > 0
-                                      ? Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext c) =>
-                                          BalanceDetails()))
-                                      : sharedData
-                                      .flutterToast("لاتوجد لديك تحويلات سابقة");
-                                },
-                                child: Text(
-                                  sharedData.accountStatementTextField,
-                                  style: sharedData.textInProfileTextStyle,
+                              )),
+                        ),
+                        isRegistered()?Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width - 50,
+                              height: 50,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: sharedData.grayColor12)),
+                                child: RaisedButton(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: new BorderRadius.circular(4.0),
+                                    // side: BorderSide(color: Colors.red)
+                                  ),
+                                  onPressed: () async {
+                                    Map result = await  showTransferMoneyDialog();
+                                    if(result!=null && result.containsKey('info')){
+
+
+                                      setState(() {
+                                        isLoading=true;
+                                      });
+
+                                      var response=await transferMoney(ammountController.text.toString(),
+                                          toUserController.text.toString(),token);
+                                      setState(() {
+                                        isLoading=false;
+                                      });
+
+
+                                      sharedData.flutterToast(response.object.toString());
+
+                                    }
+
+                                  },
+                                  child: Text(
+                                    sharedData.transferMoney,
+                                    style: sharedData.textInProfileTextStyle,
+                                  ),
                                 ),
-                              ),
-                            )),
-                      ),
-                      isRegistered()?Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            width: MediaQuery.of(context).size.width - 50,
-                            height: 50,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: sharedData.grayColor12)),
-                              child: RaisedButton(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(4.0),
-                                  // side: BorderSide(color: Colors.red)
-                                ),
-                                onPressed: () async {
-                                  Map result = await  showTransferMoneyDialog();
-                                  if(result!=null && result.containsKey('info')){
-
-
-                                    setState(() {
-                                      isLoading=true;
-                                    });
-
-                                    var response=await transferMoney(ammountController.text.toString(),
-                                        toUserController.text.toString(),token);
-                                    setState(() {
-                                      isLoading=false;
-                                    });
-
-
-                                    sharedData.flutterToast(response.object.toString());
-
-                                  }
-
-                                },
-                                child: Text(
-                                  sharedData.transferMoney,
-                                  style: sharedData.textInProfileTextStyle,
-                                ),
-                              ),
-                            )),
-                      ):Container()
-                    ],
+                              )),
+                        ):Container()
+                      ],
+                    ),
                   ),
                 ),
                 shape: GFAvatarShape.standard,

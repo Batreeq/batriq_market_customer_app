@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customerapp/Library/carousel_pro/src/carousel_pro.dart';
 import 'package:customerapp/UI/wigets/CategoryItemValue.dart';
+import 'package:customerapp/UI/wigets/SubCategoryValue.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class Home extends StatelessWidget {
   }
 
   Widget Categories(context) => Container(
-        height: (sharedData.catigoriesData.length *
+        height: (sharedData.homeBlockcatigoriesData.length *
                 MediaQuery.of(context).size.width /
                 4) +
             50,
@@ -47,7 +48,7 @@ class Home extends StatelessWidget {
 
   Widget getList(context) {
     return Container(
-        height: (sharedData.catigoriesData.length *
+        height: (sharedData.homeBlockcatigoriesData.length *
                 MediaQuery.of(context).size.width /
                 4) +
             50,
@@ -61,7 +62,7 @@ class Home extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Container(
-        height: (sharedData.catigoriesData.length *
+        height: (sharedData.homeBlockcatigoriesData.length *
                 MediaQuery.of(context).size.width /
                 4) +
             258,
@@ -79,11 +80,11 @@ class Home extends StatelessWidget {
     return GridView.builder(
     //  physics: NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-      itemCount: sharedData.catigoriesData.length,
+      itemCount: sharedData.homeBlockcatigoriesData.length,
       itemBuilder: (ctx, i) {
-        final catigory = sharedData.catigoriesData[i];
+        final catigory = sharedData.homeBlockcatigoriesData[i];
         return Container(
-          child: CategoryItemValue(
+          child: SubCategoryItemValue(
             catigory: catigory,
           ),
         );

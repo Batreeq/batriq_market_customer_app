@@ -834,10 +834,10 @@ class _SearchPage extends State<SearchPage> {
   }
 
   getCartsDialog(int count, int i, Products product) {
-    setState(() {
+ /*   setState(() {
       sharedData.isCartNotEmpty = true ;
       sharedData.writeToStorage(key: 'isCartNotEmpty', value: 'true');
-    });
+    });*/
 
     if (token != null && token.length > 10) {
       getCartNames(Cart(
@@ -1011,11 +1011,13 @@ class _SearchPage extends State<SearchPage> {
     // searchString = 'بيض'
     print(searchString);
     if (searchString != '') {
+      var url=sharedData.searchUrl + 'name=' + searchString;
       final response = await Requests.get(
           sharedData.searchUrl + 'name=' + searchString,
           bodyEncoding: RequestBodyEncoding.FormURLEncoded);
       print(response.json());
       print(response.statusCode);
+      print(url);
 
 //      await Future.delayed(Duration(seconds: 3));
 
