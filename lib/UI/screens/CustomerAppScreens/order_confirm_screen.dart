@@ -645,6 +645,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     return TextFormField(
       keyboardType: TextInputType.number,
       controller: phoneController,
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
       decoration: InputDecoration(
           labelText: ' رقم الموبايل', labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
@@ -696,7 +698,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       location: locationController.text.toString(),
       notice: noticeController.text.toString(),
       payment_type: (widget.isCash ? "cash" : "visa"),
-      phone: phoneController.text.toString(),
+
+      phone:phoneController.text.toString().trim(),
       region: selectedRegion.toString(),
       total_price: totalPrice,
       user_name: nameController.text.toString()
@@ -722,8 +725,15 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     showMap();
     if (sharedData.userInfo.name != null)
       nameController.text = sharedData.userInfo.name.toString();
-    if (sharedData.userInfo.phone != null)
-      phoneController.text = sharedData.userInfo.phone.toString();
+    if (sharedData.userInfo.phone != null){
+      phoneController.text=sharedData.userInfo.phone.toString();
+/*
+     String phone= sharedData.userInfo.phone.toString();
+     phone= phone.replaceAll(new RegExp(r'\+'),'');
+*/
+
+   // phoneController.text=phone;
+    }
   }
 
   void showSnackBar(message) {

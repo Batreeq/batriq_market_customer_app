@@ -779,7 +779,7 @@ class _ProfileScreen extends State {
       String fullPhone=phoneCon.text.toString();
       if(fullPhone!=null&&fullPhone.isNotEmpty){
         if(fullPhone.substring(0,1)=="0")
-          fullPhone=fullPhone.substring(1,fullPhone.length-1);
+          fullPhone=fullPhone.substring(1,fullPhone.length);
 
       }
       fullPhone="+"+_selectedDialogCountry.phoneCode.toString()+fullPhone;
