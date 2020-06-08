@@ -26,8 +26,8 @@ class _CartScreenState extends State<CartScreen> {
   bool isloading = false;
 
 
-   double allPrices=0.0;
-   int allCount=0;
+  double allPrices=0.0;
+  int allCount=0;
 
   @override
   void initState() {
@@ -46,13 +46,13 @@ class _CartScreenState extends State<CartScreen> {
 
     initMyProductData();
     if(map!=null &&map.isNotEmpty)
-    map.forEach((row){
+      map.forEach((row){
 
-      debugPrint("-----"+row.toString());
-      if(row.containsKey("count"))
-        allCount+= int.parse(row["count"]);
-       allPrices+=double.parse(row["count"])*double.parse(row["price"]);
-    });
+        debugPrint("-----"+row.toString());
+        if(row.containsKey("count"))
+          allCount+= int.parse(row["count"]);
+        allPrices+=double.parse(row["count"])*double.parse(row["price"]);
+      });
     setState(() {
     });
   }
@@ -220,15 +220,15 @@ class _CartScreenState extends State<CartScreen> {
             new Expanded(
               child: new Container(
                   child: new TextField(
-                keyboardType: TextInputType.phone,
-                onChanged: (v) {
-                  name = v;
-                },
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintStyle: TextStyle(fontSize: 13),
-                    hintText: 'اكتب رقم هاتف المرسل اليه'),
-              )),
+                    keyboardType: TextInputType.phone,
+                    onChanged: (v) {
+                      name = v;
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintStyle: TextStyle(fontSize: 13),
+                        hintText: 'اكتب رقم هاتف المرسل اليه'),
+                  )),
               flex: 2,
             ),
 
@@ -306,29 +306,29 @@ class _CartScreenState extends State<CartScreen> {
 
 
             // dialog bottom
-             Container(
-                padding: new EdgeInsets.all(4.0),
-                decoration: new BoxDecoration(
-                  color: sharedData.mainColor,
-                ),
-                child: FlatButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => ProfileScreen()));
+            Container(
+              padding: new EdgeInsets.all(4.0),
+              decoration: new BoxDecoration(
+                color: sharedData.mainColor,
+              ),
+              child: FlatButton(
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => ProfileScreen()));
 
-                  },
-                  child: new Text(
-                    sharedData.Continue,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14.0,
-                    ),
-                    textAlign: TextAlign.center,
+                },
+                child: new Text(
+                  sharedData.Continue,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14.0,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
+            ),
 
           ],
         ),
@@ -393,7 +393,7 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () {
-                                 // confirmOrder(data[index].cartNum, data[index].productDetails.elementAt(0));
+                                  // confirmOrder(data[index].cartNum, data[index].productDetails.elementAt(0));
                                   confirmOrder(data[index].cartNum , data[index].price);
                                 },
                               ),
@@ -447,7 +447,7 @@ class _CartScreenState extends State<CartScreen> {
         ),
       );
     } else {
-     // sendCartToApi(UserCarts(groupId: "1", userCart : carts, name: "السلة الرئيسية"));
+      // sendCartToApi(UserCarts(groupId: "1", userCart : carts, name: "السلة الرئيسية"));
     }
   }
 
@@ -576,7 +576,7 @@ class _CartScreenState extends State<CartScreen> {
                                 color: Colors.red,
                               ),
                               materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
+                              MaterialTapTargetSize.shrinkWrap,
                               onPressed: () {
                                 if (isRegistered()) {
                                   deleteFromCart(cart.id);
@@ -637,14 +637,14 @@ class _CartScreenState extends State<CartScreen> {
                                                     'user_cart',
                                                     cart.id,
                                                     (cart.quantity +
-                                                            1)
+                                                        1)
                                                         .toString());
                                                 bloc.fetchCartData();
                                               } else {
                                                 updateCart(
                                                     cart.id,
                                                     (cart.quantity +
-                                                            1)
+                                                        1)
                                                         .toString(),
                                                     bloc);
                                               }
@@ -682,22 +682,22 @@ class _CartScreenState extends State<CartScreen> {
                                                 DBHelper.update(
                                                     'user_cart',
                                                     cart.id,
-                                                      cart.quantity  > 1
+                                                    cart.quantity  > 1
                                                         ? (  cart
-                                                                    .quantity  -
-                                                                1)
-                                                            .toString()
+                                                        .quantity  -
+                                                        1)
+                                                        .toString()
                                                         : 1.toString());
                                                 bloc.fetchCartData();
                                               } else {
                                                 cart.quantity > 1
                                                     ? updateCart(
-                                                        cart.id,
-                                                        (cart
-                                                                    .quantity -
-                                                                1)
-                                                            .toString(),
-                                                        bloc)
+                                                    cart.id,
+                                                    (cart
+                                                        .quantity -
+                                                        1)
+                                                        .toString(),
+                                                    bloc)
                                                     : print("");
                                               }
                                             },

@@ -87,12 +87,13 @@ class _HomePageState extends State<HomePagee> {
 
   @override
   Widget build(BuildContext context) {
-
- _selectedIndex = sharedData.selectedIndex ;
-     size = MediaQuery.of(context).size ;
+    _selectedIndex = sharedData.selectedIndex;
+    size = MediaQuery
+        .of(context)
+        .size;
 
     final GlobalKey<ScaffoldState> _scaffoldKey =
-        new GlobalKey<ScaffoldState>();
+    new GlobalKey<ScaffoldState>();
     final bloc = SideMenuBloc();
     const String homeTextPage = 'الصفحة الرئيسية';
     const String workWithusText = 'اعمل معنا';
@@ -111,7 +112,8 @@ class _HomePageState extends State<HomePagee> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       key: _scaffoldKey,
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         children: <Widget>[
           CustomAppBar(
             scaffoldKey: _scaffoldKey,
@@ -135,7 +137,7 @@ class _HomePageState extends State<HomePagee> {
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
                 ),
                 child: Center(
-                  child: getSearchBarUI()
+                    child: getSearchBarUI()
                 ),
               ),
             ),
@@ -145,11 +147,15 @@ class _HomePageState extends State<HomePagee> {
           SingleChildScrollView(
             child: Container(
               color: Colors.white,
-              height: MediaQuery.of(context).size.height - 190,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height - 190,
               child: _widgetOptions.elementAt(_selectedIndex),
             ),
           ),
         ],
+      ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         //  backgroundColor: Colors.grey,
@@ -178,7 +184,7 @@ class _HomePageState extends State<HomePagee> {
               style: sharedData.navBarTextStyle,
             ),
           ),
-   /*       BottomNavigationBarItem(
+          /*       BottomNavigationBarItem(
             icon: sharedData.chatIcon,
             title: Text(
               chatText,
@@ -277,18 +283,17 @@ class _HomePageState extends State<HomePagee> {
           if (index == 8) {
             sharedData.flutterToast("Languages not integrated yet, Soon");
           } else if (index == 9)
-          if (titles[8] == "تسجيل الخروج"){
-                       sharedData.logout();
-
-                    setState(() {
-                      titles[8] = 'تسجيل دخول';
-                    });
+          if (titles[8] == "تسجيل الخروج") {
+            sharedData.logout();
+            setState(() {
+              titles[8] = 'تسجيل دخول';
+            });
             setState(() {
               token = "";
             });
           }
           else {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> SignUpUser()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext c )=> ProfileScreen()));
           }
         }
       },

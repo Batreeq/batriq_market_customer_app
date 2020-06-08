@@ -140,8 +140,7 @@ class _SearchPage extends State<SearchPage> {
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
   bool isloading = false;
-  Mutex m = Mutex();
-  bool firstTime = true;
+  //Mutex m = Mutex();
   @override
   void initState() {
     super.initState();
@@ -433,22 +432,15 @@ class _SearchPage extends State<SearchPage> {
                         child: FlatButton(
                             onPressed: () {
                               count++;
-                              setState(() {
-                                sharedData.isCartNotEmpty = 'true' ;
-                                sharedData.writeToStorage(key: 'isCartNotEmpty', value: 'true');
-                              });
-                              Future.delayed(Duration(milliseconds: 1500))
-                                  .then((v) async {
-                                await m.acquire();
                                 try {
-                                  if (firstTime) {
-                                    firstTime = false;
-                                    getCartsDialog(count, i, product);
-                                  }
-                                  print('is first time = ' +
-                                      firstTime.toString());
+                                 //if (firstTime) {
+//                                    firstTime = false;
+                             //    }
+                                       getCartsDialog(count, i, product);
+
+                                 // print('is first time = ' + firstTime.toString());
                                 } finally {
-                                  m.release();
+                                 // m.release();
                                   //firstTime= true;
                                   final double totalCost =
                                       double.parse(product.price) * count;
@@ -468,16 +460,6 @@ class _SearchPage extends State<SearchPage> {
                                   i.toString()
                                 ]);
                                 counts[i] = count.toString();
-                              });
-                              /*    final double totalCost =
-                                        double.parse(product.price) * count;
-                                    bloc.setCount(<String>[
-                                      count.toString(),
-                                      totalCost.toString(),
-                                      i.toString()
-                                    ]);
-
-                                    counts[i] = count.toString();*/
                             },
                             padding: EdgeInsets.all(0.0),
                             child: Image.asset('assets/images/plus.png',
@@ -849,9 +831,9 @@ class _SearchPage extends State<SearchPage> {
     } else {
       addProductToCart(product.name.toString(), product.id.toString(),
           product.price, product.size, count.toString(), product.image);
-      firstTime = false;
+     // firstTime = false;
     }
-    print(firstTime.toString());
+//    print(firstTime.toString());
 
     /*  m.acquire();
     try{

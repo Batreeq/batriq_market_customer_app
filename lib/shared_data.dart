@@ -91,8 +91,6 @@ final String workWithusText = 'اعمل معنا';
 final String cardText = 'سلة المشتريات';
 final String chatText = 'المراسلة';
 
-List categoriesList = [];
-
 List<String> titles = [
   "الملف الشخصي",
   "طلبياتي السابقة",

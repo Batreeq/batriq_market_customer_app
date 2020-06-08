@@ -129,6 +129,9 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     for (int i = 0; i < obj.category.length; i++) {
       inputs.add(false);
     }
+
+    print (" num of cat in obj is " +obj.category.length.toString());
+    print ('inputs.length' + inputs.length.toString());
     //the widget
     Widget ui = StatefulBuilder(
       builder: (context, setState) => new Container(
@@ -136,6 +139,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
         child: new ListView.builder(
             itemCount: inputs.length,
             itemBuilder: (BuildContext context, int index) {
+              print (  obj.category.elementAt(index).price + '  '+obj.category.elementAt(index).time );
               Widget card = new Card(
                 child: new Container(
                   padding: new EdgeInsets.all(10.0),
@@ -589,7 +593,6 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
               if (deliveryTimes.timesPrices.length > 0)
                 for (timesPrices in deliveryTimes.timesPrices) {
                   _modalBottomSheetMenu(timesPrices);
-                  lastIndex++;
                   //  qwe
                 }
               //
@@ -758,11 +761,6 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Column(children: getBarCodesUI(barCodes),),
-                      Text('سعر التوصيل : ' + deliveryPrice),
-                      Text('سعر الكلي للسلة : ' + totalCartPrice),
-                      Text('سعر الكلي شامل التوصيل : ' + totalWithDel.toString()),
-
                       Form(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -785,11 +783,10 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                           ),
                         ),
                       ),
-                      /*   Flexible(
-                    child: object != null
-                        ? buildDeliveryTimes(object)
-                        : Container(),
-                  ),*/
+                      Column(children: getBarCodesUI(barCodes),),
+                      Text('سعر التوصيل : ' + deliveryPrice),
+                      Text('سعر الكلي للسلة : ' + totalCartPrice),
+                      Text('سعر الكلي شامل التوصيل : ' + totalWithDel.toString()),
                       Container(
                         margin: EdgeInsets.all(15),
                         height: 40,
@@ -812,8 +809,9 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                                   isFound = true;
                                   break;
                                 }
-                              }
 
+                              }
+                              lastIndex++;
                               print(isFound.toString());
                               if (isFound) {
                                 if (code.type == "cart_val") {
@@ -871,7 +869,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     Widget column;
     for (Barcode b in codes) {
       column = Container(
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
         child: new Text(
           'كود : ' + b.code,
           style: TextStyle(fontSize: 16, color: Colors.orange),

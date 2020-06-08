@@ -141,15 +141,15 @@ class Products extends StatefulWidget {
 class _ProductsState extends State<Products> {
   bool isloading = true;
 
-  bool firstTime = true ;
+  //bool firstTime = true ;
 
-  Mutex m = Mutex();
+  //Mutex m = Mutex();
 
 
   @override
   Widget build(BuildContext context) {
    // firstTime = true ;
-    print (firstTime .toString());
+    //print (firstTime .toString());
     return Stack(
       children: <Widget>[
         buildProductList(context),
@@ -342,17 +342,17 @@ class _ProductsState extends State<Products> {
                                                               });
                                                               debugPrint("hassan count $count");}*/
                                                           count++;
-                                                          Future.delayed(Duration(milliseconds : 1500)).then((v) async {
-                                                            await m.acquire();
+//                                                          Future.delayed(Duration(milliseconds : 1500)).then((v) async {
+//                                                            await m.acquire();
                                                             try{
-                                                              if (firstTime){
-                                                                firstTime = false ;
+//                                                              if (firstTime){
+//                                                                firstTime = false ;
                                                                 getCartsDialog(count , i);
-                                                              }
-                                                              print ('is first time = ' + firstTime.toString());
+                                                             // }
+                                                             // print ('is first time = ' + firstTime.toString());
                                                             }
                                                             finally{
-                                                              m.release();
+                                                            //  m.release();
                                                               //firstTime= true;
                                                               final double totalCost = double.parse(productss[i].price) * count;
                                                               bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
@@ -362,7 +362,7 @@ class _ProductsState extends State<Products> {
                                                             final double totalCost = double.parse(productss[i].price) * count;
                                                             bloc.setCount(<String>[count.toString(), totalCost.toString(), i.toString()]);
                                                             counts[i] = count.toString();
-                                                          });
+                                                      //    });
                                                         },
                                                         padding:
                                                         EdgeInsets
@@ -524,9 +524,9 @@ class _ProductsState extends State<Products> {
           productss[i].size,
           count.toString(),
           productss[i].image);
-      firstTime = false;
+      //firstTime = false;
     }
-    print(firstTime.toString());
+ //   print(firstTime.toString());
 
   /*  m.acquire();
     try{
