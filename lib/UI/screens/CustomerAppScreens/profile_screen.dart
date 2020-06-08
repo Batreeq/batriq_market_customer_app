@@ -856,7 +856,7 @@ class _ProfileScreen extends State {
           sharedData.writeToStorage(key: 'token', value: info.apiToken);
 
           setState(() {
-            titles[0] = 'تسجيل خروج ';
+            titles[8] = 'تسجيل خروج ';
           });
           print('User Carts are :');
           final dataList = await DBHelper.getData('user_cart');
