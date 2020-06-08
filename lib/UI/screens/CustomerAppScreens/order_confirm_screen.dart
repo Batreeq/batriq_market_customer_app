@@ -593,6 +593,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
               if (deliveryTimes.timesPrices.length > 0)
                 for (timesPrices in deliveryTimes.timesPrices) {
                   _modalBottomSheetMenu(timesPrices);
+                  lastIndex++;
                   //  qwe
                 }
               //
@@ -809,9 +810,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                                   isFound = true;
                                   break;
                                 }
-
                               }
-                              lastIndex++;
+
                               print(isFound.toString());
                               if (isFound) {
                                 if (code.type == "cart_val") {
