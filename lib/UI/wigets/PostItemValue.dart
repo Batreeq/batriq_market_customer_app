@@ -17,36 +17,36 @@ class PostItemValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: InkWell(
-          onTap: () {
-            ProductDetailsModel productDetails = item.product_details;
-            Product product = Product(
-                title: productDetails.name,
-                image: productDetails.image,
-                price: productDetails.price,
-                size: productDetails.size,
-                catigory: null,
-                id: productDetails.id.toString(),
-                is_offer: false,
-                is_package: false);
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: InkWell(
+        onTap: () {
+          ProductDetailsModel productDetails = item.product_details;
+          Product product = Product(
+              title: productDetails.name,
+              image: productDetails.image,
+              price: productDetails.price,
+              size: productDetails.size,
+              catigory: null,
+              id: productDetails.id.toString(),
+              is_offer: false,
+              is_package: false);
 
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => ProductDetailsScreen(
-                      product: product,
-                    )));
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => ProductDetailsScreen(
+                    product: product,
+                  )));
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 4),
+              child: Text(
                 item.text.toString(),
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 15.0,
@@ -54,25 +54,27 @@ class PostItemValue extends StatelessWidget {
 
                 ),
               ),
-              SizedBox(height: 4,),
-              Container(
+            ),
+            SizedBox(height: 16,),
+            Container(
 
-                height: 100,
+              height: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                image: DecorationImage(
+                    image: CachedNetworkImageProvider(item.image),
+                    fit: BoxFit.contain),
+              ),
+              child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  image: DecorationImage(
-                      image: CachedNetworkImageProvider(item.image),
-                      fit: BoxFit.cover),
+                 /* color: Colors.black.withOpacity(0.1),*/
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                    color: Colors.black.withOpacity(0.1),
-                  ),
-                ),
-              )
-            ],
-          ),
+              ),
+            ),
+            SizedBox(height: 4,),
+            Divider(height: 10,thickness: 1.5,)
+          ],
         ),
       ),
     );

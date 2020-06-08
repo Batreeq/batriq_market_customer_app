@@ -440,6 +440,7 @@ class _ProductsInCartScreen extends State {
                               onPressed: () async {
                                {
                                   DBHelper.delete('user_cart', product.id.toString());
+                                 // subCartSize();
                                  await initMyProductData();
                                  setState(() {});
                                 //  bloc.fetchCartData();
@@ -496,6 +497,7 @@ class _ProductsInCartScreen extends State {
                                                     'user_cart',
                                                     product.id,newCount.toString());
                                                 await initMyProductData();
+                                               // addCartSize();
                                                 setState(() {});
 
 
@@ -553,6 +555,7 @@ class _ProductsInCartScreen extends State {
                                                       myCount.toString()
                                                   );
                                                 await initMyProductData();
+
                                                 setState(() {
 
                                                 });
@@ -564,6 +567,7 @@ class _ProductsInCartScreen extends State {
                                                   DBHelper.delete(
                                                       'user_cart',
                                                       product.id.toString());
+                                               //   subCartSize();
                                                   await initMyProductData();
                                                   setState(() {
 

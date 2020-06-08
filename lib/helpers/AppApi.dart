@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:customerapp/models/allCartForUser/AllCartModel.dart';
 import 'package:customerapp/models/mainCategoriesModel/MainCategroiesModel.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
@@ -110,6 +111,51 @@ Future<Response> transferMoney(String amount, String toUser, String token) async
   }
 }
 
+
+Future<Response> getAllCart(String token) async {
+
+
+
+  try {
+    var url=sharedData.getUserCartsUrl+"$token";
+    print(url);
+    var response =await http.get(url);
+
+
+
+    print('code  = ${response.statusCode}');
+    print('body of user ${response.body}');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+
+      AllCartModel   item = AllCartModel.fromJson(data);
+      if(item.user_cart!=null &&item.user_cart.isNotEmpty&&item.user_cart.length>0){
+
+        cartSize=item.user_cart.length;
+      return new Response(200, true);}
+      else {
+
+        cartSize=item.user_cart.length;
+        return new Response(200, false);}
+    }
+
+    else {
+      return new Response(response.statusCode, response);
+    }
+  }
+  on TimeoutException catch (_) {
+    sharedData.flutterToast('Please check your internet connection!');
+    return Response(-1000, '');
+  }
+
+  catch (e) {
+    print(e);
+    return new Response(-1, "error");
+  }
+
+}
 
 ///////////////////////////////////////// DO LOGIN /////////////////////////////////////////
 /*Future<Response> doLogin(String type, String email, String password) async {

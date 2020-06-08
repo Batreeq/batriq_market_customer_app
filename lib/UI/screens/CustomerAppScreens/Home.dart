@@ -58,6 +58,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    checkDotAmount();
     appbarBloc.setTitle("الصفحة الرئيسية");
 
     return SingleChildScrollView(
@@ -78,8 +79,9 @@ class Home extends StatelessWidget {
 
   Widget buildGrideList(context) {
     return GridView.builder(
-    //  physics: NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
+     physics: NeverScrollableScrollPhysics(),
+    //  physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 0, right: 2, left: 2),
       itemCount: sharedData.homeBlockcatigoriesData.length,
       itemBuilder: (ctx, i) {
         final catigory = sharedData.homeBlockcatigoriesData[i];
@@ -91,10 +93,10 @@ class Home extends StatelessWidget {
       },
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 10,
+        crossAxisSpacing: 0,
         childAspectRatio: MediaQuery.of(context).size.width /
             (MediaQuery.of(context).size.height / 2),
-        mainAxisSpacing: 10,
+        mainAxisSpacing: 0,
       ),
     );
   }

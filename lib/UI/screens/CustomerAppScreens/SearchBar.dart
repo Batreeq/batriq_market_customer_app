@@ -72,7 +72,7 @@ class CustomAppBar extends StatelessWidget {
             bottom: 0,
             child: Stack(
               children: <Widget>[
-                sharedData.isCartNotEmpty == 'true'
+                dotInCart
                     ? Container(
                         width: 12.0,
                         height: 12.0,

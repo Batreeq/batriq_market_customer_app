@@ -81,9 +81,13 @@ class _SplashScreenState extends State<SplashScreen> {
     extractedData['posts'].forEach((item){
       PostsModel data= PostsModel.fromJson(item);
       postsList.add(data);
+      postsList.add(data);
+      postsList.add(data);
     });
 
-  //  debugPrint("post size"+postsList.length.toString());
+
+
+   debugPrint("post size"+postsList.length.toString());
     extractedData['homeSliders'].forEach((image) {
       sharedData.sliderHomeImages.add(image['image']);
     });
@@ -155,6 +159,8 @@ class _SplashScreenState extends State<SplashScreen> {
     sharedData.helpImage = extractedData['HelpScreen'][0]['image'];
     sharedData.privacyImage = extractedData['PrivacyPolicy'][0]['image'];
     sharedData.termsTitle = extractedData['termsAndConditions'][0]['title'];
+
+    await initCheckDotInCart();
     Navigator.pushReplacement(
       context,
       new MaterialPageRoute(builder: (context) => new HomePagee()),

@@ -13,8 +13,10 @@ class WorkWithUsScreen extends StatefulWidget {
 }
 
 class _WorkWithUsScreen extends State {
+
   @override
   Widget build(BuildContext context) {
+    checkDotAmount();
     return Scaffold(
       body: getBody(),
     );

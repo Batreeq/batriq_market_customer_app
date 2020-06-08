@@ -37,8 +37,8 @@ class PostsPage extends StatelessWidget {
             crossAxisSpacing: 10,
           ),*/
           padding: EdgeInsets.only(
-              left: 16,
-              right:16,bottom: 60),
+              left: 3,
+              right:3,bottom: 60),
           itemBuilder: (context, index) {
 
               return GestureDetector(
@@ -64,6 +64,7 @@ class PostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     appbarBloc.setTitle(sharedData.posts);
+    checkDotAmount();
     return _itemGridView(postsList,context);
   }
 }

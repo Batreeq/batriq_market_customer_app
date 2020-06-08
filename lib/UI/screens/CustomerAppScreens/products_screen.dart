@@ -347,6 +347,7 @@ class _ProductsState extends State<Products> {
                                                             try{
                                                               if (firstTime){
                                                                 firstTime = false ;
+                                                               
                                                                 getCartsDialog(count , i);
                                                               }
                                                               print ('is first time = ' + firstTime.toString());
@@ -561,6 +562,8 @@ class _ProductsState extends State<Products> {
     setState(() {
       isloading = false;
     });
+
+    addCartSize();
   }
 
   cartGroupToJson(UserCarts group) {
@@ -672,6 +675,8 @@ class _ProductsState extends State<Products> {
     }).then((v){
       widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
     });
+
+    addCartSize();
   }
 
   showAlert(List<CartName> cartNames, Cart cart) {

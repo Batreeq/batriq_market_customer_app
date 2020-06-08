@@ -18,6 +18,7 @@ class _MessagingScreenState extends State<MessagingScreen>
   @override
   Widget build(BuildContext ctx) {
     this.ctx = ctx ;
+    checkDotAmount();
     return Scaffold(
       /*floatingActionButton: FloatingActionButton(
         child:  Image.asset('assets/images/icons/whatsapp.png'),

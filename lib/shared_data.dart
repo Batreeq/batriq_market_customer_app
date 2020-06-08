@@ -1,3 +1,4 @@
+import 'package:customerapp/models/allCartForUser/AllCartModel.dart';
 import 'package:customerapp/models/homeBlocks/HomeBlocksModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:requests/requests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Bloc/appBarTitleBloc.dart';
 import 'DataLayer/Catigory.dart';
@@ -19,12 +21,15 @@ import 'models/orderInfo.dart';
 import 'package:customerapp/models/UserBalance.dart';
 import 'models/UserBalance.dart';
 import 'models/PostsModel.dart';
+import 'helpers/AppApi.dart';
 
 ///this file for shared data between pages
 ///
 ///
 List<ProductTab> tabs = [];
 List<PostsModel> postsList = [];
+bool dotInCart=false;
+int cartSize=0;
 List<MyProductModel> myProductList = [];
 LocationData locationData;
 String token = "";
@@ -41,8 +46,89 @@ readToken() async {
   token = await sharedData.readFromStorage(key: 'token');
 }
 
+bool checkDotAmount(){
+
+  print("dotSize  $cartSize" );
+  if(cartSize==0){
+    dotInCart=false;
+    return false;
+  }else{
+    dotInCart=true;
+    return true;
+  }
+
+}
+
+bool addCartSize(){
+  cartSize++;
+ bool item=checkDotAmount();
+ return item;
+}
+bool subCartSize(){
+  cartSize--;
+  bool item=checkDotAmount();
+  return item;
+}
+
+bool ckeckSizeCartList(AllCartModel item){
+
+
+  if(item!=null &&item.user_cart!=null &&item.user_cart.isNotEmpty&&item.user_cart.length>0){
+    print("size lov "+item.user_cart.length.toString());
+    cartSize=item.user_cart.length;
+  }else{
+    cartSize=0;
+  }
+
+  bool data=checkDotAmount();
+  return data;
+}
+
+Future<void> initCheckDotInCart() async {
+  if(isRegistered()){
+    var response=await getAllCart(token);
+    if(response.statusCode==200){
+      dotInCart=response.object;
+    }else{
+      cartSize=0;
+      dotInCart=false;
+    }
+
+
+  }else{
+    List<Map> map= await DBHelper.getData("user_cart");
+    if(map!=null&& map.isNotEmpty&&map.length>0){
+
+      cartSize=map.length;
+      dotInCart=true;
+    }
+    else{
+      cartSize=0;
+      dotInCart=false;}
+
+  }
+}
+
+
+bool ckeckMapListCartSize(List<Map> map){
+  if(map!=null&& map.isNotEmpty&&map.length>0){
+
+    cartSize=map.length;
+    dotInCart=true;
+  }
+  else{
+    cartSize=0;
+    dotInCart=false;}
+
+  bool data=checkDotAmount();
+  return data;
+}
+
+
+
 Future<void> initMyProductData() async {
   List<Map> map= await DBHelper.getData("user_cart");
+  ckeckMapListCartSize(map);
   myProductList.clear();
   myProductList = map.map((item) {
 

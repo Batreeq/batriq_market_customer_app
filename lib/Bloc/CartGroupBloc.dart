@@ -4,6 +4,7 @@ import 'package:customerapp/DataLayer/Cart.dart';
 import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/helpers/DBHelper.dart';
 import 'package:customerapp/models/UserCarts.dart';
+import 'package:customerapp/models/allCartForUser/AllCartModel.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:requests/requests.dart';
 import 'bloc.dart';
@@ -28,6 +29,7 @@ class CartGroupBloc implements Bloc {
     if (response.statusCode == 200 ){
       response.raiseForStatus();
       dynamic json = response.json();
+      ckeckSizeCartList(AllCartModel.fromJson(json));
       userCarts = UserCarts.fromJson(json);
      for( Cart c in userCarts.userCart){
        print ("cart title " + c.cartTitle  + ' cart quantity ' + c.quantity.toString());
@@ -65,6 +67,8 @@ class CartGroupBloc implements Bloc {
   Future<void> fetchCartData() async {
     List<UserCarts> carts = [];
     final dataList = await DBHelper.getData('user_cart');
+    print("databaseSize "+dataList.length.toString());
+    ckeckMapListCartSize(dataList);
     List<Cart> items = dataList.map((item) {
       print("object${item['count']}");
       return Cart(
