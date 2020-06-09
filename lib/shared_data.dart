@@ -354,7 +354,8 @@ class sharedData {
         timeInSecForIosWeb: 1,
         backgroundColor: mainColor,
         textColor: Colors.black,
-        fontSize: 16.0);
+        fontSize: 16.0
+    );
   }
 
   static bool validationForm(GlobalKey<FormState> item){

@@ -54,7 +54,7 @@ class _EarnWithUsScreen extends State {
 
     this.context = context;
     return Scaffold(
-      appBar: sharedData.appBar(context, 'اكسب معنا', null, () {}),
+      appBar: sharedData.appBar(context, 'اربح معنا', null, () {}),
       body: getBody(context),
     );
   }

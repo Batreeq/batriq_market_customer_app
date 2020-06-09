@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePagee> {
     new GlobalKey<ScaffoldState>();
     final bloc = SideMenuBloc();
     const String homeTextPage = 'الصفحة الرئيسية';
-    const String workWithusText = 'اعمل معنا';
+    const String workWithusText = 'اربح معنا';
     const String chatText = 'المراسلة';
     const String postText = sharedData.posts;
     pageController = new PageController();
