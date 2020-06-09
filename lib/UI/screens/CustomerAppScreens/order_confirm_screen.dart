@@ -480,18 +480,20 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
+                      lastIndex++;
                       double delTotal = 0;
+
                       for (Category c in categoriesWhichSelected)
-                        {delTotal+= double.parse(c.price );}
+                        {
+
+                          delTotal+= double.parse(c.price );
+
+                        }
                       print ('all del price '+ delTotal.toString());
                       if (widget.selectedTime != null) {
-                        //Navigator.of(context).pop();
 
-                        if (lastIndex == deliveryTimes.timesPrices.length)
-                          barCodeDialog(
-                              deliveryTimes.barcode,
-                              /*devliveryPrice*/ delTotal.toString(),
-                              totalCartPrice);
+
+
 
                         categoriesWhichSelected.add(category);
                         for (Category c in categoriesWhichSelected) {
@@ -506,9 +508,22 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                           print(c.category.length.toString());
                         }
 
+
+                        if (lastIndex == deliveryTimes.timesPrices.length){
+                          Navigator.of(context).pop();
+                          barCodeDialog(
+                              deliveryTimes.barcode,
+                              /*devliveryPrice*/ delTotal.toString(),
+                              totalCartPrice);
+
+                        }
+                        else
+                          Navigator.of(context).pop();
+
                       } else {
                         sharedData.flutterToast('اختر فترة  التوصيل');
                       }
+
                       print('last index = ' +
                           lastIndex.toString() +
                           '  ' +
@@ -567,7 +582,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       margin: EdgeInsets.only(top: 50),
       child: RaisedButton(
         color: sharedData.mainColor,
-        onPressed: () {
+        onPressed: () async {
           //  totalDeliveryPrice += int.parse(obj.category.elementAt(index).price) ;
           print('total ' + totalDeliveryPrice.toString());
           TimesPrices timesPrices;
@@ -592,8 +607,8 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
             if (deliveryTimes.timesPrices != null) {
               if (deliveryTimes.timesPrices.length > 0)
                 for (timesPrices in deliveryTimes.timesPrices) {
-                  _modalBottomSheetMenu(timesPrices);
-                  lastIndex++;
+                   _modalBottomSheetMenu(timesPrices);
+
                   //  qwe
                 }
               //
@@ -711,15 +726,18 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     print("time : ${widget.selectedTime}");
     print ('to json model ');
     debugPrint( model.toJson().toString());
-
+    debugPrint("url " + sharedData.confirmOrderUrl);
+    debugPrint("body " + model.toJson().toString());
     final response = await http.post(sharedData.confirmOrderUrl, body: model.toJson());
     debugPrint("res " + response.body.toString());
     setState(() {
       isLoading = false;
     });
     Navigator.of(context).pop();
+    if(response.statusCode==200)
     showSnackBar("تمت العملية بنجاح");
-
+    else
+      showSnackBar("لم تتم العملية بنجاح ");
 //    Navigator.of(context).pop();
     //print("resss :  ${response.statusCode}");
   }

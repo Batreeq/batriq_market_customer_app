@@ -44,7 +44,7 @@ class SubCategoryItemValue extends StatelessWidget {
 
     }
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(2.0),
       child: InkWell(
         onTap:(){
           openProductPage();
@@ -59,8 +59,8 @@ class SubCategoryItemValue extends StatelessWidget {
           );*/
         ,
         child: Container(
-          height: 105.0,
-          width: 160.0,
+          height: 100.0,
+          width: 140.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(3.0)),
             image: DecorationImage(

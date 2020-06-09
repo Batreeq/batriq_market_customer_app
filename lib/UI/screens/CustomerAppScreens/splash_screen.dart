@@ -81,8 +81,6 @@ class _SplashScreenState extends State<SplashScreen> {
     extractedData['posts'].forEach((item){
       PostsModel data= PostsModel.fromJson(item);
       postsList.add(data);
-      postsList.add(data);
-      postsList.add(data);
     });
 
 

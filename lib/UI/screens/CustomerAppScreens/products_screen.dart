@@ -557,6 +557,15 @@ class _ProductsState extends State<Products> {
           CartNum: cartname['cart_num'], cartTitle: cartname['cart_title']);
       carts.add(cartName);
     });
+
+    if(carts!=null&&carts.length==1) {
+      List<Cart> carts = [];
+      carts.add(cart);
+      UserCarts groups = UserCarts(groupId: "1", userCart: carts, name : "السلة الرئيسية");
+      addToCartWithToken(cartGroupToJson(groups),state: false);
+
+
+    }else
     showDialog(context: context, child: showAlert(carts, cart),barrierDismissible: false);
     setState(() {
       isloading = false;
@@ -752,9 +761,10 @@ class _ProductsState extends State<Products> {
     );
   }
 
-  addToCartWithToken(data) async {
+  addToCartWithToken(data,{bool state}) async {
     final jsonData = {'"data"': data};
     final Map<String, dynamic> formData = {'data': jsonData.toString()};
+    if(state)
     Navigator.of(context).pop();
     setState(() {
       isloading = true;
