@@ -244,9 +244,24 @@ class _ProductsState extends State<Products> {
                                 padding: EdgeInsets.all(10),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    productss[i].image,
-                                    fit: BoxFit.fill,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 3,
+                                        child: Image.network(
+                                          productss[i].image,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                      Expanded(
+                                      flex: 1,
+                                        child: getPointsNumber(productss[i].points)==0?
+                                        Container():
+                                        Text("${productss[i].points} "+sharedData.point,style: TextStyle(fontSize: 14),),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
@@ -558,7 +573,10 @@ class _ProductsState extends State<Products> {
       carts.add(cartName);
     });
 
-    if(carts!=null&&carts.length==1) {
+
+    print("carts Leanght"+carts.length.toString());
+
+    if(carts!=null&&carts.length<=1) {
       List<Cart> carts = [];
       carts.add(cart);
       UserCarts groups = UserCarts(groupId: "1", userCart: carts, name : "السلة الرئيسية");
@@ -620,7 +638,8 @@ class _ProductsState extends State<Products> {
             id: p['id'].toString(),
             size: p['size'],
             is_offer: p['is_offer'],
-        is_package: p['is_package']);
+        is_package: p['is_package'],
+            points:p['points'] );
         products.add(product);
       });
     }else
@@ -637,7 +656,8 @@ class _ProductsState extends State<Products> {
           id: p['id'].toString(),
           size: p['size'],
       is_offer: p['is_offer'],
-      is_package: p['is_package']);
+      is_package: p['is_package'],
+      points: p['points']);
       products.add(product);
     });
     if (mounted)

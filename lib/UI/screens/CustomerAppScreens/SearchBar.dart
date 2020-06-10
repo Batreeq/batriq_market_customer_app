@@ -903,9 +903,24 @@ class _SearchPage extends State<SearchPage> {
                   padding: EdgeInsets.all(10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      post.image,
-                      fit: BoxFit.fill,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 3,
+                          child: Image.network(
+                            post.image,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: getPointsNumber(post.points)==0?
+                          Container():
+                          Text("${post.points} "+sharedData.point,style: TextStyle(fontSize: 14),),
+                        )
+                      ],
                     ),
                   ),
                 ),

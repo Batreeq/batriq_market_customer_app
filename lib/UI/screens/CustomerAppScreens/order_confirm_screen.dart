@@ -449,6 +449,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
   }
 
   void _modalBottomSheetMenu(TimesPrices object) {
+
     showModalBottomSheet(
         context: context,
         builder: (builder) {
@@ -517,8 +518,10 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                               totalCartPrice);
 
                         }
-                        else
+                        else{
+
                           Navigator.of(context).pop();
+                          FocusScope.of(context).requestFocus(FocusNode());}
 
                       } else {
                         sharedData.flutterToast('اختر فترة  التوصيل');
@@ -607,6 +610,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
             if (deliveryTimes.timesPrices != null) {
               if (deliveryTimes.timesPrices.length > 0)
                 for (timesPrices in deliveryTimes.timesPrices) {
+
                    _modalBottomSheetMenu(timesPrices);
 
                   //  qwe

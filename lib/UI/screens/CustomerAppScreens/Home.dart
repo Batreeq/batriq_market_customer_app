@@ -95,7 +95,7 @@ class Home extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 0,
         childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 2),
+            (MediaQuery.of(context).size.height / 2.4),
         mainAxisSpacing: 0,
       ),
     );

@@ -315,6 +315,7 @@ class _CartScreenState extends State<CartScreen> {
                 padding: EdgeInsets.all(0),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => ProfileScreen()));
 
@@ -567,7 +568,7 @@ class _CartScreenState extends State<CartScreen> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal),
                           ),
-                          Container(
+                      /*    Container(
                             height: 30,
                             width: 30,
                             child: FlatButton(
@@ -589,7 +590,7 @@ class _CartScreenState extends State<CartScreen> {
                               },
                               padding: EdgeInsets.all(0),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       Row(

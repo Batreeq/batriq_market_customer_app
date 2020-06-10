@@ -21,7 +21,7 @@ class CartGroupBloc implements Bloc {
     final response = await Requests.get(sharedData.getUserCartsUrl + token);
 
     if (response != null) {
-     // print(response.json());
+      print(response.json());
       print(response.statusCode);
     } else
       print('response is null');

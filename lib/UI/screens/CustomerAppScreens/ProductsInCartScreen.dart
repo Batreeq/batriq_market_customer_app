@@ -163,7 +163,7 @@ class _ProductsInCartScreen extends State {
                                 fontWeight: FontWeight.normal),
                           ),
                           //close button
-                          Container(
+                          /*Container(
                             height: 30,
                             width: 30,
                             child: FlatButton(
@@ -185,7 +185,7 @@ class _ProductsInCartScreen extends State {
                               },
                               padding: EdgeInsets.all(0),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       Row(
@@ -282,7 +282,7 @@ class _ProductsInCartScreen extends State {
                                       child: ConstrainedBox(
                                           constraints: BoxConstraints.expand(),
                                           child: FlatButton(
-                                              onPressed: () {
+                                              onPressed: () async {
 
                                                 setState(() {
                                                   minus = true ;
@@ -315,13 +315,14 @@ class _ProductsInCartScreen extends State {
                                                      print(' in if quantity = ' /*+ quantity.toString() + ' :: ' +*/
                                                          'product q = ' + product.quantity.toString());
                                                      this.product = product;
-                                                     updateCart(c.id, (product.quantity).toString(), bloc);
+                                                    updateCart(c.id, (product.quantity).toString(), bloc);
                                                    }
-                                                }  else if (product.quantity == 1 || product.quantity == 1)  {
+                                                }
+                                                else if (product.quantity == 1 || product.quantity == 1)  {
                                                   // delete product here
                                                   if (isRegistered()) {
                                                     updateCart(product.id, product.quantity.toString(), bloc);
-                                                    deleteFromCart(product.id , index );
+                                                    await deleteFromCart(product.id , index,removelastIndex: true );
                                                     bloc.getCartData(token);
                                                   } else {
                                                     DBHelper.delete(
@@ -426,7 +427,7 @@ class _ProductsInCartScreen extends State {
                                 fontWeight: FontWeight.normal),
                           ),
                           //close button
-                          Container(
+                         /* Container(
                             height: 30,
                             width: 30,
                             child: FlatButton(
@@ -448,7 +449,7 @@ class _ProductsInCartScreen extends State {
                               },
                               padding: EdgeInsets.all(0),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       Row(
@@ -672,13 +673,16 @@ class _ProductsInCartScreen extends State {
         this.quantity --;
       });*/
 
-    bloc.getCartData(token);
+
+ /*   bloc.getCartData(token);
     setState(() {
       isloading = false;
-    });
+    });*/
+
   }
 
-  deleteFromCart(id , int index ) async {
+  Future<void>deleteFromCart(id , int index,{bool removelastIndex}) async {
+    print("TEST_before delete");
     setState(() {
       isloading = true;
     });
@@ -686,11 +690,14 @@ class _ProductsInCartScreen extends State {
     print ('will delete ' + id.toString());
     final uri =
         "https://jaraapp.com/index.php/api/deleteFromCart?api_token=$token&id=$id";
+    print(uri);
     final response = await Requests.post(uri);
     if (response.statusCode == 200)
       print('successfully deleted ');
+
     setState(() {
       isloading = false;
+      if(!removelastIndex)
       cart.productDetails.removeAt(index);
     });
   }
