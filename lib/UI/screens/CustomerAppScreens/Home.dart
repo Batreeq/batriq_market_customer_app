@@ -94,8 +94,7 @@ class Home extends StatelessWidget {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 0,
-        childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 2),
+        childAspectRatio: 12 / 8,
         mainAxisSpacing: 0,
       ),
     );

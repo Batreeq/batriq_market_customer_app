@@ -514,7 +514,7 @@ class _ProductsState extends State<Products> {
       getCartNames(Cart(
           price: productss[i].price,
           cartTitle: "",
-          quantity: count,
+          quantity: 1,
           productId: productss[i].id));
     } else {
       addProductToCart(
@@ -522,7 +522,7 @@ class _ProductsState extends State<Products> {
           productss[i].id,
           productss[i].price,
           productss[i].size,
-          count.toString(),
+          1.toString(),
           productss[i].image);
       //firstTime = false;
     }

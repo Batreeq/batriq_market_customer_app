@@ -10,6 +10,7 @@ import 'package:customerapp/models/MyProductsModel.dart';
 import 'package:customerapp/models/UserCarts.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/material.dart';
+import 'HomePage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 
@@ -62,118 +63,130 @@ class _CartScreenState extends State<CartScreen> {
     appbarBloc.setTitle("سلة المشتريات");
 
     return Scaffold(
-        appBar: sharedData.appBar(context, 'سلة المشتتريات', null, () {}),
-        body: (!isRegistered()) ? Card(
-            elevation: 10,
-            margin: EdgeInsets.all(10),
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext c) => ProductsInCartScreen()));
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+      appBar: sharedData.appBar(context, 'سلة المشتتريات', null, () {}),
+      body: (!isRegistered()) ? Card(
+          elevation: 10,
+          margin: EdgeInsets.all(10),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext c) => ProductsInCartScreen()));
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
 
-                children: <Widget>[
-                  buildGroupDevider("السلة الرئيسية"),
-                  //buildGroupItem(context, data , bloc),
-                  builtCartInfoV2(context,),
-                  Container(
-                    height: 40,
-                    margin: EdgeInsets.all(10),
-                    width: double.infinity,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            margin: EdgeInsets.only(left: 10),
-                            color: sharedData.mainColor,
-                            child: MaterialButton(
-                              child: Text(
-                                'تأكيد الطلب',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    child: showSendToLogin(
-                                        1.toString(), context));
-
-                                //confirmOrder(data[index].id, data[index].productDetails);
-                              },
+              children: <Widget>[
+                buildGroupDevider("السلة الرئيسية"),
+                //buildGroupItem(context, data , bloc),
+                builtCartInfoV2(context,),
+                Container(
+                  height: 40,
+                  margin: EdgeInsets.all(10),
+                  width: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 10),
+                          color: sharedData.mainColor,
+                          child: MaterialButton(
+                            child: Text(
+                              'تأكيد الطلب',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  child: showSendToLogin(
+                                      1.toString(), context));
+
+                              //confirmOrder(data[index].id, data[index].productDetails);
+                            },
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: sharedData.mainColor,
-                                    style: BorderStyle.solid,
-                                    width: 1)),
-                            child: MaterialButton(
-                              child: Text(
-                                'مشاركة السلة',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    child: shareCartDialog(
-                                        1.toString(), context));
-                              },
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: sharedData.mainColor,
+                                  style: BorderStyle.solid,
+                                  width: 1)),
+                          child: MaterialButton(
+                            child: Text(
+                              'مشاركة السلة',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
                             ),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  child: shareCartDialog(
+                                      1.toString(), context));
+                            },
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
-              ),
-            )
-        )
-            : Stack(
-          children: <Widget>[
-            BlocProvider<CartGroupBloc>(
-              bloc: bloc,
-              child: StreamBuilder<UserCarts>(
-                  stream: bloc.cartDataStream,
-                  builder: (context, snapshot) {
-                    return snapshot.data == null
-                        ? Center(child: Text(''))
-                        : buildCartList(snapshot.data, bloc, context);
-                  }),
-            ),
-            isloading
-                ? Center(
-              child: Container(
-                child: SpinKitPulse(
-                    duration: Duration(milliseconds: 1000),
-                    color: sharedData.mainColor,
-                    size: 70
-//                    lineWidth: 2,
                 ),
-                width: 100,
-                height: 100,
+                SizedBox(
+                  height: 10,
+                )
+              ],
+            ),
+          )
+      )
+          : Stack(
+        children: <Widget>[
+          BlocProvider<CartGroupBloc>(
+            bloc: bloc,
+            child: StreamBuilder<UserCarts>(
+                stream: bloc.cartDataStream,
+                builder: (context, snapshot) {
+                  return snapshot.data == null
+                      ? Center(child: Text(''))
+                      : buildCartList(snapshot.data, bloc, context);
+                }),
+          ),
+          isloading
+              ? Center(
+            child: Container(
+              child: SpinKitPulse(
+                  duration: Duration(milliseconds: 1000),
+                  color: sharedData.mainColor,
+                  size: 70
+//                    lineWidth: 2,
               ),
-            )
-                : Container()
-          ],
-        )
+              width: 100,
+              height: 100,
+            ),
+          )
+              : Container()
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // this button should go to Homt.dart to go to home to add more  products to the cart
+          setState(() {
+            sharedData.selectedIndex = 0 ;
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext c) => HomePagee()));
+          });
+        },
+       child: Icon(Icons.add),
+    //    backgroundColor: Colors.pink,
+      ),
     );
   }
 
@@ -314,6 +327,7 @@ class _CartScreenState extends State<CartScreen> {
               child: FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
+                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => ProfileScreen()));

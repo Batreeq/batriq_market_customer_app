@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:customerapp/Bloc/ProductItemBloc.dart';
 import 'package:customerapp/Bloc/bloc_provider.dart';
-import 'package:customerapp/DataLayer/Cart.dart';
-import 'package:customerapp/DataLayer/CartGroup.dart';
 import 'package:customerapp/DataLayer/CartName.dart';
 import 'package:customerapp/DataLayer/Product.dart';
 import 'package:customerapp/DataLayer/tab.dart';
@@ -22,7 +20,6 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:customerapp/models/searchResult.dart';
-/*import 'package:flappy_search_bar/flappy_search_bar.dart';*/
 import 'package:flutter/rendering.dart';
 import 'package:requests/requests.dart';
 import 'package:http/http.dart' as http;
@@ -826,11 +823,11 @@ class _SearchPage extends State<SearchPage> {
       getCartNames(Cart(
           price: product.price,
           cartTitle: "",
-          quantity: count,
+          quantity: 1,
           productId: product.id.toString()));
     } else {
       addProductToCart(product.name.toString(), product.id.toString(),
-          product.price, product.size, count.toString(), product.image);
+          product.price, product.size, 1.toString(), product.image);
      // firstTime = false;
     }
 //    print(firstTime.toString());

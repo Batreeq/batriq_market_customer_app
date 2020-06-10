@@ -450,6 +450,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 
   void _modalBottomSheetMenu(TimesPrices object) {
     showModalBottomSheet(
+
         context: context,
         builder: (builder) {
           return Column(
@@ -482,6 +483,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                     onPressed: () {
                       lastIndex++;
                       double delTotal = 0;
+                      categoriesWhichSelected.add(category);
 
                       for (Category c in categoriesWhichSelected)
                         {
@@ -495,7 +497,6 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 
 
 
-                        categoriesWhichSelected.add(category);
                         for (Category c in categoriesWhichSelected) {
                           print('c price ');
                           print(c.price);
@@ -515,10 +516,12 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                               deliveryTimes.barcode,
                               /*devliveryPrice*/ delTotal.toString(),
                               totalCartPrice);
-
                         }
                         else
-                          Navigator.of(context).pop();
+                         {
+                           Navigator.of(context).pop();
+                           FocusScope.of(context).requestFocus(FocusNode());
+                         }
 
                       } else {
                         sharedData.flutterToast('اختر فترة  التوصيل');
@@ -778,7 +781,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       List<Barcode> barCodes, String deliveryPrice, String totalCartPrice) {
     TextEditingController codeCon = new TextEditingController();
     totalWithDel = (double.parse(totalCartPrice) + double.parse(deliveryPrice));
-    showModalBottomSheet(
+/*   showModalBottomSheet(
         context: context,
         builder: (builder) {
           return Padding(
@@ -889,8 +892,129 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
               ),
             ),
           );
-        });
-  }
+        });*/
+
+    Dialog errorDialog = Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+      child: Container(
+        height: MediaQuery.of(context).size.width -20,
+    //    width: MediaQuery.of(context).size.width -10,
+
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Form(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: codeCon,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        alignLabelWithHint: true,
+                        border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: color)),
+                        labelText: 'رمز الكوبون',
+                        hintText: 'ادخل رمز الكوبون',
+                        helperText: helpText,
+                        helperStyle: TextStyle(color: color),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        labelStyle: TextStyle(color: color),
+                      ),
+                    ),
+                  ),
+                ),
+                Column(children: getBarCodesUI(barCodes),),
+                Text('سعر التوصيل : ' + deliveryPrice),
+                Text('سعر الكلي للسلة : ' + totalCartPrice),
+                Text('سعر الكلي شامل التوصيل : ' + totalWithDel.toString()),
+                Container(
+                  margin: EdgeInsets.all(15),
+                  height: 40,
+                  width: double.infinity,
+                  child: Container(
+                    color: sharedData.mainColor,
+                    child: MaterialButton(
+                      child: Text(
+                        'إرسال الطلب',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        Barcode code = new Barcode();
+                        lastIndex = 0 ;
+                        print ('last index after bar code dialog shown '+lastIndex.toString());
+                        if (codeCon.text == '' || codeCon.text == null )
+                          confirmOrder(categoriesWhichSelected, code, totalCartPrice, totalWithDel.toString());
+
+
+                        bool isFound = false;
+                        for (code in barCodes) {
+                          if (codeCon.text == code.code) {
+                            isFound = true;
+                            break;
+                          }
+                        }
+
+                        print(isFound.toString());
+                        if (isFound) {
+                          if (code.type == "cart_val") {
+                            double c = (double.parse(totalCartPrice)) *
+                                code.value;
+                            setState(() {
+                              totalCartPrice =
+                                  ((double.parse(totalCartPrice)) - c)
+                                      .toString();
+                              totalWithDel = (double.parse(totalCartPrice) +
+                                  double.parse(deliveryPrice));
+                              color = Colors.green;
+                              helpText = '';
+                            });
+                            confirmOrder(categoriesWhichSelected, code, totalCartPrice, totalWithDel.toString());
+                          }
+                          else if (code.type == "delviery_val") {
+                            double c = (double.parse(deliveryPrice)) *
+                                code.value;
+                            setState(() {
+                              deliveryPrice =
+                                  ((double.parse(deliveryPrice)) - c)
+                                      .toString();
+                              totalWithDel = (double.parse(totalCartPrice) +
+                                  double.parse(deliveryPrice));
+                              color = Colors.green;
+                              helpText = '';
+                            });
+                            confirmOrder(categoriesWhichSelected, code, totalCartPrice, totalWithDel.toString());
+
+                          }
+
+                          setState(() {
+                          });
+                        } else if (codeCon.text != null || codeCon.text != '')
+                          setState(() {
+                            color = Colors.red;
+                            helpText = 'رمز الكوبون ليس صحيح';
+                          });
+
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
+      ),
+    );
+    showDialog(context: context, builder: (BuildContext context) => errorDialog);}
+
 
   List<Widget> getBarCodesUI(List<Barcode> codes) {
     List<Widget> codesList = new List();
