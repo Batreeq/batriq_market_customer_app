@@ -71,6 +71,7 @@ class _CartScreenState extends State<CartScreen> {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: InkWell(
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext c) => ProductsInCartScreen()));
             },

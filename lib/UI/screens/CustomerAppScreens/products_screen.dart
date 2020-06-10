@@ -798,7 +798,8 @@ class _ProductsState extends State<Products> {
     setState(() {
       isloading = false;
     });
-    print(response.body);
+    print(""+json.encode(formData).toString());
+    print(url);
     widget.showSnackBar("تمت الإضافة إلي سلة المشتريات");
   }
 

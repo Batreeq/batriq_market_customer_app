@@ -799,10 +799,12 @@ class _SearchPage extends State<SearchPage> {
     return json;
   }
 
-  addToCartWithToken(data) async {
+  addToCartWithToken(data,{bool state}) async {
     final jsonData = {'"data"': data};
     final Map<String, dynamic> formData = {'data': jsonData.toString()};
-    Navigator.of(context).pop();
+    if(state)
+      Navigator.of(context).pop();
+
     setState(() {
       isloading = true;
     });
@@ -857,10 +859,20 @@ class _SearchPage extends State<SearchPage> {
           CartNum: cartname['cart_num'], cartTitle: cartname['cart_title']);
       carts.add(cartName);
     });
+
+    if(carts!=null&&carts.length<=1) {
+      List<Cart> carts = [];
+      carts.add(cart);
+      UserCarts groups = UserCarts(groupId: "1", userCart: carts, name : "السلة الرئيسية");
+      addToCartWithToken(cartGroupToJson(groups),state: false);
+
+    }else
     showDialog(context: context, child: showAlert(carts, cart));
     setState(() {
       isloading = false;
     });
+
+    addCartSize();
   }
 
   Widget buildSearchVoiceItem(Products post, i) {
