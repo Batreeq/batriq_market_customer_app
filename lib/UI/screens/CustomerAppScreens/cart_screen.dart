@@ -581,7 +581,7 @@ class _CartScreenState extends State<CartScreen> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal),
                           ),
-                          Container(
+                      /*    Container(
                             height: 30,
                             width: 30,
                             child: FlatButton(
@@ -603,7 +603,7 @@ class _CartScreenState extends State<CartScreen> {
                               },
                               padding: EdgeInsets.all(0),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       Row(

@@ -10,7 +10,8 @@ class Product {
   ProductTab catigory;
   bool is_offer;
   bool is_package;
+  String points;
   Product(
       {this.title, this.image, this.price, this.size, this.catigory,
-        this.id,this.is_offer,this.is_package});
+        this.id,this.is_offer,this.is_package,this.points});
 }

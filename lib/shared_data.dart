@@ -46,6 +46,12 @@ readToken() async {
   token = await sharedData.readFromStorage(key: 'token');
 }
 
+int getPointsNumber(String point){
+  if(point!=null &&point.isNotEmpty){
+    return int.parse(point);
+  }else return 0;
+}
+
 bool checkDotAmount(){
 
   print("dotSize  $cartSize" );
@@ -288,6 +294,7 @@ class sharedData {
   static const String transferMoneyAmmount = 'الرصيد';
   static const String enterNumberUser = 'الرجاء ادخال رقم المستخدم';
   static const String enterAmount = 'الرجاء ادخال الرصيد';
+  static const String point = 'نقاط';
 
   static const String altPhoneHintTextField = 'رقم الهاتف البديل ';
   static const String addressHintTextField = 'العنوان ';
@@ -362,6 +369,8 @@ class sharedData {
 
     return item.currentState.validate();
   }
+
+
 
   static String getUserCartsUrl = "https://jaraapp.com/index.php/api/getUserCart?api_token=";
 

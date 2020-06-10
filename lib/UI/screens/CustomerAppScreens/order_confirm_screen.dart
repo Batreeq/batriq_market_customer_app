@@ -452,6 +452,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     showModalBottomSheet(
 
         context: context,
+        isDismissible: false,
         builder: (builder) {
           return Column(
             children: <Widget>[
@@ -517,11 +518,10 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
                               /*devliveryPrice*/ delTotal.toString(),
                               totalCartPrice);
                         }
-                        else
-                         {
-                           Navigator.of(context).pop();
-                           FocusScope.of(context).requestFocus(FocusNode());
-                         }
+                        else{
+
+                          Navigator.of(context).pop();
+                          FocusScope.of(context).requestFocus(FocusNode());}
 
                       } else {
                         sharedData.flutterToast('اختر فترة  التوصيل');
@@ -781,8 +781,12 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
       List<Barcode> barCodes, String deliveryPrice, String totalCartPrice) {
     TextEditingController codeCon = new TextEditingController();
     totalWithDel = (double.parse(totalCartPrice) + double.parse(deliveryPrice));
+    showModalBottomSheet(
+
+      isScrollControlled: true,
 /*   showModalBottomSheet(
         context: context,
+        isDismissible: false,
         builder: (builder) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
