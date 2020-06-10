@@ -452,6 +452,7 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
 
     showModalBottomSheet(
         context: context,
+        isDismissible: false,
         builder: (builder) {
           return Column(
             children: <Widget>[
@@ -783,7 +784,10 @@ class _ConfiremOrderScreenState extends State<ConfiremOrderScreen> {
     TextEditingController codeCon = new TextEditingController();
     totalWithDel = (double.parse(totalCartPrice) + double.parse(deliveryPrice));
     showModalBottomSheet(
+
+      isScrollControlled: true,
         context: context,
+        isDismissible: false,
         builder: (builder) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
