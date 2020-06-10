@@ -116,8 +116,10 @@ class _ProductItemValue extends State {
     setState(() {
       _state = 1;
     });
+    int userPoints = 0;
+    if (sharedData.userInfo != null && sharedData.userInfo.points != null )
+       userPoints = int.parse(sharedData.userInfo.points);
 
-    int userPoints = int.parse(sharedData.userInfo.points);
     int productPoints = int.parse(product.points);
     if (token == null || token == '')
       sharedData.flutterToast('عذرا ليس لديك حساب');
@@ -151,10 +153,11 @@ class _ProductItemValue extends State {
               .toString();
         });
       } else
-        setState(() {
+        Navigator.of(context).pop();
+
+      setState(() {
           _state = 0;
         });
-      Navigator.of(context).pop();
     }
   }
 
