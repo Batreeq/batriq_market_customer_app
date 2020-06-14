@@ -1,7 +1,13 @@
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_picker_dialog.dart';
+import 'package:country_pickers/utils/utils.dart';
 import 'package:customerapp/UI/screens/DriverAppScreens/DriverOptionsScreen.dart';
+import 'package:customerapp/helpers/AppApi.dart';
+import 'package:customerapp/models/DriverModel/DriverModel.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import 'SignupDriver.dart';
 
@@ -18,6 +24,40 @@ class _LoginDriver extends State {
   TextEditingController passwordCon, phoneCon;
   String password = '', phone = '';
 
+
+  Country _selectedDialogCountry;
+
+  bool obsucre=true;
+  bool loading=false;
+
+  void _openCountryPickerDialog() => showDialog(
+      context: context,
+      builder: (context) => Theme(
+          data: Theme.of(context).copyWith(primaryColor: Colors.black),
+          child: CountryPickerDialog(
+              titlePadding: EdgeInsets.all(8.0),
+              searchCursorColor: Colors.black,
+              searchInputDecoration: InputDecoration(hintText: 'Search...'),
+              isSearchable: true,
+              title: Text('Select your country code',),
+              onValuePicked: (Country country) {
+                setState(() => _selectedDialogCountry = country);
+                print(country.name);
+              },
+              itemBuilder: (Country country) {
+                return Container(
+                  child: Row(
+                    children: <Widget>[
+                      CountryPickerUtils.getDefaultFlagImage(country),
+                      SizedBox(
+                        width: 16.0,
+                      ),
+                      Text("+${country.phoneCode}(${country.isoCode})"),
+                    ],
+                  ),
+                );
+              })));
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +66,12 @@ class _LoginDriver extends State {
     passwordFocus = new FocusNode();
     phoneFocus = new FocusNode();
 
+    _selectedDialogCountry = new Country(
+      phoneCode: CountryPickerUtils
+          .getCountryByPhoneCode('962')
+          .phoneCode,
+    );
+
   }
 
   @override
@@ -33,75 +79,76 @@ class _LoginDriver extends State {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: sharedData.appBar(context, "تسجيل دخول", null, null),
-      body: getBody(),
-    );
-  }
-
-  getBody() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-              child: Text(
-            sharedData.welcomeTextInLoginDriver,
-            style: sharedData.optionStyle,
-          )),
-          SizedBox(
-            height: 50,
-          ),
-          formFields(),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: <Widget>[
-                Text(
-                  sharedData.dontHaveAccount,
-                  style: sharedData.optionStyle,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: InkWell(
-                    focusColor: sharedData.yellow,
-                    child: Text(
-                      sharedData.createAccount,
-                      style: sharedData.yellowStyle,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext c) => SignUpDriver()));
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Center(
-              child: Text(
-            sharedData.loginUsingText,
-            style: sharedData.optionStyle,
-          )),
-          Row(
+      body: ModalProgressHUD(
+        inAsyncCall: loading,
+        child: SingleChildScrollView(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              InkWell(
-                child: Image.asset('assets/images/facebook.png'),
-                onTap: () {},
-              ),
+              Center(
+                  child: Text(
+                    sharedData.welcomeTextInLoginDriver,
+                    style: sharedData.optionStyle,
+                  )),
               SizedBox(
-                width: 20,
+                height: 50,
               ),
-              InkWell(
-                child: Image.asset('assets/images/googleplus.png'),
-                onTap: () {},
+              formFields(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  textDirection: TextDirection.rtl,
+                  children: <Widget>[
+                    Text(
+                      sharedData.dontHaveAccount,
+                      style: sharedData.optionStyle,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: InkWell(
+                        focusColor: sharedData.yellow,
+                        child: Text(
+                          sharedData.createAccount,
+                          style: sharedData.yellowStyle,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext c) => SignUpDriver()));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Center(
+                  child: Text(
+                    sharedData.loginUsingText,
+                    style: sharedData.optionStyle,
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  InkWell(
+                    child: Image.asset('assets/images/facebook.png'),
+                    onTap: () {},
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  InkWell(
+                    child: Image.asset('assets/images/googleplus.png'),
+                    onTap: () {},
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
+
+
 
   // Form will fields (phone number, name, location and email ) to fill them by user
   Widget formFields() {
@@ -139,13 +186,11 @@ class _LoginDriver extends State {
                           phone = value;
                         });
                       },
-                      validator: (value) {
-                        if (value.isNotEmpty) if (!isValidPhone()) {
-                          return 'Invalid Phone Format';
-                        }
-                        if (value.isEmpty) return 'Please fill the phone';
-                        phone = value;
-                        return null;
+                      validator: (String value) {
+                        if (value.isEmpty)  {
+                          return sharedData.emptyValidation;
+                        }else return null;
+
                       },
                       onFieldSubmitted: (term) {
                         _fieldFocusChange(context, phoneFocus, passwordFocus);
@@ -167,8 +212,35 @@ class _LoginDriver extends State {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                  child: sharedData.phoneIcon,
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      //  _openCountryPickerDialog();
+                    },
+                    child: Container(
+
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            "+${_selectedDialogCountry.phoneCode}",
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.grey),
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          CountryPickerUtils.getDefaultFlagImage(
+                              CountryPickerUtils
+                                  .getCountryByPhoneCode(
+                                  _selectedDialogCountry
+                                      .phoneCode)),
+                          SizedBox(
+                            width: 7,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -189,6 +261,7 @@ class _LoginDriver extends State {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      obscureText: obsucre,
                       controller: passwordCon,
                       textAlign: TextAlign.right,
                       textDirection: TextDirection.rtl,
@@ -200,9 +273,10 @@ class _LoginDriver extends State {
                           password = value;
                         });
                       },
-                      validator: (val) {
-                        if (val == null) return 'Please fill the password';
-                        return null;
+                      validator: (String val) {
+                        if (val.isEmpty)  {
+                          return sharedData.emptyValidation;
+                        }else return null;
                       },
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
@@ -221,8 +295,14 @@ class _LoginDriver extends State {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                  child: sharedData.passwordIcon,
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  child:  obsucre?IconButton(icon: Icon(Icons.remove_red_eye),color: sharedData.yellow,
+                    onPressed: (){setState(() {
+                      obsucre=!obsucre;
+                    });},):IconButton(icon: Icon(Icons.remove_red_eye),color: Colors.red,
+                    onPressed: (){setState(() {
+                      obsucre=!obsucre;
+                    });},),
                 ),
               ],
             ),
@@ -235,10 +315,10 @@ class _LoginDriver extends State {
               child: RaisedButton(
                 color: sharedData.yellow,
                 onPressed: () {
-                  //  _validateAndSubmit();
+                    _validateAndSubmit();
                   print(phone + '  ' + password);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext c) => DriverOptionsScreen()));
+                 /* Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext c) => DriverOptionsScreen()));*/
                 },
                 child: Text(
                   'تسجيل دخول',
@@ -272,11 +352,39 @@ class _LoginDriver extends State {
   }
 
   //this method to check in the inputs are valid, to save and submit to do the update  user info request
-  void _validateAndSubmit() {
+  Future<void> _validateAndSubmit() async {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
+      setState(() {
+        loading=!loading;
+      });
+
+      var response=await loginDriver(initMap());
+
+      if(response.statusCode==200){
+        DriverModel driverModel=response.object;
+        await sharedData.writeToStorageDriver(key: sharedData.driverTokenTxt,value: driverModel.driver_token);
+        sharedData.driverInfo=driverModel;
+         Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext c) => DriverOptionsScreen()));
+      }
+
+
+
+      setState(() {
+        loading=!loading;
+      });
     } else
-      sharedData.flutterToast('Invalid Input');
+      sharedData.flutterToast(sharedData.emptyValidation);
+  }
+
+  Map<String,dynamic> initMap(){
+    Map<String,dynamic> data={
+      "phone":getFullPhoneNumber(phoneCon, _selectedDialogCountry),
+      "password":passwordCon.text.toString().trim()
+    };
+
+    return data;
   }
 }

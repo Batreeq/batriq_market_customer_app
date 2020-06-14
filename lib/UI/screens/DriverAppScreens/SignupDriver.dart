@@ -1,6 +1,12 @@
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_picker_dialog.dart';
+import 'package:country_pickers/utils/utils.dart';
+import 'package:customerapp/helpers/AppApi.dart';
+import 'package:customerapp/models/DriverModel/DriverModel.dart';
 import 'package:customerapp/shared_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class SignUpDriver extends StatefulWidget{
   @override
@@ -13,31 +19,76 @@ class _SignUpDriver extends State {
 
   final formKey = GlobalKey<FormState>();
   TextEditingController nameCon, lastNameCon, phoneCon, addressCon, modelCon,
-      altPhoneCon, typeCon;
+      altPhoneCon, typeCon,passwordCon,rePasswordCon;
 
   FocusNode nameFocus, phoneFocus, addressFocus, lastNameFocus, modelFocus,
-      typeFocus, altPhoneFocus;
+      typeFocus, altPhoneFocus,passFocus,rePassFocus;
 
-  String name, phone, altPhone, address, model, type, lastName;
+  String name, phone, altPhone, address, model, type, lastName,password,rePassword;
+
+  bool obsecurePassword=true;
+  bool obsecureRePassword=true;
+  bool loading=false;
+
+  Country _selectedDialogCountry;
+
+  void _openCountryPickerDialog() => showDialog(
+      context: context,
+      builder: (context) => Theme(
+          data: Theme.of(context).copyWith(primaryColor: Colors.black),
+          child: CountryPickerDialog(
+              titlePadding: EdgeInsets.all(8.0),
+              searchCursorColor: Colors.black,
+              searchInputDecoration: InputDecoration(hintText: 'Search...'),
+              isSearchable: true,
+              title: Text('Select your country code',),
+              onValuePicked: (Country country) {
+                setState(() => _selectedDialogCountry = country);
+                print(country.name);
+              },
+              itemBuilder: (Country country) {
+                return Container(
+                  child: Row(
+                    children: <Widget>[
+                      CountryPickerUtils.getDefaultFlagImage(country),
+                      SizedBox(
+                        width: 16.0,
+                      ),
+                      Text("+${country.phoneCode}(${country.isoCode})"),
+                    ],
+                  ),
+                );
+              })));
 
   @override
   void initState() {
     super.initState();
-    nameCon = new TextEditingController(text: name);
-    phoneCon = new TextEditingController(text: phone);
-    lastNameCon = new TextEditingController(text: phone);
-    addressCon = new TextEditingController(text: phone);
-    modelCon = new TextEditingController(text: phone);
-    altPhoneCon = new TextEditingController(text: phone);
-    typeCon = new TextEditingController(text: phone);
+    nameCon = new TextEditingController();
+    passwordCon = new TextEditingController();
+    rePasswordCon = new TextEditingController();
+    phoneCon = new TextEditingController();
+    lastNameCon = new TextEditingController();
+    addressCon = new TextEditingController();
+    modelCon = new TextEditingController();
+    altPhoneCon = new TextEditingController();
+    typeCon = new TextEditingController();
 
     nameFocus = new FocusNode();
+    passFocus = new FocusNode();
+    rePassFocus = new FocusNode();
     phoneFocus = new FocusNode();
     addressFocus = new FocusNode();
     lastNameFocus = new FocusNode();
     modelFocus = new FocusNode();
     typeFocus = new FocusNode();
     altPhoneFocus = new FocusNode();
+
+
+    _selectedDialogCountry = new Country(
+      phoneCode: CountryPickerUtils
+          .getCountryByPhoneCode('962')
+          .phoneCode,
+    );
   }
 
   @override
@@ -45,23 +96,24 @@ class _SignUpDriver extends State {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: sharedData.appBar(context, "تسجيل حساب لسائق ", null, () {}),
-      body: getBody(),
-    );
-  }
-
-  getBody() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-              child: Image.asset('assets/images/batreeq.png')
+      body: ModalProgressHUD(
+        inAsyncCall:loading ,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                  child: Image.asset('assets/images/batreeq.png')
+              ),
+              formFields(),
+            ],
           ),
-          formFields(),
-        ],
+        ),
       ),
     );
   }
+
+
 
   // Form will fields (phone number, name, location and email ) to fill them by user
   Widget formFields() {
@@ -100,6 +152,11 @@ class _SignUpDriver extends State {
                             setState(() {
                               name = value;
                             });
+                          },
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else return null;
+
                           },
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
@@ -154,8 +211,10 @@ class _SignUpDriver extends State {
                               lastName = value;
                             });
                           },
-                          validator: (value) {
-                            return null;
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else return null;
+
                           },
                           onFieldSubmitted: (term) {
                             _fieldFocusChange(
@@ -213,11 +272,10 @@ class _SignUpDriver extends State {
                               phone = value;
                             });
                           },
-                          validator: (value) {
-                            if (value.isNotEmpty) if (!isValidPhone()) {
-                              return 'Invalid Phone Format';
-                            }
-                            return null;
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else return null;
+
                           },
                           onFieldSubmitted: (term) {
                             _fieldFocusChange(context, phoneFocus, nameFocus);
@@ -239,8 +297,35 @@ class _SignUpDriver extends State {
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                      child: sharedData.phoneIcon,
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          //  _openCountryPickerDialog();
+                        },
+                        child: Container(
+
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                "+${_selectedDialogCountry.phoneCode}",
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.grey),
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              CountryPickerUtils.getDefaultFlagImage(
+                                  CountryPickerUtils
+                                      .getCountryByPhoneCode(
+                                      _selectedDialogCountry
+                                          .phoneCode)),
+                              SizedBox(
+                                width: 7,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -272,11 +357,10 @@ class _SignUpDriver extends State {
                               altPhone = value;
                             });
                           },
-                          validator: (value) {
-                            if (value.isNotEmpty) if (!isValidPhone()) {
-                              return 'Invalid Phone Format';
-                            }
-                            return null;
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                              else return null;
+
                           },
                           onFieldSubmitted: (term) {
                             _fieldFocusChange(context, altPhoneFocus,
@@ -285,7 +369,7 @@ class _SignUpDriver extends State {
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
                             border: InputBorder.none,
-                            hintText: sharedData.phoneHintTextField,
+                            hintText: sharedData.secondPhoneHintTextField,
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
                         ),
@@ -299,12 +383,181 @@ class _SignUpDriver extends State {
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                      child: sharedData.phoneIcon,
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            //  _openCountryPickerDialog();
+                          },
+                          child: Container(
+
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  "+${_selectedDialogCountry.phoneCode}",
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.grey),
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                CountryPickerUtils.getDefaultFlagImage(
+                                    CountryPickerUtils
+                                        .getCountryByPhoneCode(
+                                        _selectedDialogCountry
+                                            .phoneCode)),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                     ),
                   ],
                 ),
-              ), // alternative phone
+              ),
+
+              /*password*/
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.5),
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                margin:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          obscureText: obsecurePassword,
+                          controller: passwordCon,
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          focusNode: passFocus,
+                          onSaved: (value) {
+                            setState(() {
+                              password = value;
+                            });
+                          },
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else if(passwordCon.text.toString()!=rePasswordCon.text.toString()) return sharedData.passwordValidation;
+                              else return null;
+
+                          },
+                          onFieldSubmitted: (term) {
+                            _fieldFocusChange(context, passFocus,
+                                rePassFocus);
+                          },
+                          decoration: InputDecoration(
+                            alignLabelWithHint: true,
+                            border: InputBorder.none,
+                            hintText: sharedData.passwordTextField,
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 30.0,
+                      width: 1.0,
+                      color: Colors.grey.withOpacity(0.5),
+                      margin: const EdgeInsets.only(left: 00.0, right: 10.0),
+                    ),
+                    Padding(
+                      padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                        child: obsecurePassword?IconButton(icon: Icon(Icons.remove_red_eye),color: sharedData.yellow,
+                        onPressed: (){setState(() {
+                          obsecurePassword=!obsecurePassword;
+                        });},):IconButton(icon: Icon(Icons.remove_red_eye),color: Colors.red,
+                          onPressed: (){setState(() {
+                            obsecurePassword=!obsecurePassword;
+                          });},)
+                    ),
+                  ],
+                ),
+              ),
+
+              /*rePassword*/
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.5),
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                margin:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          obscureText: obsecureRePassword,
+                          controller: rePasswordCon,
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          focusNode: rePassFocus,
+                          onSaved: (value) {
+                            setState(() {
+                              rePassword = value;
+                            });
+                          },
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else if(passwordCon.text.toString()!=rePasswordCon.text.toString()) return sharedData.passwordValidation;
+                            else return null;
+
+                          },
+                          onFieldSubmitted: (term) {
+                            _fieldFocusChange(context, rePassFocus,
+                                addressFocus);
+                          },
+                          decoration: InputDecoration(
+                            alignLabelWithHint: true,
+                            border: InputBorder.none,
+                            hintText: sharedData.rePasswordTextField,
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 30.0,
+                      width: 1.0,
+                      color: Colors.grey.withOpacity(0.5),
+                      margin: const EdgeInsets.only(left: 00.0, right: 10.0),
+                    ),
+                    Padding(
+                        padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                        child:obsecureRePassword?IconButton(icon: Icon(Icons.remove_red_eye),color: sharedData.yellow,
+                          onPressed: (){setState(() {
+                            obsecureRePassword=!obsecureRePassword;
+                          });},):IconButton(icon: Icon(Icons.remove_red_eye),color: Colors.red,
+                          onPressed: (){setState(() {
+                            obsecureRePassword=!obsecureRePassword;
+                          });},)
+                    ),
+                  ],
+                ),
+              ),
+
+
+
+              // alternative phone
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -332,8 +585,10 @@ class _SignUpDriver extends State {
                               address = value;
                             });
                           },
-                          validator: (value) {
-                            return null;
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else return null;
+
                           },
                           onFieldSubmitted: (term) {
                             _fieldFocusChange(context, addressFocus,
@@ -389,8 +644,10 @@ class _SignUpDriver extends State {
                               model = value;
                             });
                           },
-                          validator: (value) {
-                            return null;
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else return null;
+
                           },
                           onFieldSubmitted: (term) {
                             _fieldFocusChange(context, modelFocus, typeFocus);
@@ -413,6 +670,7 @@ class _SignUpDriver extends State {
                     Padding(
                       padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      child: sharedData.carIcon,
 
                     ),
                   ],
@@ -445,8 +703,10 @@ class _SignUpDriver extends State {
                               type = value;
                             });
                           },
-                          validator: (value) {
-                            return null;
+                          validator: (String value){
+                            if(value.isEmpty) return sharedData.emptyValidation;
+                            else return null;
+
                           },
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
@@ -466,18 +726,20 @@ class _SignUpDriver extends State {
                     Padding(
                       padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      child: sharedData.carIcon,
 
                     ),
                   ],
                 ),
               ), // vehicle type
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 40,
+
                   child: RaisedButton(
                     color: sharedData.yellow,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     onPressed: () {
                       _validateAndSubmit();
                     },
@@ -485,7 +747,8 @@ class _SignUpDriver extends State {
                       'تسجيل حساب', style: sharedData.appBarTextStyle,),
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 12,)
             ],
           )),
     );
@@ -511,12 +774,40 @@ class _SignUpDriver extends State {
   }
 
   //this method to check in the inputs are valid, to save and submit to do the update  user info request
-  void _validateAndSubmit() {
+  Future<void> _validateAndSubmit() async {
     final form = formKey.currentState;
     if (form.validate()) {
-      print(name + phone + address + lastName + altPhone + model + type);
+      print("$name + $phone + $address + $lastName + $altPhone + $model + $type");
       form.save();
+
+      setState(() {
+        loading=!loading;
+      });
+      var response =await createAccountDriver(initMap());
+      setState(() {
+        loading=!loading;
+      });
+      if(response.statusCode==200){
+        DriverModel driverModel=response.object;
+        sharedData.driverInfo=driverModel;
+        sharedData.writeToStorageDriver(key: sharedData.driverTokenTxt,value: driverModel.driver_token);
+        Navigator.of(context).pop();
+      }
+
     } else
-      sharedData.flutterToast('Invalid Input');
+      sharedData.flutterToast(sharedData.emptyValidation);
+  }
+
+  Map<String,dynamic>  initMap(){
+    Map<String, dynamic> data={
+      "first_name":name,
+      "last_name":lastName,
+      "phone":getFullPhoneNumber(phoneCon,_selectedDialogCountry),
+      "password":password,
+      "second_phone":getFullPhoneNumber(altPhoneCon,_selectedDialogCountry),
+      "location":address,
+      "car":type,
+      "car_model":model };
+    return data;
   }
 }

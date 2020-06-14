@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:customerapp/models/DriverModel/DriverModel.dart';
 import 'package:customerapp/models/allCartForUser/AllCartModel.dart';
 import 'package:customerapp/models/mainCategoriesModel/MainCategroiesModel.dart';
 import 'package:customerapp/shared_data.dart';
@@ -112,6 +113,139 @@ Future<Response> transferMoney(String amount, String toUser, String token) async
 }
 
 
+/*Create Account Driver*/
+Future<Response> createAccountDriver(Map<String,dynamic> map) async {
+
+
+  print(sharedData.registerDriverURL);
+  print("body"+ json.encode(map).toString());
+
+  try {
+    var response = await http.post(sharedData.registerDriverURL, headers: {'content-type': 'application/json'},
+        body: json.encode(map));
+    var res = json.decode(response.body);
+    print('code  = ${response.statusCode}');
+    print('response  = ${response.body}');
+    if (response.statusCode == 200) {
+
+      DriverModel driverModel=DriverModel.fromJson(res["driver"]);
+      
+      sharedData.flutterToast(res['message']);
+
+
+      return new Response(200,driverModel);
+
+    } else if (response.statusCode == 401) {
+      return new Response(response.statusCode, sharedData.tryLater);
+    } else if(response.statusCode==500)  {
+      sharedData.flutterToast(sharedData.phoneAlreadyUserd);
+      return new Response(response.statusCode, sharedData.tryLater);
+    }
+    else {
+      return new Response(response.statusCode, sharedData.tryLater);
+    }
+  }
+  on TimeoutException catch (_) {
+    sharedData.flutterToast('Please check your internet connection!');
+    return Response(-1000, '');
+  }
+
+  catch (e) {
+    print(e);
+    return new Response(-1, "error");
+  }
+}
+
+
+/*login Driver*/
+Future<Response> loginDriver(Map<String,dynamic> map) async {
+
+
+  print(sharedData.loginDriverURL);
+  print("body"+ json.encode(map).toString());
+
+  try {
+    var response = await http.post(sharedData.loginDriverURL, headers: {'content-type': 'application/json'},
+        body: json.encode(map));
+    var res = json.decode(response.body);
+    print('code  = ${response.statusCode}');
+    print('response  = ${response.body}');
+    if (response.statusCode == 200) {
+
+      sharedData.flutterToast(res['message']);
+      if(res['success']){
+        DriverModel driverModel=DriverModel.fromJson(res["driver"]);
+        return new Response(200,driverModel);}
+      else{
+        return new Response(400,"");
+      }
+    //  DriverModel driverModel=DriverModel.fromJson(res["driver"]);
+
+    //  sharedData.flutterToast(res['message']);
+
+
+      return new Response(200,"");
+
+    } else if (response.statusCode == 401) {
+      return new Response(response.statusCode, sharedData.tryLater);
+    } else if(response.statusCode==500)  {
+      //sharedData.flutterToast(sharedData.phoneAlreadyUserd);
+      return new Response(response.statusCode, sharedData.tryLater);
+    }
+    else {
+      return new Response(response.statusCode, sharedData.tryLater);
+    }
+  }
+  on TimeoutException catch (_) {
+    sharedData.flutterToast('Please check your internet connection!');
+    return Response(-1000, '');
+  }
+
+  catch (e) {
+    print(e);
+    return new Response(-1, "error");
+  }
+}
+
+
+/*setAvailable*/
+Future<Response> setAvailableDriver(String driver_token,String available) async {
+
+
+
+  try {
+    var url=sharedData.availableDriverURL+"driver_token=$driver_token&available=$available";
+    print(url);
+    var response =await http.get(url);
+
+
+
+    print('code  = ${response.statusCode}');
+    print('body of user ${response.body}');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      print("response"+data);
+        return new Response(200, true);
+
+    }
+
+    else {
+      return new Response(response.statusCode, response);
+    }
+  }
+  on TimeoutException catch (_) {
+    sharedData.flutterToast('Please check your internet connection!');
+    return Response(-1000, '');
+  }
+
+  catch (e) {
+    print(e);
+    return new Response(-1, "error");
+  }
+
+}
 Future<Response> getAllCart(String token) async {
 
 

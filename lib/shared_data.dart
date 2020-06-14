@@ -1,3 +1,5 @@
+import 'package:country_pickers/country.dart';
+import 'package:customerapp/models/DriverModel/DriverModel.dart';
 import 'package:customerapp/models/allCartForUser/AllCartModel.dart';
 import 'package:customerapp/models/homeBlocks/HomeBlocksModel.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,6 +35,7 @@ int cartSize=0;
 List<MyProductModel> myProductList = [];
 LocationData locationData;
 String token = "";
+String driverToken = "";
 appBarBloc appbarBloc;
 bool isRegistered() {
   if (token != null && token.length > 10) {
@@ -41,9 +44,19 @@ bool isRegistered() {
     return false;
   }
 }
+bool isRegisteredDriver() {
+  if (driverToken != null && driverToken.length > 10) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 readToken() async {
   token = await sharedData.readFromStorage(key: 'token');
+}
+readTokenDriver() async {
+  driverToken = await sharedData.readFromStorage(key: driverToken);
 }
 
 int getPointsNumber(String point){
@@ -88,6 +101,20 @@ bool ckeckSizeCartList(AllCartModel item){
 
   bool data=checkDotAmount();
   return data;
+}
+
+String getFullPhoneNumber(TextEditingController controller,Country selectedDialogCountry){
+  String fullPhone=controller.text.toString();
+  if(fullPhone!=null&&fullPhone.isNotEmpty){
+    if(fullPhone.substring(0,1)=="0")
+      fullPhone=fullPhone.substring(1,fullPhone.length);
+
+    fullPhone="+"+selectedDialogCountry.phoneCode.toString()+fullPhone;
+
+    return fullPhone;
+  }
+  return"";
+
 }
 
 Future<void> initCheckDotInCart() async {
@@ -244,6 +271,11 @@ class sharedData {
     color: sharedData.yellow,
   );
 
+  static const Icon carIcon = Icon(
+    Icons.directions_car,
+    color: sharedData.yellow,
+  );
+
   static const TextStyle navBarTextStyle =
   TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12);
   static const TextStyle textInProfileTextStyle =
@@ -275,10 +307,13 @@ class sharedData {
 
   static const String searchHintText = 'البحث';
   static const String phoneHintTextField = 'رقم الهاتف';
+  static const String secondPhoneHintTextField = 'رقم هاتف اخر';
   static const String enterPhoneHintTextField = 'ادخل  رقم الهاتف';
   static const String ageHintTextField = 'العمر';
   static const String nameHintTextField = 'الاسم';
   static const String passwordTextField = 'كلمة المرور';
+  static const String rePasswordTextField = 'تأكيد كلمة المرور  ';
+  static const String passwordValidation = 'كلمات المرور غير متطابقة';
   static const String locationHintTextField = 'الموقع';
   static const String emailHintTextField = 'البريد الالكتروني';
   static const String updateProfileTextField = 'تعديل الملف الشخصي';
@@ -295,6 +330,7 @@ class sharedData {
   static const String enterNumberUser = 'الرجاء ادخال رقم المستخدم';
   static const String enterAmount = 'الرجاء ادخال الرصيد';
   static const String point = 'نقاط';
+  static const String phoneAlreadyUserd = 'لا يمكنك التسجيل برقم الهاتف لانه مستخدم سابقا';
 
   static const String altPhoneHintTextField = 'رقم الهاتف البديل ';
   static const String addressHintTextField = 'العنوان ';
@@ -311,8 +347,12 @@ class sharedData {
   static const String tryLater= 'حاول لاحقا';
   static const String posts= 'الاعلانات';
   static const String noData= 'لايوجد بيانات ';
+  static const String phoneAndRePhoneValidation= 'ارقام الهواتف غير متطابقة';
+  static const String emptyValidation= 'الرجاء ادخال البيانات ';
   static const String canotTranferForYourSlef= 'لا يمكنك التحويل لنفسك!! ';
   static String isCartNotEmpty = '' ;
+  static String driverTokenTxt="driver_token";
+  static String driverIsOn="السائق متاح";
 
   static const TextStyle tableFieldsTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
@@ -421,6 +461,19 @@ class sharedData {
     token = value;
   }
 
+  static Future<bool> writeToStorageDriver({String key, String value}) async {
+
+    driverToken = value ;
+    await storage
+        .write(
+      key: key,
+      value: value,
+    )
+        .then((val) {});
+    driverToken = value;
+    print("driver"+driverToken);
+  }
+
   static Future<String> readFromStorage({String key}) async {
     //storage.write(key: key, value: '0efa83ba127ea5118042c63bdcf4005063b375cbd9e103af137165a3e067352c' , );
     String s = await storage.read(
@@ -433,9 +486,12 @@ class sharedData {
 
   static logout() async {
     await storage.delete(key: "token");
+    await storage.delete(key: driverToken);
     token = "";
+    driverToken="";
     sharedData.api_token = "";
     sharedData.userInfo = new UserInfo();
+    sharedData.driverInfo = new DriverModel();
     flutterToast("تم تسجيل الخروج ");
   }
 
@@ -495,6 +551,9 @@ class sharedData {
   static String userPoints = '0';
 
   static const String transferMoneyURL='https://jaraapp.com/api/transferMoney';
+  static const String registerDriverURL='https://jaraapp.com/api/registerDriver';
+  static const String loginDriverURL='https://jaraapp.com/api/loginDriver';
+  static const String availableDriverURL='https://jaraapp.com/api/driverAvailablity?';
 
   //static List <UserPayments>  listOfUserPayment ;
 
@@ -529,6 +588,7 @@ class sharedData {
 
   static List<FamilyMembers> familyMembers = new List<FamilyMembers>();
   static UserInfo userInfo = new UserInfo();
+  static  DriverModel driverInfo=DriverModel();
   static UserBalance userBalance = new UserBalance();
 
   static List<UserPayments> listOfUserPayment = new List<UserPayments>();
